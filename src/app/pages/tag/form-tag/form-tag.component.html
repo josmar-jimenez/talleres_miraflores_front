@@ -1,0 +1,85 @@
+<!-- ----------------------------------------------------------------------------------- -->
+<!-- FORMULARIO DE ETIQUETA -->
+<!-- ----------------------------------------------------------------------------------- -->
+<div id="divForm">
+        <!-- general form elements disabled -->
+        <div class="card" [ngClass]="{'card-warning': isCreateMode,'card-danger': isDeleteMode, 
+                                      'card-success' : isViewMode, 'card-info' : !isViewMode && !isCreateMode}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <a (click)="goBack()" title="Volver atras"><i class="fas fa-arrow-circle-left"></i> </a>
+                    {{info_component.title | translate}}
+                </h3>
+            </div>
+
+            <!-- /.card-header -->
+            <div class="card-body" *ngIf="!progressing">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label> {{label_text.name_label | translate }} {{ info_component.owner | translate }}
+                                </label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="fas fa-tags"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control"
+                                        placeholder="{{label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                        title="{{ label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                        id="name_tag" formControlName="name"
+                                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+
+                                    <!-- DIV- ERROR-->
+                                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                        <div *ngIf="f.name.errors.required">
+                                            {{label_text.name_label | translate }}
+                                            {{label_error.msg_error_required | translate }}
+                                        </div>
+                                        <div *ngIf="f.name.errors.cannotContainSpace">
+                                            No se admiten espacios en blanco
+                                        </div>
+                                    </div>
+                                    <!-- DIV- ERROR-->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-text">
+                        <button type="button" (click)="goBack()" *ngIf="!isViewMode"
+                            class="btn btn-outline-danger float-right"
+                            [ngClass]="{'btn-outline-danger': !isDeleteMode,  'btn-outline-secondary' : isDeleteMode }">
+                            <i class="far fa-window-close"></i>
+                            {{ label_btn.btn_cancel | translate}}
+                        </button>
+                        <!-- Botones del formulario de editar / crear-->
+                        <button type="submit" class="btn float-left" *ngIf="!isViewMode && !isDeleteMode"
+                            [ngClass]="{'btn-outline-success': isCreateMode,  'btn-outline-info' : !isViewMode && !isCreateMode  && !isDeleteMode}"
+                            [disabled]="progressing" translate>
+                            <i class="far fa-save"></i> {{ isCreateMode ? label_btn.btn_save : label_btn.btn_edit }}
+                        </button>
+
+                        <!-- Botones del formulario de crear-->
+                        <button type="reset" (click)="onReset()" *ngIf="isCreateMode" class="btn btn-outline-info ml-1">
+                            <i class="fas fa-backspace"></i> {{ label_btn.btn_cleanup | translate}}
+                        </button>
+
+                        <!-- Botones del formulario de consultar-->
+                        <button type="button" (click)="goBack()" *ngIf="isViewMode" class="btn btn-outline-secondary">
+                            <i class="far fa-arrow-alt-circle-left"></i> {{ label_btn.btn_back | translate}}
+                        </button>
+
+                        <!-- Botones del formulario de eliminar-->
+                        <button type="button" (click)="onDelete()" *ngIf="isDeleteMode"
+                        [disabled]="progressing" class="btn btn-outline-danger">
+                        <i class="fas fa-trash"></i> {{ label_btn.btn_delete | translate}}</button>
+
+                    </div>
+                </form>
+            </div>
+            <!-- /.card-body -->
+        </div>
+</div>

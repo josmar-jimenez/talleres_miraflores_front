@@ -1,0 +1,95 @@
+<div class="row">
+    <!-- ----------------------------------------------------------------------------------- -->
+    <!-- LISTA DE USUARIO -->
+    <!-- ----------------------------------------------------------------------------------- -->
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-header">
+                <h2 class="card-title titulo-data-table  ">
+                    <i class="fas fa-users"></i>
+                    {{info_component.title | translate }}
+                </h2>
+            </div>
+
+            <div class="card-body" *ngIf="!progressing"> 
+                <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
+                <ng-template #dataBlock>
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="col-sm-12">
+                            <table id="table_user" class="table table-bordered table-striped dataTable dtr-inline"
+                                role="grid" aria-describedby="table_user_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
+                                            *ngFor="let key of info_component.list.header_item;">{{key | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ label_text.actions | translate}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="odd"
+                                        *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                        <td class="dtr-control">{{item.nick}}</td>
+                                        <td class="dtr-control">{{item.name}}</td>
+                                        <td class="dtr-control">{{item.cellphone | mask: maskPhone }}</td>
+                                        <td class="dtr-control">{{item.email}}</td>
+                                        <td class="dtr-control">{{item.address}}</td>                                        
+                                        <td class="dtr-control">{{item.emergencyPhone | mask: maskPhone }}</td>
+                                        <td class="dtr-control">{{item.emergencyContact}}</td>
+                                        <td class="dtr-control">{{item.statusName}}</td>
+                                        <td class="dtr-control">
+                                            <app-button-list [acciones_crud]="info_component.list.acciones_crud"
+                                                [id]="item.id"></app-button-list>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr role="row">
+                                        <th rowspan="1" colspan="9">
+                                            <span class="badge bg-success rounded-pill" style="font-size: medium;">
+                                                {{ label_text.num_item_list | translate}}: {{
+                                                info_component.count_item}}
+                                            </span>
+
+                                            <a *ngIf="actionAllowed.includes('Registrar')"  
+                                                routerLink="{{ info_component.list.url_add_item }}"
+                                                class="btn btn-outline-warning float-right" role="button"
+                                                aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
+                    </div>
+                </ng-template>
+
+                <ng-template #emptyBlock>
+                    <div class="row" >
+                        <div class="col-sm-12">
+                            {{ info_component.sms_empty | translate}} ...
+                        </div>
+                        <div class="col-sm-12" >
+                            <a  routerLink="{{ info_component.list.url_add_item }}"
+                                class="btn btn-outline-warning float-right" role="button"
+                                aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
+                                <i class="fas fa-plus-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>

@@ -1,0 +1,44 @@
+<!-- /.login-logo -->
+<div class="card card-outline card-primary">
+  <div class="card-header text-center">
+    <a class="h1"><b> {{ goblas_prop.info_globals.name_system }}</b>.</a>
+  </div>    
+  <div class="card-body">
+    <p class="login-box-msg">{{ goblas_prop.text_component.txt_login_credenciales | translate }}</p>
+    <div class=" ">
+      <img class="animation__shake img-fluid" [src]="logo_login" alt="Login Circulo">
+    </div>
+    <hr />
+    <form [formGroup]="formLogin" (ngSubmit)="onLogin()"> 
+        <!-- text input -->
+        <div class="form-group">    
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <div class="input-group-text"> <i class="fas fa-user-shield"></i> </div>
+            </div>
+            <input type="text" class="form-control" placeholder="{{ goblas_prop.label_component.nick_label   | translate }}" title="{{ goblas_prop.label_component.nick_label  | translate}}" id="usuarioLogin"
+              formControlName="usuarioLogin" [ngClass]="{ 'is-invalid': submitted && isLoginFail }" /> 
+          </div>
+        </div>   
+         <!-- text input -->
+         <div class="form-group">    
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <div class="input-group-text"> <i class="fas fa-key"></i> </div>
+            </div>
+            <input type="password" class="form-control" placeholder="{{ goblas_prop.label_component.password_label  | translate}}" title="{{ goblas_prop.label_component.password_label   | translate }} " id="claveLogin"
+              formControlName="claveLogin" [ngClass]="{ 'is-invalid': submitted && isLoginFail }" /> 
+          </div>
+        </div> 
+
+      <div class="row">
+        <div style="padding-left:30%;">
+          <button type="submit" [disabled]="formLogin.invalid" class="btn btn-info float-left"> <i class="fas fa-user-shield"></i> {{ goblas_prop.label_btn.btn_login | translate }} </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->

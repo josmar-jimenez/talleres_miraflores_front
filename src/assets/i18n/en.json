@@ -1,0 +1,38 @@
+{       
+        "__ COMMENTARIO - MODULOS DEL MENU __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
+        "inicio": "home",
+        "usuarios": "user",
+        "tiendas": "store",
+        "productos": "product",
+        "almacenes": "stock",
+        "proveedores": "provider",
+        "inventarios": "inventory",
+        "ventas": "sale",
+        "etiquetas": "tag",
+        
+        "Registrar":"To register",
+        "Editar":"Edit",
+        "Eliminar":"Remove",
+        "Consultar":"Consult",
+        "Pausar/Bloquear":"Pause/Lock",
+        "Reanudar":"Resume",
+
+
+
+        "__ COMMENTARIO - TITULOS DE COMPONENTES  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
+        "lista de usuarios":"list of user",
+  
+
+        "__ COMMENTARIO - INFORMACION DEL FOOTER  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
+        "Todos los derechos reservados.":"All rights reserved.",
+
+
+        "__ COMMENTARIO - BOTONES DE LA APP  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
+        "Consultar Registro":"Consult Registry",
+        "Editar Registro":"Edit record",    
+        "Eliminar Registro":"Delete the record",
+
+
+        "__ COMMENTARIO - LABEL DE LOS FORMULARIOS  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
+        "Delete the record":"Eliminar Registro"
+}

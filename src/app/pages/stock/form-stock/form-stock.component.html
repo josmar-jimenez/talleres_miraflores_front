@@ -1,0 +1,172 @@
+<!-- ----------------------------------------------------------------------------------- -->
+<!-- FORMULARIO DE ALMACEN -->
+<!-- ----------------------------------------------------------------------------------- -->
+<div id="divForm">
+    
+        <!-- general form elements disabled -->
+        <div class="card"  [ngClass]="{'card-warning': isCreateMode,'card-danger': isDeleteMode,
+                                       'card-success' : isViewMode, 'card-info' : !isViewMode && !isCreateMode}">
+           
+       
+            <div class="card-header">
+                <h3 class="card-title  ">
+                        <a (click)="goBack()" title="Volver atras"><i class="fas fa-arrow-circle-left"></i> </a>
+                        {{info_component.title | translate}}
+                </h3>
+            </div> 
+         <!-- /.card-header -->
+        <div class="card-body" *ngIf="!progressing"> 
+            <form  [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group ">
+                                <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
+                                </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-id-card"></i>
+                                        </span>
+                                    </div>
+
+                                    <select name="productId" class="form-control  " id="product_id"
+                                        formControlName="productId">
+                                        <option class="text-white bg-dark  " value="undefined"
+                                            selected disabled>
+                                            {{label_text.selected_label | translate }} </option>
+                                        <option [value]="item.id" *ngFor="let item of listProduct">
+                                            {{item.name}}</option>
+                                    </select>
+
+                                    <div *ngIf="submitted && f.productId.errors" class="invalid-feedback">
+                                        <div *ngIf="f.productId.errors.required"> {{label_text.profile_label | translate }}
+                                            {{label_error.msg_error_required | translate }} </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <!-- select  -->
+                            <div class="form-group ">
+                                <label> {{label_text.store_label | translate }} {{ info_component.owner | translate }}
+                                </label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-store"></i>
+                                        </span>
+                                    </div>
+                                    <select name="storeId" class="form-control  " id="store_stock"   formControlName="storeId">
+                                        <option class="text-white bg-dark  " value="undefined" selected disabled> {{label_text.selected_label | translate }} </option>
+                                        <option [ngValue]="item.id" *ngFor="let item of listStore">  {{item.name}}  </option>
+                                    </select>
+
+                                    <div *ngIf="submitted && f.storeId.errors" class="invalid-feedback">
+                                        <div *ngIf="f.storeId.errors.required"> {{label_text.store_label | translate }}
+                                            {{label_error.msg_error_required | translate }} </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label> {{ info_component.owner | translate }}
+                                </label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">@</div>
+                                    </div>
+                                    <input type="number" class="form-control" id="stock"
+                                        placeholder=" {{label_text.stock  | translate  }}  {{ info_component.owner | translate }}"
+                                        title=" {{label_text.stock  | translate  }}  {{ info_component.owner | translate  }}"
+                                        [ngClass]="{ 'is-invalid': submitted && f.stock.errors }" formControlName="stock"
+                                        autocomplete="new-user" />
+                                    <div *ngIf="submitted && f.stock.errors" class="invalid-feedback">
+                                        <div *ngIf="f.stock.errors.required">{{label_text.nick_label | translate }}
+                                            {{label_error.msg_error_required | translate }} </div>
+                                        <div *ngIf="f.stock.errors.minlength">
+                                            {{label_text.stock | translate }}
+                                            {{label_error.msg_error_characters_min | translate }}
+                                        </div>
+                                        <div *ngIf="f.stock.errors.maxlength">
+                                            {{label_text.stock | translate }}
+                                            {{label_error.msg_error_characters_max | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label> {{label_text.status_label | translate }} {{ info_component.owner | translate }}
+                                </label>
+                                <div class="input-group mb-2">
+                                    <div class="form-check-inline">
+                                        <input class="form-check-input" type="radio" formControlName="statusId"
+                                            id="status_stock1" [value]="1" >
+                                        <label class="form-check-label" for="status_stock1">
+                                            Activo
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <input class="form-check-input" type="radio" formControlName="statusId"
+                                            id="status_stock3" [value]="3">
+                                        <label class="form-check-label" for="status_stock3">
+                                            Pausado
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <input class="form-check-input" type="radio" formControlName="statusId"
+                                            id="status_stock5" [value]="5">
+                                        <label class="form-check-label" for="status_stock5">
+                                            Agotado
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <hr>
+                    <div class="card-text">
+                        <button type="button" (click)="goBack()" *ngIf="!isViewMode"
+                            class="btn btn-outline-danger float-right"
+                            [ngClass]="{'btn-outline-danger': !isDeleteMode,  'btn-outline-secondary' : isDeleteMode }">
+                            <i class="far fa-window-close"></i>
+                            {{ label_btn.btn_cancel | translate}}
+                        </button>
+                        <!-- Botones del formulario de editar / crear-->
+                        <button type="submit" class="btn float-left" *ngIf="!isViewMode && !isDeleteMode"
+                            [ngClass]="{'btn-outline-success': isCreateMode,  'btn-outline-info' : !isViewMode && !isCreateMode  && !isDeleteMode}"
+                            [disabled]="progressing" translate>
+                            <i class="far fa-save"></i> {{ isCreateMode ? label_btn.btn_save : label_btn.btn_edit }}
+                        </button>
+
+                        <!-- Botones del formulario de crear-->
+                        <button type="reset" (click)="onReset()" *ngIf="isCreateMode" class="btn btn-outline-info ml-1">
+                            <i class="fas fa-backspace"></i> {{ label_btn.btn_cleanup | translate}}
+                        </button>
+
+                        <!-- Botones del formulario de consultar-->
+                        <button type="button" (click)="goBack()" *ngIf="isViewMode" class="btn btn-outline-secondary">
+                            <i class="far fa-arrow-alt-circle-left"></i> {{ label_btn.btn_back | translate}}
+                        </button>
+
+                        <!-- Botones del formulario de eliminar-->
+                        <button type="button" (click)="onDelete()" *ngIf="isDeleteMode"
+                        [disabled]="progressing" class="btn btn-outline-danger">
+                        <i class="fas fa-trash"></i> {{ label_btn.btn_delete | translate}}</button>
+
+                    </div>
+                </form>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- general form elements disabled -->
+    </div>
+</div>

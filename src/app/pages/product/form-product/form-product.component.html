@@ -1,0 +1,225 @@
+<!-- ----------------------------------------------------------------------------------- -->
+<!-- FORMULARIO DE PRODUCTO -->
+<!-- ----------------------------------------------------------------------------------- -->
+<div id="divForm">
+    <!-- general form elements disabled -->
+    <div class="card" [ngClass]="{'card-warning': isCreateMode,'card-danger': isDeleteMode,
+                'card-success' : isViewMode, 'card-info' : !isViewMode && !isCreateMode}">
+ 
+        <div class="card-header">
+            <h3 class="card-title  ">
+                <a (click)="goBack()" title="Volver atras"><i class="fas fa-arrow-circle-left"></i> </a>
+                {{info_component.title | translate}}
+            </h3>
+        </div>
+
+        <!-- /.card-header -->
+        <div class="card-body" *ngIf="!progressing"> 
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{label_text.name_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">N</div>
+                                </div>
+                                <input type="text" class="form-control"
+                                    placeholder="{{label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    title="{{ label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    id="name_product" formControlName="name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.name.errors.required"> {{label_text.name_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label> {{label_text.status_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-2">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" formControlName="statusId"
+                                        id="status_product1" [value]="1" >
+                                    <label class="form-check-label" for="status_product1">
+                                        Activo
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" formControlName="statusId"
+                                        id="status_product3" [value]="3">
+                                    <label class="form-check-label" for="status_product3">
+                                        Pausado
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" formControlName="statusId"
+                                        id="status_product5" [value]="5">
+                                    <label class="form-check-label" for="status_product5">
+                                        Agotado
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{label_text.shortName_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-sort-alpha-down-alt"></i></span>
+                                </div>
+                                <input type="text" class="form-control"
+                                    placeholder="{{label_text.shortName_label | translate }}"
+                                    title="{{label_text.shortName_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    id="shortName_product" formControlName="shortName"
+                                    [ngClass]="{ 'is-invalid': submitted && f.shortName.errors }" />
+
+                                <div *ngIf="submitted && f.shortName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.shortName.errors.required">{{label_text.shortName_label |
+                                        translate }} {{label_error.msg_error_required | translate }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group ">
+                            <label> {{label_text.barcode_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="price" class="form-control" id="price_product" formControlName="barcode"
+                                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
+                                    placeholder="{{label_text.barcode_label | translate }}"
+                                    title="{{label_text.barcode_label  | translate  }}  {{ info_component.owner | translate  }}" />
+
+                                <div *ngIf="submitted && f.barcode.errors" class="invalid-feedback">
+                                    <div *ngIf="f.barcode.errors.required"> {{label_text.barcode_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                    <div *ngIf="f.barcode.errors.price"> {{label_text.barcode_label | translate }}
+                                        {{label_error.msg_error_price_invalid | translate }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{label_text.coste_label | translate }} {{ info_component.owner | translate
+                                }} </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        {{prop_glo.info_globals.monedas.default.simb_mon}}</span>
+                                </div>
+                                <input type="number" class="form-control"
+                                    placeholder="{{label_text.coste_label | translate }}"
+                                    title="{{label_text.coste_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    id="cost_product" formControlName="cost"
+                                    [ngClass]="{ 'is-invalid': submitted && f.cost.errors }" />
+                                <div *ngIf="submitted && f.cost.errors" class="invalid-feedback">
+                                    <div *ngIf="f.cost.errors.required">{{label_text.coste_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <!-- text input -->
+                        <div class="form-group ">
+                            <label> {{label_text.price_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        {{prop_glo.info_globals.monedas.default.simb_mon}}</span>
+                                </div>
+
+                                <input type="number" class="form-control" id="price_product" formControlName="price"
+                                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
+                                    placeholder="{{label_text.price_label | translate }}"
+                                    title="{{label_text.price_label  | translate  }}  {{ info_component.owner | translate  }}" />
+
+                                <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                                    <div *ngIf="f.price.errors.required"> {{label_text.price_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                    <div *ngIf="f.price.errors.price"> {{label_text.price_label | translate }}
+                                        {{label_error.msg_error_price_invalid | translate }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <fieldset class="border border-info col-sm-12 rounded "  *ngIf="isCreateMode">
+                    <legend class="border border-info col-sm-12 rounded">
+                        <i class="fas fa-images"></i> [{{label_text.optional_image | translate}}]
+                        <small class="text-muted ">{{label_text.optional_field| translate }} </small>
+                    </legend>
+
+                    <div class="row">
+                        <!-- text input -->
+                        <div class="form-group col-sm-6">
+                            <label>{{label_text.image_label | translate }} {{ info_component.owner | translate }}</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" formControlName="image"
+                                    title="{{label_text.image_label | translate }}" id="image_product" />
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <hr>
+                <div class="card-text">
+                    <button type="button" (click)="goBack()" *ngIf="!isViewMode"
+                        class="btn btn-outline-danger float-right"
+                        [ngClass]="{'btn-outline-danger': !isDeleteMode,  'btn-outline-secondary' : isDeleteMode }">
+                        <i class="far fa-window-close"></i>
+                        {{ label_btn.btn_cancel | translate}}
+                    </button>
+                    <!-- Botones del formulario de editar / crear-->
+                    <button type="submit" class="btn float-left" *ngIf="!isViewMode && !isDeleteMode"
+                        [ngClass]="{'btn-outline-success': isCreateMode,  'btn-outline-info' : !isViewMode && !isCreateMode  && !isDeleteMode}"
+                        [disabled]="progressing" translate>
+                        <i class="far fa-save"></i> {{ isCreateMode ? label_btn.btn_save : label_btn.btn_edit }}
+                    </button>
+
+                    <!-- Botones del formulario de crear-->
+                    <button type="reset" (click)="onReset()" *ngIf="isCreateMode" class="btn btn-outline-info ml-1">
+                        <i class="fas fa-backspace"></i> {{ label_btn.btn_cleanup | translate}}
+                    </button>
+
+                    <!-- Botones del formulario de consultar-->
+                    <button type="button" (click)="goBack()" *ngIf="isViewMode" class="btn btn-outline-secondary">
+                        <i class="far fa-arrow-alt-circle-left"></i> {{ label_btn.btn_back | translate}}
+                    </button>
+
+                    <!-- Botones del formulario de eliminar-->
+                    <button type="button" (click)="onDelete()" *ngIf="isDeleteMode"
+                    [disabled]="progressing" class="btn btn-outline-danger">
+                    <i class="fas fa-trash"></i> {{ label_btn.btn_delete | translate}}</button>
+
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div><!-- /.card -->
+</div>
+<!-- general form elements disabled -->

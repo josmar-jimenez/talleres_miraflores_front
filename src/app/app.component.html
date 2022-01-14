@@ -1,0 +1,41 @@
+<div *ngIf="isAuthenticated()&&!isIndexPage()">
+      <div class="wrapper">
+            <app-mainheader></app-mainheader>
+            <app-sidebar></app-sidebar>
+            <!-- Content Wrapper. Contains page content -->
+            <app-preloader></app-preloader> 
+            <div class="content-wrapper">
+                  <app-navbar></app-navbar>
+                  <!-- Main content -->
+                  <section class="content">                      
+                        <div class="container-fluid"> 
+                              <app-loading-component></app-loading-component> 
+                              <ng-container *ngTemplateOutlet="template"></ng-container>
+                        </div>
+                  </section>
+            </div> 
+            <!-- /.control-sidebar -->
+            <app-footer></app-footer>
+      </div>
+</div>
+
+<div *ngIf="!isAuthenticated()&&!isIndexPage()">
+      <app-preloader></app-preloader>
+      <div class="login-box">
+            <ng-container *ngTemplateOutlet="template"></ng-container>
+      </div>
+</div>
+
+<div *ngIf="isIndexPage()">
+      <app-indexheader></app-indexheader>
+      <section class="content index-content">                      
+            <div class="container-fluid"> 
+                  <ng-container *ngTemplateOutlet="template"></ng-container>
+            </div>
+      </section>
+      <app-footer></app-footer>
+</div>
+
+<ng-template #template> 
+      <router-outlet> </router-outlet>
+</ng-template>

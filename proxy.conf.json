@@ -1,0 +1,18 @@
+{
+    "/user/*": {
+      "target": "http://localhost:8080/",
+      "secure": true,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/user/*": ""
+      }
+    },
+    "/operatives/*": {
+      "target": "http://localhost:8080/",
+      "secure": true,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/operatives/*": ""
+      }
+    }
+  }

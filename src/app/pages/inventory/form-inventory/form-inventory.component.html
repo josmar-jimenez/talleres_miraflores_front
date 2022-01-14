@@ -1,0 +1,175 @@
+<!-- ----------------------------------------------------------------------------------- -->
+<!-- FORMULARIO DE ALMACEN -->
+<!-- ----------------------------------------------------------------------------------- -->
+<div id="divForm">
+    
+    <!-- general form elements disabled -->
+    <div class="card"  [ngClass]="{'card-warning': isCreateMode,'card-danger': isDeleteMode,
+                                   'card-success' : isViewMode, 'card-info' : !isViewMode && !isCreateMode}">
+       
+   
+        <div class="card-header">
+            <h3 class="card-title  ">
+                    <a (click)="goBack()" title="Volver atras"><i class="fas fa-arrow-circle-left"></i> </a>
+                    {{info_component.title | translate}}
+            </h3>
+        </div> 
+     <!-- /.card-header -->
+    <div class="card-body" *ngIf="!progressing"> 
+        <form  [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <!-- select  -->
+                        <div class="form-group ">
+                            <label> {{label_text.store_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-store"></i>
+                                    </span>
+                                </div>
+
+                                <select name="storeId" class="form-control  " id="store_inventory"   formControlName="storeId">
+                                    <option class="text-white bg-dark  " value="undefined" selected disabled> {{label_text.selected_label | translate }} </option>
+                                    <option [ngValue]="item.id" *ngFor="let item of listStore">  {{item.name}}  </option>
+                                </select>
+
+                                <div *ngIf="submitted && f.storeId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.storeId.errors.required"> {{label_text.store_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{ label_text.cantPhysical_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">@</div>
+                                </div>
+                                <input type="number" class="form-control" id="cantPhysical"
+                                    placeholder=" {{label_text.cantPhysical_label  | translate  }}  {{ info_component.owner | translate }}"
+                                    title=" {{label_text.cantPhysical  | translate  }}  {{ info_component.owner | translate  }}"
+                                    [ngClass]="{ 'is-invalid': submitted && f.cantPhysical.errors }" formControlName="cantPhysical"
+                                    autocomplete="new-user" />
+                                <div *ngIf="submitted && f.cantPhysical.errors" class="invalid-feedback">
+                                    <div *ngIf="f.cantPhysical.errors.required">{{label_text.nick_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                    <div *ngIf="f.cantPhysical.errors.minlength">
+                                        {{label_text.cantPhysical | translate }}
+                                        {{label_error.msg_error_characters_min | translate }}
+                                    </div>
+                                    <div *ngIf="f.cantPhysical.errors.maxlength">
+                                        {{label_text.cantPhysical | translate }}
+                                        {{label_error.msg_error_characters_max | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group ">
+                            <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-id-card"></i>
+                                    </span>
+                                </div>
+
+                                <select name="productId" class="form-control  " id="product_id"
+                                    formControlName="productId">
+                                    <option class="text-white bg-dark  " value="undefined"
+                                        selected disabled>
+                                        {{label_text.selected_label | translate }} </option>
+                                    <option [value]="item.id" *ngFor="let item of listProduct">
+                                        {{item.name}}</option>
+                                </select>
+
+                                <div *ngIf="submitted && f.productId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.productId.errors.required"> {{label_text.profile_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div> 
+                </div>  
+
+                <div class="row">
+                    <!-- text input -->
+                    <div class="col-sm-12">
+
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{label_text.comments_label | translate }} {{ info_component.owner | translate }}  </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"> 
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                </div>
+
+                                <textarea id="comments_user"  formControlName="comments"  class="form-control"  
+                                    placeholder="{{label_text.indicate_label | translate  }} ..." rows="3"
+                                    title=" {{label_text.comments_label  | translate  }}  {{ info_component.owner | translate  }}" 
+                                    [ngClass]="{ 'is-invalid': submitted && f.comments.errors }"></textarea>
+
+                                <!-- DIV´s - ERRORES -->
+                                <div *ngIf="submitted && f.comments.errors" class="invalid-feedback">
+                                    <div *ngIf="f.comments.errors.required">{{label_text.comments_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+                                <!-- DIV´s - ERRORES -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="card-text">
+                    <button type="button" (click)="goBack()" *ngIf="!isViewMode"
+                        class="btn btn-outline-danger float-right"
+                        [ngClass]="{'btn-outline-danger': !isDeleteMode,  'btn-outline-secondary' : isDeleteMode }">
+                        <i class="far fa-window-close"></i>
+                        {{ label_btn.btn_cancel | translate}}
+                    </button>
+                    <!-- Botones del formulario de editar / crear-->
+                    <button type="submit" class="btn float-left" *ngIf="!isViewMode && !isDeleteMode"
+                        [ngClass]="{'btn-success': isCreateMode,  'btn-outline-info' : !isViewMode && !isCreateMode  && !isDeleteMode}"
+                        [disabled]="progressing" translate>
+                        <i class="far fa-save"></i> {{ isCreateMode ? label_btn.btn_save : label_btn.btn_edit }}
+                    </button>
+
+                    <!-- Botones del formulario de crear-->
+                    <button type="reset" (click)="onReset()" *ngIf="isCreateMode" class="btn btn-info ml-1">
+                        <i class="fas fa-backspace"></i> {{ label_btn.btn_cleanup | translate}}
+                    </button>
+
+                    <!-- Botones del formulario de consultar-->
+                    <button type="button" (click)="goBack()" *ngIf="isViewMode" class="btn btn-outline-secondary">
+                        <i class="far fa-arrow-alt-circle-left"></i> {{ label_btn.btn_back | translate}}
+                    </button>
+
+                    <!-- Botones del formulario de eliminar-->
+                    <button type="button" (click)="onDelete()" *ngIf="isDeleteMode"
+                    [disabled]="progressing" class="btn btn-outline-danger">
+                    <i class="fas fa-trash"></i> {{ label_btn.btn_delete | translate}}</button>
+
+                </div>
+            </form>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+    <!-- general form elements disabled -->
+</div>
+</div>
