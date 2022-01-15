@@ -12,6 +12,6 @@ jobs:
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          repoToken: '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'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TALLERES_MIRAFLORES_FRONT }}'
           projectId: talleres-miraflores-front
