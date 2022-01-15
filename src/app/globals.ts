@@ -65,7 +65,8 @@ export const propiedades_globales = {
         pref_exito: "EXITO: ",
         sms_bienvenida: "bienvenido al systema",
         sms_success_add: "registrado correctamente", 
-        sms_success_edit: "editado correctamente" 
+        sms_success_edit: "editado correctamente" ,
+        sms_success_delete: "eliminado correctamente" ,
     },
 
     sms_error_component: {

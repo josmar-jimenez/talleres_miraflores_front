@@ -62,6 +62,7 @@ export class FormUserComponent implements OnInit {
   public form_data: any;
   
   ngOnInit(): void { 
+    this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
         name: [{ value: "", disabled: this.isViewMode }, Validators.required],
@@ -78,8 +79,6 @@ export class FormUserComponent implements OnInit {
         confirmPassword: [{ value: "", disabled: this.isViewMode }, Validators.required]
       }, { validators: [ValidationConfimPass.match('password', 'confirmPassword')] }
     );
-
-    this.getInfoComponent();
   }
 
   get f(): { [key: string]: AbstractControl } {

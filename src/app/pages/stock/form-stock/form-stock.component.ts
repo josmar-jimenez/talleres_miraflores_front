@@ -60,6 +60,7 @@ export class FormStockComponent implements OnInit {
   public img_stock_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
   ngOnInit(): void {     
+    this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
         stock: [{ value: "", disabled: this.isViewMode }, Validators.required], 
@@ -68,7 +69,6 @@ export class FormStockComponent implements OnInit {
         statusId: [{ value: 1, disabled: this.isViewMode }, null],
        }
     );
-    this.getInfoComponent();
   }
 
   get f(): { [key: string]: AbstractControl } {

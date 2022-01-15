@@ -52,14 +52,14 @@ export class FormTagComponent implements OnInit {
   public form_data: any;
   public info_component!: any;
 
-  ngOnInit(): void {    
+  ngOnInit(): void { 
+    this.getInfoComponent()   
     this.form = this.formBuilder.group(
       {
         name: [{ value: "", disabled: this.isViewMode || this.isDeleteMode }, Validators.required]
       }, { validators: [ValidationSpaceWhite.cannotContainSpace('name')] }
     );
 
-    this.getInfoComponent();
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -139,7 +139,7 @@ export class FormTagComponent implements OnInit {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
         } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_edit);
+          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_delete);
           pref = prop_glo.sms_component.pref_exito;
         }
 

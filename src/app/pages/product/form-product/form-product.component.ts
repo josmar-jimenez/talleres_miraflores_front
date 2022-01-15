@@ -57,6 +57,7 @@ export class FormProductComponent implements OnInit {
   public img_product_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
   ngOnInit(): void { 
+    this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
         name: [{ value: "", disabled: this.isViewMode }, Validators.required],
@@ -69,7 +70,6 @@ export class FormProductComponent implements OnInit {
        }
     );
 
-    this.getInfoComponent();
   }
 
   get f(): { [key: string]: AbstractControl } {
