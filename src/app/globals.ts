@@ -153,7 +153,9 @@ export const propierties_api = {
     empoint_url: {
         /*url base endpoint*/
         // 'https://talleres-miraflores.herokuapp.com',
-        base_ws_url: 'http://localhost:8080',
+        // 'http://localhost:8080',
+
+        base_ws_url: 'https://talleres-miraflores.herokuapp.com',
         /*url base endpoint*/
 
         /*url endpoint users*/
