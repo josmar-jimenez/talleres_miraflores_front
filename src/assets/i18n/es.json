@@ -36,7 +36,7 @@
 
         "__ COMMENTARIO - TITULOS DE COMPONENTES  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
         
-        "add": "agregar",
+        "add": "Agregar",
 
         "list of user": "Lista de usuarios",
         "list of store": "Lista de tiendas",
@@ -138,13 +138,15 @@
         "comment":"Comentario",
         "quantity physical":"Cantidad fisica",
         "cost":"Costo",
-        "detail":"Detail",
+        "detail":"Detalle",
         "total":"Total",
         "createdDate":"Fecha de creación",
         "createdTime":"Hora de creación",
         "productName":"Producto",
         "storeName":"Tienda",
         "statusName":"Estatus",
+        "hasMismatch":"Posee descuadre",
+        "addProduct":"Añadir producto",
 
         "__ COMMENTARIO - LABEL ERRORES DE LOS FORMULARIOS  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
         "is invalid": "no es valido",

@@ -15,6 +15,9 @@ import { InventoryService } from 'src/app/services/data/inventory.service';
 import { Inventory } from 'src/app/model/data/inventory';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { DetailInventory } from 'src/app/model/data/detail-inventory';
+import { InventoryTable } from 'src/app/model/data/inventory-table';
+import { Product } from 'src/app/model/data/product';
+
 
 @Component({
   selector: 'app-form-inventory',
@@ -34,7 +37,7 @@ export class FormInventoryComponent implements OnInit {
     private storeService: StoreService,
     private productService: ProductService,
     private location: Location,
-    private notificationService:NotificationsService,
+    private notificationService: NotificationsService,
     public translate: TranslateService
   ) {
     translate.addLangs(prop_glo.info_globals.idiomas.config);
@@ -54,22 +57,25 @@ export class FormInventoryComponent implements OnInit {
 
   public form!: FormGroup;
   public listStore: any;
-  public listProduct: any; 
-  public id: any = null;   
-  public info_component!: any; 
+  public listProduct:  Array<Product> = [];
+  public id: any = null;
+  public info_component!: any;
   public form_data: any;
 
+  public inventoryTable: Array<InventoryTable> = [];
+
   public img_inventory_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
- 
-  ngOnInit(): void {     
+
+  ngOnInit(): void {
     this.form = this.formBuilder.group(
       {
-        cantPhysical: [{ value: "", disabled: this.isViewMode }, Validators.required], 
-        comments: [{ value: "", disabled: this.isViewMode }, Validators.nullValidator], 
-        productId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]], 
-        storeId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]],
+        storeId: [{ value: "undefined", disabled: this.isViewMode }, null],
+        comments: [{ value: "", disabled: this.isViewMode }, null],
         statusId: [{ value: this.status_activo.id, disabled: this.isViewMode }, null],
-       }
+
+        cantPhysical: [{ value: "", disabled: this.isViewMode }, Validators.required],
+        productId: [{ value: '', disabled: this.isViewMode }, [Validators.required]],
+      }
     );
     this.getInfoComponent();
   }
@@ -85,34 +91,34 @@ export class FormInventoryComponent implements OnInit {
       return;
     }
 
-    this.controlLoading (true);
+    this.controlLoading(true);
 
-    this.form_data = this.form.value;   
+    this.form_data = this.form.value;
 
-    let objInventoryDetail:DetailInventory = {
-      cantPhysical:this.form_data.cantPhysical,
+    let objInventoryDetail: DetailInventory = {
+      cantPhysical: this.form_data.cantPhysical,
       productId: this.form_data.productId
     };
 
-    let inventory_data = new Inventory( null, this.form_data.storeId, this.form_data.comments,Array.of(objInventoryDetail) ); 
+    let inventory_data = new Inventory(null, this.form_data.storeId, this.form_data.comments, Array.of(objInventoryDetail), "", false);
     console.log(inventory_data);
 
-    if (! this.isCreateMode) {  
+    if (!this.isCreateMode) {
       this.updateProduct(inventory_data);
-    }else{
+    } else {
       this.saveProduct(inventory_data);
-    } 
+    }
 
   }
- 
-  saveProduct(inventory_data:Inventory){
+
+  saveProduct(inventory_data: Inventory) {
     this.serviceUse.save(inventory_data).subscribe(
       (response: any) => {
 
         let sms: string, pref: string;
         this.authService.setToken(response.token);
         let existeError: boolean = response.error != null && response.error != '';
-      
+
         if (existeError) {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
@@ -126,14 +132,14 @@ export class FormInventoryComponent implements OnInit {
     );
   }
 
-  updateProduct(inventory_data:Inventory): void {  
+  updateProduct(inventory_data: Inventory): void {
     this.serviceUse.update(this.id, inventory_data).subscribe(
       (response: any) => {
 
         let sms: string, pref: string;
         this.authService.setToken(response.token);
         let existeError: boolean = response.error != null && response.error != '';
-         
+
         if (existeError) {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
@@ -142,7 +148,7 @@ export class FormInventoryComponent implements OnInit {
           pref = prop_glo.sms_component.pref_exito;
         }
 
-        this.postExecuteNotification(existeError, sms, pref);  
+        this.postExecuteNotification(existeError, sms, pref);
 
       },
       error => {
@@ -182,7 +188,7 @@ export class FormInventoryComponent implements OnInit {
   findItemById(id: any): void {
     this.serviceUse.findOne(id).pipe(first()).subscribe(
       (response: any) => {
-        console.log(response);    
+        console.log(response);
         this.authService.setToken(response.token);
         let existeError = response.error != null && response.error != '';
 
@@ -190,7 +196,7 @@ export class FormInventoryComponent implements OnInit {
           console.log(response.error);
         } else {
           this.form.patchValue(response.info);
-          this.controlLoading (false); 
+          this.controlLoading(false);
         }
       },
       error => {
@@ -210,7 +216,7 @@ export class FormInventoryComponent implements OnInit {
       this.authService.setToken(data.token);
       this.listStore = data.info.content;
 
-      this.controlLoading (false); 
+      this.controlLoading(false);
 
     }, (error: any) => {
       console.log(error);
@@ -218,9 +224,9 @@ export class FormInventoryComponent implements OnInit {
 
   }
 
-  getInfoComponent() {   
-    this.controlLoading (true);   
-    this.getSelectedAddStock();    
+  getInfoComponent() {
+    this.controlLoading(true);
+    this.getSelectedAddStock();
 
     let ruta = this.router.url;
     let owner = ruta.split('/')[1];
@@ -230,33 +236,33 @@ export class FormInventoryComponent implements OnInit {
     this.isViewMode = this.info_component.accion_activa == actions[2];//actions[4] = view ~
     this.isCreateMode = this.info_component.accion_activa == actions[3]; //actions[4] = create ~
     this.isDeleteMode = this.info_component.accion_activa == actions[1]; //actions[1] = delete ~
-    
+
     if (!this.isCreateMode) {  //actions[4] = create ~   
       this.id = this.getIdParams();
       console.log("ITEM [" + owner + "] | ID SELECCIONADO:" + this.id);
       this.findItemById(this.id);
-    } 
+    }
   }
-      
+
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {
-    if (_existeError) { 
-      this.controlLoading (false); 
+    if (_existeError) {
+      this.controlLoading(false);
       this.toastr.error(sms, pref, {
         timeOut: 2000, positionClass: 'toast-top-center'
       });
-      
+
     } else {
       this.notificationService.useCache = false;
-      
+
       this.toastr.success(sms, pref, {
         timeOut: 3000, positionClass: 'toast-top-center'
-      }).onHidden.subscribe( () => { this.onReset();  this.goUpdatedList();} );
-    } 
-    
+      }).onHidden.subscribe(() => { this.onReset(); this.goUpdatedList(); });
+    }
+
   }
   /* Metodo utilitario */
   onReset(): void {
-    this.submitted = false;  
+    this.submitted = false;
     this.form.reset();
   }
 
@@ -273,8 +279,48 @@ export class FormInventoryComponent implements OnInit {
     this.location.back();
   }
 
-  controlLoading (status : boolean) : void {
+  controlLoading(status: boolean): void {
     this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
     this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
+  }
+
+  /*Acciones tabla*/
+  addItem(): void {
+    this.form_data = this.form.value;  
+    this.submitted = true;
+    if (this.form.invalid) {
+      return;
+    }
+    var productName:string= "";
+    this.listProduct.forEach((item) => {
+      if (item.id == this.form_data.productId) {
+        productName = item.name;
+      }});
+    this.inventoryTable.push(new InventoryTable(this.form_data.productId, productName,this.form_data.cantPhysical));
+  }
+
+  addCant(id: number): void {
+    this.inventoryTable.forEach((item, index) => {
+      if (item.productId == id) {
+          item.cant = item.cant + 1;
+      }});
+  }
+
+  subsCant(id: number): void {
+    this.inventoryTable.forEach((item, index) => {
+      if (item.productId == id) {
+        if (item.cant > 1)
+          item.cant = item.cant - 1;
+        else
+          this.inventoryTable.splice(index, 1);
+      }
+    });
+
+  }
+  removeItem(id: number): void {
+    this.inventoryTable.forEach((item, index) => {
+      if (item.productId == id)
+        this.inventoryTable.splice(index, 1);
+    });
   }
 }

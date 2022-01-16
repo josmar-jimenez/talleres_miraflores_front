@@ -2,23 +2,21 @@
 <!-- FORMULARIO DE ALMACEN -->
 <!-- ----------------------------------------------------------------------------------- -->
 <div id="divForm">
-    
+
     <!-- general form elements disabled -->
-    <div class="card"  [ngClass]="{'card-warning': isCreateMode,'card-danger': isDeleteMode,
-                                   'card-success' : isViewMode, 'card-info' : !isViewMode && !isCreateMode}">
-       
-   
+    <div class="card" [ngClass]="{'card-warning': isCreateMode,'card-danger': isDeleteMode,
+    'card-success' : isViewMode, 'card-info' : !isViewMode && !isCreateMode}">
         <div class="card-header">
             <h3 class="card-title  ">
-                    <a (click)="goBack()" title="Volver atras"><i class="fas fa-arrow-circle-left"></i> </a>
-                    {{info_component.title | translate}}
+                <a (click)="goBack()" title="Volver atras"><i class="fas fa-arrow-circle-left"></i> </a>
+                {{info_component.title | translate}}
             </h3>
-        </div> 
-     <!-- /.card-header -->
-    <div class="card-body" *ngIf="!progressing"> 
-        <form  [formGroup]="form" (ngSubmit)="onSubmit()">
-                <div class="row">
+        </div>
 
+        <!-- /.card-header -->
+        <div class="card-body" *ngIf="!progressing">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="row" >
                     <div class="col-sm-6">
                         <!-- select  -->
                         <div class="form-group ">
@@ -32,9 +30,11 @@
                                     </span>
                                 </div>
 
-                                <select name="storeId" class="form-control  " id="store_inventory"   formControlName="storeId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled> {{label_text.selected_label | translate }} </option>
-                                    <option [ngValue]="item.id" *ngFor="let item of listStore">  {{item.name}}  </option>
+                                <select name="storeId" class="form-control  " id="store_inventory"
+                                    formControlName="storeId">
+                                    <option class="text-white bg-dark  " value="undefined" selected disabled>
+                                        {{label_text.selected_label | translate }} </option>
+                                    <option [ngValue]="item.id" *ngFor="let item of listStore"> {{item.name}} </option>
                                 </select>
 
                                 <div *ngIf="submitted && f.storeId.errors" class="invalid-feedback">
@@ -43,39 +43,50 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group" *ngIf="this.isCreateMode">
+                            <label> Solo puede realizar inventarios de la tienda que pertenece </label>
+                        </div>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label> {{ label_text.cantPhysical_label | translate }} {{ info_component.owner | translate }}
+                            <label> {{label_text.comments_label | translate }} {{ info_component.owner | translate }}
                             </label>
-                            <div class="input-group mb-2">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text">@</div>
+                                    <div class="input-group-text">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
                                 </div>
-                                <input type="number" class="form-control" id="cantPhysical"
-                                    placeholder=" {{label_text.cantPhysical_label  | translate  }}  {{ info_component.owner | translate }}"
-                                    title=" {{label_text.cantPhysical  | translate  }}  {{ info_component.owner | translate  }}"
-                                    [ngClass]="{ 'is-invalid': submitted && f.cantPhysical.errors }" formControlName="cantPhysical"
-                                    autocomplete="new-user" />
-                                <div *ngIf="submitted && f.cantPhysical.errors" class="invalid-feedback">
-                                    <div *ngIf="f.cantPhysical.errors.required">{{label_text.nick_label | translate }}
+
+                                <textarea id="comments_user" formControlName="comments" class="form-control"
+                                    placeholder="{{label_text.indicate_label | translate  }} ..." rows="3"
+                                    title=" {{label_text.comments_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    [ngClass]="{ 'is-invalid': submitted && f.comments.errors }"></textarea>
+
+                                <!-- DIV´s - ERRORES -->
+                                <div *ngIf="submitted && f.comments.errors" class="invalid-feedback">
+                                    <div *ngIf="f.comments.errors.required">{{label_text.comments_label | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
-                                    <div *ngIf="f.cantPhysical.errors.minlength">
-                                        {{label_text.cantPhysical | translate }}
-                                        {{label_error.msg_error_characters_min | translate }}
-                                    </div>
-                                    <div *ngIf="f.cantPhysical.errors.maxlength">
-                                        {{label_text.cantPhysical | translate }}
-                                        {{label_error.msg_error_characters_max | translate }}
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-3">
+                </div>
+                <div class="row" *ngIf="this.isCreateMode">
+                    <div class="col">
+                        <hr>
+                    </div>
+                    <div class="col-auto"><label>{{'list of product' | translate }}</label></div>
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <br />
+                <div class="row" *ngIf="this.isCreateMode">
+                    <!-- text input -->
+                    <div class="col-sm-4">
                         <div class="form-group ">
                             <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
                             </label>
@@ -87,55 +98,106 @@
                                 </div>
 
                                 <select name="productId" class="form-control  " id="product_id"
-                                    formControlName="productId">
-                                    <option class="text-white bg-dark  " value="undefined"
-                                        selected disabled>
+                                [ngClass]="{ 'is-invalid': submitted && f.productId.errors }"
+                                    formControlName="productId" required>
+                                    <option class="text-white bg-dark" value='' >
                                         {{label_text.selected_label | translate }} </option>
                                     <option [value]="item.id" *ngFor="let item of listProduct">
                                         {{item.name}}</option>
                                 </select>
 
                                 <div *ngIf="submitted && f.productId.errors" class="invalid-feedback">
-                                    <div *ngIf="f.productId.errors.required"> {{label_text.profile_label | translate }}
-                                        {{label_error.msg_error_required | translate }} </div>
+                                    <div *ngIf="f.productId.errors.required"> {{'product' | translate }}
+                                        {{label_error.msg_error_required | translate }}
+                                    </div>
                                 </div>
 
                             </div>
                         </div>
-                    </div> 
-                </div>  
-
-                <div class="row">
-                    <!-- text input -->
-                    <div class="col-sm-12">
-
+                    </div>
+                    <div class="col-sm-4">
                         <!-- text input -->
                         <div class="form-group">
-                            <label> {{label_text.comments_label | translate }} {{ info_component.owner | translate }}  </label>
-                            <div class="input-group">
+                            <label> {{ label_text.cantPhysical_label | translate }} {{ info_component.owner | translate
+                                }}
+                            </label>
+                            <div class="input-group mb-2">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text"> 
-                                        <i class="fas fa-comments"></i>
+                                    <div class="input-group-text">@</div>
+                                </div>
+                                <input type="number" class="form-control" id="cantPhysical"
+                                    placeholder=" {{label_text.cantPhysical_label  | translate  }}  {{ info_component.owner | translate }}"
+                                    title=" {{label_text.cantPhysical  | translate  }}  {{ info_component.owner | translate  }}"
+                                    [ngClass]="{ 'is-invalid': submitted && f.cantPhysical.errors }"
+                                    formControlName="cantPhysical" min="1" />
+                                <div *ngIf="submitted && f.cantPhysical.errors" class="invalid-feedback">
+                                    <div *ngIf="f.cantPhysical.errors.required">{{'quantity physical' | translate }}
+                                        {{label_error.msg_error_required | translate }}
+                                    </div>
+                                    <div *ngIf="f.cantPhysical.errors.min">
+                                        {{label_text.cantPhysical | translate }} debe ser al menos una unidad
                                     </div>
                                 </div>
-
-                                <textarea id="comments_user"  formControlName="comments"  class="form-control"  
-                                    placeholder="{{label_text.indicate_label | translate  }} ..." rows="3"
-                                    title=" {{label_text.comments_label  | translate  }}  {{ info_component.owner | translate  }}" 
-                                    [ngClass]="{ 'is-invalid': submitted && f.comments.errors }"></textarea>
-
-                                <!-- DIV´s - ERRORES -->
-                                <div *ngIf="submitted && f.comments.errors" class="invalid-feedback">
-                                    <div *ngIf="f.comments.errors.required">{{label_text.comments_label | translate }}
-                                        {{label_error.msg_error_required | translate }} </div>
-                                </div>
-                                <!-- DIV´s - ERRORES -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{ 'add' | translate }} </label>
+                            <div class="input-group mb-2">
+                                <a class="btn btn-outline-warning float-right" role="button" aria-pressed="true"
+                                    title="{{ label_btn.btn_add | translate}}" (click)="addItem()">
+                                    <i class="fas fa-plus-circle"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <hr>
+                    </div>
+                    <div class="col-auto"><label>{{'detail' | translate }}</label></div>
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{'product' | translate }}</th>
+                                    <th scope="col">Cant</th>
+                                    <th scope="col">{{'actions' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of inventoryTable">
+                                    <th scope="row">{{item.productName}}</th>
+                                    <td>{{item.cant}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary mr-1"
+                                            title="{{ label_btn.btn_delete  | translate }}"
+                                            (click)="addCant(item.productId)">
+                                            <i class="fas fa-plus-circle"></i> </button>
+                                        <button type="button" class="btn btn-outline-info mr-1"
+                                        title="{{ label_btn.btn_delete  | translate }}"
+                                        (click)="subsCant(item.productId)">
+                                        <i class="fas fa-minus-circle"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger"
+                                            title="{{ label_btn.btn_delete  | translate }}" 
+                                            (click)="removeItem(item.productId)">
+                                        <i class="fas fa-trash-alt"></i> </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                <hr>
                 <div class="card-text">
                     <button type="button" (click)="goBack()" *ngIf="!isViewMode"
                         class="btn btn-outline-danger float-right"
@@ -145,13 +207,13 @@
                     </button>
                     <!-- Botones del formulario de editar / crear-->
                     <button type="submit" class="btn float-left" *ngIf="!isViewMode && !isDeleteMode"
-                        [ngClass]="{'btn-success': isCreateMode,  'btn-outline-info' : !isViewMode && !isCreateMode  && !isDeleteMode}"
+                        [ngClass]="{'btn-outline-success': isCreateMode,  'btn-outline-info' : !isViewMode && !isCreateMode  && !isDeleteMode}"
                         [disabled]="progressing" translate>
                         <i class="far fa-save"></i> {{ isCreateMode ? label_btn.btn_save : label_btn.btn_edit }}
                     </button>
 
                     <!-- Botones del formulario de crear-->
-                    <button type="reset" (click)="onReset()" *ngIf="isCreateMode" class="btn btn-info ml-1">
+                    <button type="reset" (click)="onReset()" *ngIf="isCreateMode" class="btn btn-outline-info ml-1">
                         <i class="fas fa-backspace"></i> {{ label_btn.btn_cleanup | translate}}
                     </button>
 
@@ -161,15 +223,15 @@
                     </button>
 
                     <!-- Botones del formulario de eliminar-->
-                    <button type="button" (click)="onDelete()" *ngIf="isDeleteMode"
-                    [disabled]="progressing" class="btn btn-outline-danger">
-                    <i class="fas fa-trash"></i> {{ label_btn.btn_delete | translate}}</button>
+                    <button type="button" (click)="onDelete()" *ngIf="isDeleteMode" [disabled]="progressing"
+                        class="btn btn-outline-danger">
+                        <i class="fas fa-trash"></i> {{ label_btn.btn_delete | translate}}</button>
 
                 </div>
             </form>
-        <!-- /.card-body -->
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- general form elements disabled -->
     </div>
-    <!-- /.card -->
-    <!-- general form elements disabled -->
-</div>
 </div>
