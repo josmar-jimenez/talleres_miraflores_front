@@ -10,13 +10,15 @@ import { propiedades_globales as prop_glo } from 'src/app/globals';
 import { Status } from 'src/app/services/data/status-const';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { StoreService } from 'src/app/services/data/store.service';
-import { ProductService } from 'src/app/services/data/product.service';
 import { InventoryService } from 'src/app/services/data/inventory.service';
 import { Inventory } from 'src/app/model/data/inventory';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { DetailInventory } from 'src/app/model/data/detail-inventory';
 import { InventoryTable } from 'src/app/model/data/inventory-table';
 import { Product } from 'src/app/model/data/product';
+import { StockService } from 'src/app/services/data/stock.service';
+import { Stock } from 'src/app/model/data/stock';
+import { StockByProduct } from 'src/app/model/data/stock-by-product';
 
 
 @Component({
@@ -35,16 +37,20 @@ export class FormInventoryComponent implements OnInit {
     private authService: AuthService,
     private serviceUse: InventoryService,
     private storeService: StoreService,
-    private productService: ProductService,
+    private stockService: StockService,
     private location: Location,
     private notificationService: NotificationsService,
     public translate: TranslateService
   ) {
     translate.addLangs(prop_glo.info_globals.idiomas.config);
     translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
+    
   }
 
   public submitted: boolean = false;
+  public submitted2: boolean = false;
+  public storeEmpty: boolean = false;
+
   public progressing: boolean = false;
   public isCreateMode: boolean = false;
   public isViewMode: boolean = false;
@@ -57,7 +63,8 @@ export class FormInventoryComponent implements OnInit {
 
   public form!: FormGroup;
   public listStore: any;
-  public listProduct:  Array<Product> = [];
+  public listStock: Array<Stock> = [];
+  public listProduct: Array<StockByProduct> = [];
   public id: any = null;
   public info_component!: any;
   public form_data: any;
@@ -67,9 +74,11 @@ export class FormInventoryComponent implements OnInit {
   public img_inventory_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
   ngOnInit(): void {
+    this.getInfoComponent();
+
     this.form = this.formBuilder.group(
       {
-        storeId: [{ value: "undefined", disabled: this.isViewMode }, null],
+        storeId: [{ value: '', disabled: this.isViewMode }, null],
         comments: [{ value: "", disabled: this.isViewMode }, null],
         statusId: [{ value: this.status_activo.id, disabled: this.isViewMode }, null],
 
@@ -77,7 +86,6 @@ export class FormInventoryComponent implements OnInit {
         productId: [{ value: '', disabled: this.isViewMode }, [Validators.required]],
       }
     );
-    this.getInfoComponent();
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -85,26 +93,32 @@ export class FormInventoryComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.submitted = true;
-
-    if (this.form.invalid) {
+    this.submitted = false;
+    this.submitted2 = true;
+    this.form_data = this.form.value;
+    if (this.form_data.storeId == '') {
+      this.storeEmpty = true;
+      return;
+    } else {
+      this.storeEmpty = false;
+    }
+    if (this.form.invalid || this.inventoryTable.length == 0) {
       return;
     }
 
     this.controlLoading(true);
 
-    this.form_data = this.form.value;
+    let inventoryDetails: Array<DetailInventory> = [];
+    this.inventoryTable.forEach(item => {
+      inventoryDetails.push(new DetailInventory(item.productId, item.cant, 0))
+    });
 
-    let objInventoryDetail: DetailInventory = {
-      cantPhysical: this.form_data.cantPhysical,
-      productId: this.form_data.productId
-    };
-
-    let inventory_data = new Inventory(null, this.form_data.storeId, this.form_data.comments, Array.of(objInventoryDetail), "", false);
+    let inventory_data = new Inventory(null, this.form_data.storeId, this.form_data.comments, inventoryDetails, "", false);
     console.log(inventory_data);
 
     if (!this.isCreateMode) {
-      this.updateProduct(inventory_data);
+      //this.updateProduct(inventory_data);
+      //Chequear un inventario no deberia poder actualizarse
     } else {
       this.saveProduct(inventory_data);
     }
@@ -123,7 +137,7 @@ export class FormInventoryComponent implements OnInit {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
         } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_add);
+          sms = this.translate.instant('inventory').concat(" ").concat(prop_glo.sms_component.sms_success_add);
           pref = prop_glo.sms_component.pref_exito;
         }
 
@@ -133,6 +147,8 @@ export class FormInventoryComponent implements OnInit {
   }
 
   updateProduct(inventory_data: Inventory): void {
+    //Chequear por definicion un inventario no deberia actualizarse
+    /*
     this.serviceUse.update(this.id, inventory_data).subscribe(
       (response: any) => {
 
@@ -153,10 +169,12 @@ export class FormInventoryComponent implements OnInit {
       },
       error => {
         console.log(error);
-      });
+      });*/
   }
 
   onDelete() {
+    //Chequear por definicion un inventario no deberia eliminarse
+    /*
     this.serviceUse.delete(this.id).subscribe(
       (response: any) => {
         let sms: string, pref: string;
@@ -173,7 +191,7 @@ export class FormInventoryComponent implements OnInit {
 
         this.postExecuteNotification(existeError, sms, pref);
       }, error => { console.log(error); }
-    );
+    );*/
 
   }
 
@@ -197,6 +215,10 @@ export class FormInventoryComponent implements OnInit {
         } else {
           this.form.patchValue(response.info);
           this.controlLoading(false);
+          console.log(response.info);
+          response.info.detail.forEach((item:any) => {
+            this.inventoryTable.push(new InventoryTable(item.productId, item.productName, item.cantPhysical));
+          });
         }
       },
       error => {
@@ -204,10 +226,23 @@ export class FormInventoryComponent implements OnInit {
       });
   }
 
+  updateProductList(): void {
+    this.form_data = this.form.value;
+    this.inventoryTable= [];
+    this.listProduct = [];
+    this.listStock.forEach(item => {
+      if (item.storeId == this.form_data.storeId)
+        this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock));
+    });
+  }
+
   getSelectedAddStock(): void {
-    this.productService.findAllOptions().subscribe((data: any) => {
+    this.stockService.findAllOptions().subscribe((data: any) => {
       this.authService.setToken(data.token);
-      this.listProduct = data.info.content;
+      this.listStock = data.info.content;
+      this.listStock.forEach(item => {
+        this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock));
+      });
     }, (error: any) => {
       console.log(error);
     });
@@ -263,7 +298,13 @@ export class FormInventoryComponent implements OnInit {
   /* Metodo utilitario */
   onReset(): void {
     this.submitted = false;
-    this.form.reset();
+    this.submitted2 = false;
+    this.storeEmpty = false;
+    this.inventoryTable = [];
+    this.form.reset({
+      productId: '',
+      storeId: ''
+    });
   }
 
   /* Metodos de navegacion */
@@ -286,24 +327,43 @@ export class FormInventoryComponent implements OnInit {
 
   /*Acciones tabla*/
   addItem(): void {
-    this.form_data = this.form.value;  
+    this.form_data = this.form.value;
     this.submitted = true;
+    this.storeEmpty = false;
+    if (this.form_data.storeId == '') {
+      this.storeEmpty = true;
+      this.submitted2 = true;
+      return;
+    } else {
+      this.storeEmpty = false;
+      this.submitted2 = false;
+    }
     if (this.form.invalid) {
       return;
     }
-    var productName:string= "";
+
+    /*Check nombre del producto*/
+    var productName: string = "";
     this.listProduct.forEach((item) => {
-      if (item.id == this.form_data.productId) {
-        productName = item.name;
-      }});
-    this.inventoryTable.push(new InventoryTable(this.form_data.productId, productName,this.form_data.cantPhysical));
+      if (item.productId == this.form_data.productId) {
+        productName = item.productName;
+      }
+    });
+
+    /*Check si producto existe*/
+    this.inventoryTable.forEach((item, index) => {
+      if (item.productId == this.form_data.productId)
+        this.inventoryTable.splice(index, 1);
+    });
+    this.inventoryTable.push(new InventoryTable(this.form_data.productId, productName, this.form_data.cantPhysical));
   }
 
   addCant(id: number): void {
-    this.inventoryTable.forEach((item, index) => {
+    this.inventoryTable.forEach((item) => {
       if (item.productId == id) {
-          item.cant = item.cant + 1;
-      }});
+        item.cant = item.cant + 1;
+      }
+    });
   }
 
   subsCant(id: number): void {

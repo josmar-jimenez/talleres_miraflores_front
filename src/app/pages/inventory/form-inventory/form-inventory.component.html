@@ -29,16 +29,16 @@
                                         <i class="fas fa-store"></i>
                                     </span>
                                 </div>
-
                                 <select name="storeId" class="form-control  " id="store_inventory"
-                                    formControlName="storeId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled>
+                                [ngClass]="{ 'is-invalid': submitted2 && storeEmpty}" formControlName="storeId" 
+                                (change)="updateProductList()">
+                                    <option class="text-white bg-dark  " value=''>
                                         {{label_text.selected_label | translate }} </option>
                                     <option [ngValue]="item.id" *ngFor="let item of listStore"> {{item.name}} </option>
                                 </select>
 
-                                <div *ngIf="submitted && f.storeId.errors" class="invalid-feedback">
-                                    <div *ngIf="f.storeId.errors.required"> {{label_text.store_label | translate }}
+                                <div *ngIf="submitted2 && storeEmpty" class="invalid-feedback">
+                                    <div *ngIf="storeEmpty"> {{label_text.store_label | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
                                 </div>
                             </div>
@@ -100,10 +100,10 @@
                                 <select name="productId" class="form-control  " id="product_id"
                                 [ngClass]="{ 'is-invalid': submitted && f.productId.errors }"
                                     formControlName="productId" required>
-                                    <option class="text-white bg-dark" value='' >
+                                    <option class="text-white bg-dark" value=''>
                                         {{label_text.selected_label | translate }} </option>
-                                    <option [value]="item.id" *ngFor="let item of listProduct">
-                                        {{item.name}}</option>
+                                    <option [value]="item.productId" *ngFor="let item of listProduct">
+                                        {{item.productName}}</option>
                                 </select>
 
                                 <div *ngIf="submitted && f.productId.errors" class="invalid-feedback">
@@ -158,11 +158,22 @@
                     <div class="col">
                         <hr>
                     </div>
-                    <div class="col-auto"><label>{{'detail' | translate }}</label></div>
+                    <div class="col-auto"><label >{{'detail' | translate }}</label></div>
                     <div class="col">
                         <hr>
                     </div>
                 </div>
+                <div class="row" *ngIf="submitted2 && !submitted && inventoryTable.length==0">
+                    <div class="col">
+                    </div>
+                    <div class="col-auto">
+                        <p class="text-danger"> Al menos un producto es obligatorio</p>
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+
+
                 <br />
                 <div class="row">
                     <div class="col-sm-12">
@@ -171,14 +182,14 @@
                                 <tr>
                                     <th scope="col">{{'product' | translate }}</th>
                                     <th scope="col">Cant</th>
-                                    <th scope="col">{{'actions' | translate }}</th>
+                                    <th scope="col" *ngIf="this.isCreateMode">{{'actions' | translate }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of inventoryTable">
                                     <th scope="row">{{item.productName}}</th>
                                     <td>{{item.cant}}</td>
-                                    <td>
+                                    <td *ngIf="this.isCreateMode">
                                         <button type="button" class="btn btn-outline-primary mr-1"
                                             title="{{ label_btn.btn_delete  | translate }}"
                                             (click)="addCant(item.productId)">
