@@ -59,7 +59,7 @@
                                         <td class="dtr-control">{{item.createdDate}}</td>
                                         <td class="dtr-control">{{item.createdTime}}</td>
                                         <td class="dtr-control">{{item.storeName}}</td>
-                                        <td class="dtr-control">{{item.comments}}</td>
+                                        <td class="dtr-control">{{item.comments | slice:0:65}}</td>
                                         <td class="dtr-control">{{item.hasMismatch?'Sí':'No'}}</td>
                                         
                                         <td class="dtr-control">
