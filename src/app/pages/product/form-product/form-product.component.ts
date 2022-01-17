@@ -110,7 +110,7 @@ export class FormProductComponent implements OnInit {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
         } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_add);
+          sms = this.translate.instant('product').concat(" ").concat(prop_glo.sms_component.sms_success_add);
           pref = prop_glo.sms_component.pref_exito; 
         }
 
@@ -132,7 +132,7 @@ export class FormProductComponent implements OnInit {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
         } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_edit);
+          sms = this.translate.instant('product').concat(" ").concat(prop_glo.sms_component.sms_success_edit);
           pref = prop_glo.sms_component.pref_exito;
         }
 
@@ -153,7 +153,7 @@ export class FormProductComponent implements OnInit {
           sms = response.error;
           pref = prop_glo.sms_error_component.pref_error;
         } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_edit);
+          sms = this.translate.instant('product').concat(" ").concat(prop_glo.sms_component.sms_success_delete);
           pref = prop_glo.sms_component.pref_exito;
         }
 

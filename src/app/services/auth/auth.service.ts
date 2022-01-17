@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 
 const TOKEN_KEY = 'token';
 const USERNAME_KEY = 'userName';
+const USERPERSOLNAME_KEY = 'name';
+const USERSTORE_KEY = 'storeName';
 const AUTORIZATION_KEY = 'authorization';
 const helper = new JwtHelperService();
 
@@ -39,8 +41,22 @@ export class AuthService {
     window.sessionStorage.removeItem(USERNAME_KEY);
     window.sessionStorage.setItem(USERNAME_KEY, token);
   }
+  public setPersonalName(personalName: string): void {
+    window.sessionStorage.removeItem(USERPERSOLNAME_KEY);
+    window.sessionStorage.setItem(USERPERSOLNAME_KEY, personalName);
+  }
+  public setStoreName(storeName: string): void {
+    window.sessionStorage.removeItem(USERSTORE_KEY);
+    window.sessionStorage.setItem(USERSTORE_KEY, storeName);
+  }
   public getUserName(): string | null {
     return sessionStorage.getItem(USERNAME_KEY);
+  }
+  public getPersonalName(): string | null {
+    return sessionStorage.getItem(USERPERSOLNAME_KEY);
+  }
+  public getStoreName(): string | null {
+    return sessionStorage.getItem(USERSTORE_KEY);
   }
 
   public setAutorization(modulosDelUsuario: string): void {
@@ -60,6 +76,7 @@ export class AuthService {
 
     if (modulos != null) {
       modulos = JSON.parse((atob(modulos)));
+      modulos.sort((a:MenuAutorization,b:MenuAutorization) => a.operative_name.localeCompare(b.operative_name));
 
       modulos.forEach((module: any) => {
 

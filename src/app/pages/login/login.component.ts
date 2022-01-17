@@ -83,6 +83,8 @@ export class LoginComponent implements OnInit {
           this.loginService.getAuthorizations().subscribe(
             (response: any) => {
               this.authService.setUserName(data.userName);
+              this.authService.setPersonalName(data.name);
+              this.authService.setStoreName(data.storeName);
               this.authService.setAutorization(btoa(JSON.stringify(response.info)));
               this.authService.setToken(response.token); 
               this.authService.reloadPage();

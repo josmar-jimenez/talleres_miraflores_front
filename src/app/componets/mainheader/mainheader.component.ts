@@ -14,11 +14,13 @@ import { MenuAutorization } from 'src/app/model/menu/menu-autorization';
 export class MainHeaderComponent implements OnInit {
   
   public modulosPermitidos: MenuAutorization[] = [];
+  public userName:any ="";
+  public storeName:any ="";
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    public translate: TranslateService
+    public translate: TranslateService,
   ) {
     translate.addLangs(prop_glo.info_globals.idiomas.config);
     translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
@@ -30,11 +32,12 @@ export class MainHeaderComponent implements OnInit {
         this.modulosPermitidos = this.authService.loadModuleMenu(null);
       }
     });
+    this.userName = this.authService.getPersonalName();
+    this.storeName = this.authService.getStoreName();
   }
 
   nglogOut() {
     this.authService.logOut();
   } 
- 
 
 }

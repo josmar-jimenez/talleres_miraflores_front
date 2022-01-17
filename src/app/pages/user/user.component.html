@@ -23,11 +23,30 @@
                                     <tr role="row">
                                         <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
                                             colspan="1" aria-label="Rendering engine: activate to sort column ascending"
-                                            *ngFor="let key of info_component.list.header_item;">{{key | translate }}
+                                            >{{'store' | translate }}
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
+                                            >{{'nick' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
+                                            >{{'name' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
+                                            >{{'cellphone' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
+                                            >{{'email' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                        colspan="1" aria-label="Rendering engine: activate to sort column ascending"
+                                        >{{'status' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_user" rowspan="1"
+                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending">
                                             {{ label_text.actions | translate}}
                                         </th>
                                     </tr>
@@ -35,13 +54,11 @@
                                 <tbody>
                                     <tr class="odd"
                                         *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                        <td class="dtr-control">{{item.storeName}}</td>
                                         <td class="dtr-control">{{item.nick}}</td>
                                         <td class="dtr-control">{{item.name}}</td>
                                         <td class="dtr-control">{{item.cellphone | mask: maskPhone }}</td>
-                                        <td class="dtr-control">{{item.email}}</td>
-                                        <td class="dtr-control">{{item.address}}</td>                                        
-                                        <td class="dtr-control">{{item.emergencyPhone | mask: maskPhone }}</td>
-                                        <td class="dtr-control">{{item.emergencyContact}}</td>
+                                        <td class="dtr-control">{{item.email}}</td>                                      
                                         <td class="dtr-control">{{item.statusName}}</td>
                                         <td class="dtr-control">
                                             <app-button-list [acciones_crud]="info_component.list.acciones_crud"
