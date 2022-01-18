@@ -226,6 +226,7 @@ export class FormUserComponent implements OnInit {
   }
 
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {
+    this.toastr.toastrConfig.positionClass="toast-top-full-width";
     if (_existeError) { 
       this.controlLoading (false); 
       this.toastr.error(sms, pref, {

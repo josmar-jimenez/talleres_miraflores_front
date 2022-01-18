@@ -6,6 +6,7 @@ import { propiedades_globales as prop_glo } from 'src/app/globals';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { ProductService } from 'src/app/services/data/product.service';
+import { StorageService } from 'src/app/services/upload-file/storage.service';
 
 @Component({
   selector: 'app-product',
@@ -13,6 +14,8 @@ import { ProductService } from 'src/app/services/data/product.service';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit { 
+  private NO_IMAGE = '/assets/image/empty.png' ;
+
   public progressing: boolean = false; 
   public use_cache: boolean = true;
 
@@ -20,6 +23,7 @@ export class ProductComponent implements OnInit {
   public label_text: any = prop_glo.label_component;
   public info_component: any =  prop_glo.info_globals.info_component;
   public actionAllowed:any= [];
+  public imageList:any= [];
 
   constructor(
     private router: Router, 
@@ -27,7 +31,8 @@ export class ProductComponent implements OnInit {
     private serviceUse: ProductService,
     private location: Location,
     private notificationService:NotificationsService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public storageService: StorageService
     ) {
       translate.addLangs(prop_glo.info_globals.idiomas.config);
       translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
@@ -66,9 +71,23 @@ export class ProductComponent implements OnInit {
       this.info_component.list.data = data.info.content;
     }
  
-    console.log(data.info);
+    data.info.content.forEach((element:any, index:any) => {
+      this.getImage(element.id, index);
+    });
     this.info_component.list.header_item = this.serviceUse.getTableHeaderName(data.info.content);
     this.controlLoading(false);
+  }
+
+  getImage(idProduct:number, index:number) {
+    console.log(this.info_component.list.data[index]);
+    this.info_component.list.data[index].image=this.NO_IMAGE;
+
+     this.storageService.getDownloadURL("product/"+idProduct+"/image.jpg").then(value => {
+        console.log(value);
+        this.info_component.list.data[index].image=value;
+      } ).catch(function(reason) {
+        console.log(reason);
+     });
   }
   
   restInfoComponent()  : void{  

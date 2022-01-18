@@ -12,7 +12,9 @@ import { PreloaderComponent } from './componets/preloader/preloader.component';
 import { AuthInterceptorProviders } from './helpers/auth.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { environment } from 'src/environments/environment';
+import { initializeApp,provideFirebaseApp, } from '@angular/fire/app';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 export const AppBaseHref = [
   {provide: APP_BASE_HREF, useValue: '/'}
 ];
@@ -37,7 +39,8 @@ export const AppBaseHref = [
         deps: [HttpClient]
       },
       isolate: false
-    }),
+    }), 
+    provideFirebaseApp(() => initializeApp(environment.firebase)), provideStorage(() => getStorage()),
   ],
   exports: [
   ],

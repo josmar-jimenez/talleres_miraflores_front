@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "talleres-miraflores-front"
+  },
+  "targets": {
+    "talleres-miraflores-front": {
+      "hosting": {
+        "taller-mirafloes": [
+          "talleres-miraflores-front"
+        ]
+      }
+    }
   }
 }

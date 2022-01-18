@@ -147,6 +147,7 @@
         "statusName":"Estatus",
         "hasMismatch":"Posee descuadre",
         "addProduct":"Añadir producto",
+        "imagePreview":"Previsualización",
 
         "__ COMMENTARIO - LABEL ERRORES DE LOS FORMULARIOS  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
         "is invalid": "no es valido",

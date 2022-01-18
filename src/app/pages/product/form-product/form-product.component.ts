@@ -12,6 +12,7 @@ import { first } from 'rxjs/operators';
 import { ProductService } from 'src/app/services/data/product.service';
 import { Product } from 'src/app/model/data/product';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { StorageService } from 'src/app/services/upload-file/storage.service';
 
 @Component({
   selector: 'app-form-product',
@@ -30,7 +31,8 @@ export class FormProductComponent implements OnInit {
     private serviceUse: ProductService,
     private location: Location,
     private notificationService:NotificationsService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private storageService: StorageService
   ) {
     translate.addLangs(prop_glo.info_globals.idiomas.config);
     translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
@@ -56,6 +58,9 @@ export class FormProductComponent implements OnInit {
   public form_data: any;
   public img_product_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
+  public fileToUpload: File | null = null;
+  public imagePreview:any = "/assets/image/empty.png" ;
+
   ngOnInit(): void { 
     this.getInfoComponent();
     this.form = this.formBuilder.group(
@@ -76,16 +81,16 @@ export class FormProductComponent implements OnInit {
     return this.form.controls;
   }
 
+
+
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       return;
     }
     this.controlLoading (true);
 
     this.form_data = this.form.value;   
-    this.form_data.image = this.form_data.image == "" ? this.form_data.image : this.img_product_default;
 
     let product_data = new Product( null, this.form_data.statusId,"", this.form_data.name, 
                                 this.form_data.shortName, this.form_data.barcode,this.form_data.price,this.form_data.cost,
@@ -102,6 +107,9 @@ export class FormProductComponent implements OnInit {
   saveProduct(product_data:Product){
     this.serviceUse.save(product_data).subscribe(
       (response: any) => {
+        let ID = response.info.id;
+        this.storageService.uploadBytes("product/"+ID+"/image.jpg",this.fileToUpload);
+        
         let sms: string, pref: string;
         this.authService.setToken(response.token);
         let existeError: boolean = response.error != null && response.error != '';
@@ -244,4 +252,16 @@ export class FormProductComponent implements OnInit {
     this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
     this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
   }
+
+  handleFileInput(eventTarget: any) {
+    let reader = new FileReader();
+    if(eventTarget.files && eventTarget.files.length > 0) {
+      this.fileToUpload = eventTarget.files.item(0);
+      let file = eventTarget.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imagePreview = reader.result; 
+      };
+    }
+ }
 }

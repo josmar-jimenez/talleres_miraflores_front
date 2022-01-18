@@ -181,7 +181,15 @@
                             <label>{{label_text.image_label | translate }} {{ info_component.owner | translate }}</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" formControlName="image"
-                                    title="{{label_text.image_label | translate }}" id="image_product" />
+                                    title="{{label_text.image_label | translate }}" id="image_product" 
+                                     (change)="handleFileInput($event.target)"
+                                    />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>{{'imagePreview' | translate }}</label>
+                            <div class="input-group">
+                                <img src="{{imagePreview}}" class="image-list img-circle">
                             </div>
                         </div>
                     </div>
