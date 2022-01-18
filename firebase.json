@@ -1,6 +1,7 @@
 {
   "hosting": [
     {
+	  "target": "project-name",
       "public": "dist/taller-mirafloes",
       "ignore": [
         "firebase.json",
