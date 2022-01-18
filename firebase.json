@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-	  "target": "project-name",
+	  "target": "talleres-miraflores-front",
       "public": "dist/taller-mirafloes",
       "ignore": [
         "firebase.json",
