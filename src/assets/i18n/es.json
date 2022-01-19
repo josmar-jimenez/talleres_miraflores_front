@@ -31,8 +31,8 @@
         "go back":"Regresar",
         "image": "Imagen",
         "emergency":"emergencia",
-        "select an image":"seleccione una imagen",
-        "this is an optional field":"este campo es opcional",
+        "select an image":"Seleccione una imagen",
+        "this is an optional field":"(este campo es opcional)",
 
         "__ COMMENTARIO - TITULOS DE COMPONENTES  __": "__________ ESTA PROPIEDAD ES DE CARACTER INFORMATIVO ________",
         
@@ -122,7 +122,7 @@
         "cellphone emergency": "Teléfono celular de emergencia",
         "emergencyPhone": "Tlf. emergencia",
         "emergency data": "Datos de emergencia",
-        "these fields are optional": "estos campos son opcionales",
+        "these fields are optional": "(estos campos son opcionales)",
         "please select":"por favor seleccione",
         "indicate":"indique",
         "address": "Dirección",

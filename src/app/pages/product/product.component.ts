@@ -79,11 +79,8 @@ export class ProductComponent implements OnInit {
   }
 
   getImage(idProduct:number, index:number) {
-    console.log(this.info_component.list.data[index]);
     this.info_component.list.data[index].image=this.NO_IMAGE;
-
      this.storageService.getDownloadURL("product/"+idProduct+"/image.jpg").then(value => {
-        console.log(value);
         this.info_component.list.data[index].image=value;
       } ).catch(function(reason) {
         console.log(reason);
