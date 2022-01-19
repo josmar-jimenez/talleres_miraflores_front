@@ -22,10 +22,35 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                                colspan="1"
-                                                aria-label="Rendering engine: activate to sort column ascending"
-                                                *ngFor="let key of info_component.list.header_item;">{{key | translate  }}
-                                            </th>
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ 'name' | translate}}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ 'shortName' | translate}}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ 'address' | translate}}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ 'email' | translate}}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ 'phone' | translate}}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ 'status' | translate}}
+                                        </th>
                                             <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
                                                 colspan="1"
                                                 aria-label="Rendering engine: activate to sort column ascending">
@@ -40,15 +65,6 @@
                                             <td class="dtr-control">{{item.address}}</td>
                                             <td class="dtr-control">{{item.email }}</td>
                                             <td class="dtr-control">{{item.phone | mask: maskPhone }}</td>
-
-                                            <td class="dtr-control">
-                                                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                                                    <div class="image">
-                                                        <img [src]="item.image" class="img-circle elevation-2"
-                                                            title="provider Image" />
-                                                    </div>
-                                                </div>
-                                            </td>
                                             <td class="dtr-control">{{item.statusName }}</td>
                                             <td class="dtr-control">
                                                 <app-button-list [acciones_crud]="info_component.list.acciones_crud"  [id]="item.id"></app-button-list>

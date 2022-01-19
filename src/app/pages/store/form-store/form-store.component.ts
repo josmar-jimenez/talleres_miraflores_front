@@ -12,6 +12,7 @@ import { propiedades_globales as prop_glo } from 'src/app/globals';
 import { StoreService } from 'src/app/services/data/store.service';
 import { Store } from 'src/app/model/data/store';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { StorageService } from 'src/app/services/upload-file/storage.service';
 
 @Component({
   selector: 'app-form-store',
@@ -29,7 +30,8 @@ export class FormStoreComponent implements OnInit {
     private serviceUse: StoreService,
     private location: Location,
     public translate: TranslateService,
-    private notificationService:NotificationsService    
+    private notificationService: NotificationsService,
+    private storageService: StorageService
   ) {
     translate.addLangs(prop_glo.info_globals.idiomas.config);
     translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
@@ -40,6 +42,7 @@ export class FormStoreComponent implements OnInit {
   public label_btn: any = prop_glo.label_btn;
   public maskPhone: string = prop_glo.mask.mask_phone;
   public status_activo: any = Status.estados[0];
+  public imagePreview:any = prop_glo.info_globals.info_component.no_image;
 
   public form!: FormGroup;
   public submitted: boolean = false;
@@ -47,14 +50,15 @@ export class FormStoreComponent implements OnInit {
   public isCreateMode: boolean = false;
   public isViewMode: boolean = false;
   public isDeleteMode: boolean = false;
+  public imageChanged: boolean = false;
 
   public id!: any;
   public info_component!: any;
   public form_data: any;
 
-  public img_store_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
+  public fileToUpload: File | null = null;
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
@@ -78,12 +82,10 @@ export class FormStoreComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.controlLoading (true);
+    this.controlLoading(true);
 
     this.form_data = this.form.value;
-    this.form_data.image = this.form_data.image == "" ? this.form_data.image : this.img_store_default;
-
-    let store_data = new Store(null, this.form_data.statusId, "",this.form_data.name,
+    let store_data = new Store(null, this.form_data.statusId, "", this.form_data.name,
       this.form_data.phone, this.form_data.address, this.form_data.email,
       this.form_data.image);
 
@@ -98,7 +100,7 @@ export class FormStoreComponent implements OnInit {
   saveStore(store_data: Store) {
     this.serviceUse.save(store_data).subscribe(
       (response: any) => {
-
+        let ID = response.info.id;
         let sms: string, pref: string;
         this.authService.setToken(response.token);
         let existeError: boolean = response.error != null && response.error != '';
@@ -109,6 +111,7 @@ export class FormStoreComponent implements OnInit {
         } else {
           sms = this.translate.instant('store').concat(" ").concat(prop_glo.sms_component.sms_success_add);
           pref = prop_glo.sms_component.pref_exito;
+          this.storageService.uploadBytes("store/" + ID + "/image.jpg", this.fileToUpload);
         }
 
         this.postExecuteNotification(existeError, sms, pref);
@@ -129,6 +132,9 @@ export class FormStoreComponent implements OnInit {
         } else {
           sms = this.translate.instant('store').concat(" ").concat(prop_glo.sms_component.sms_success_edit);
           pref = prop_glo.sms_component.pref_exito;
+          if (this.imageChanged) {
+            this.storageService.uploadBytes("store/" + this.id + "/image.jpg", this.fileToUpload);
+          }
         }
 
         this.postExecuteNotification(existeError, sms, pref);
@@ -150,6 +156,7 @@ export class FormStoreComponent implements OnInit {
         } else {
           sms = this.translate.instant('store').concat(" ").concat(prop_glo.sms_component.sms_success_delete);
           pref = prop_glo.sms_component.pref_exito;
+          this.storageService.delete("store/" + this.id + "/image.jpg");
         }
 
         this.postExecuteNotification(existeError, sms, pref);
@@ -176,7 +183,8 @@ export class FormStoreComponent implements OnInit {
           console.log(response.error);
         } else {
           this.form.patchValue(response.info);
-          this.controlLoading (false);
+          this.controlLoading(false);
+          this.getImage(id);
         }
       },
       error => {
@@ -195,7 +203,7 @@ export class FormStoreComponent implements OnInit {
     this.isDeleteMode = this.info_component.accion_activa == actions[1]; //actions[1] = delete ~
 
     if (!this.isCreateMode) {  //actions[4] = create ~ 
-      this.controlLoading (true);
+      this.controlLoading(true);
       this.id = this.getIdParams();
       console.log("ITEM [" + owner + "] | ID SELECCIONADO:" + this.id);
       this.findItemById(this.id);
@@ -203,26 +211,26 @@ export class FormStoreComponent implements OnInit {
   }
 
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {
-    this.toastr.toastrConfig.positionClass="toast-top-full-width";
+    this.toastr.toastrConfig.positionClass = "toast-top-full-width";
 
     if (_existeError) {
-      this.controlLoading (false);  
+      this.controlLoading(false);
       this.toastr.error(sms, pref, {
         timeOut: 2000, positionClass: 'toast-top-center'
       });
-      
+
     } else {
       this.notificationService.useCache = false;
 
       this.toastr.success(sms, pref, {
         timeOut: 3000, positionClass: 'toast-top-center'
-      }).onHidden.subscribe( () => { this.onReset();  this.goUpdatedList();} );
-    } 
-    
+      }).onHidden.subscribe(() => { this.onReset(); this.goUpdatedList(); });
+    }
+
   }
   /* Metodo utilitario */
   onReset(): void {
-    this.submitted = false;  
+    this.submitted = false;
     this.form.reset();
   }
 
@@ -239,9 +247,29 @@ export class FormStoreComponent implements OnInit {
     this.location.back();
   }
 
-  controlLoading (status : boolean) : void {
+  controlLoading(status: boolean): void {
     this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
     this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
   }
-  
+
+  handleFileInput(eventTarget: any) {
+    let reader = new FileReader();
+    this.imageChanged = true;
+    if (eventTarget.files && eventTarget.files.length > 0) {
+      this.fileToUpload = eventTarget.files.item(0);
+      let file = eventTarget.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+    }
+  }
+
+  getImage(idStore: number) {
+    this.storageService.getDownloadURL("store/" + idStore + "/image.jpg").then(value => {
+      this.imagePreview = value;
+    }).catch(function (reason) {
+      console.log(reason);
+    });
+  }
 }

@@ -14,7 +14,6 @@ import { StorageService } from 'src/app/services/upload-file/storage.service';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit { 
-  private NO_IMAGE = '/assets/image/empty.png' ;
 
   public progressing: boolean = false; 
   public use_cache: boolean = true;
@@ -22,8 +21,9 @@ export class ProductComponent implements OnInit {
   public label_btn: any = prop_glo.label_btn;
   public label_text: any = prop_glo.label_component;
   public info_component: any =  prop_glo.info_globals.info_component;
+  private NO_IMAGE = prop_glo.info_globals.info_component.no_image ;
+
   public actionAllowed:any= [];
-  public imageList:any= [];
 
   constructor(
     private router: Router, 
@@ -69,11 +69,11 @@ export class ProductComponent implements OnInit {
       this.info_component.sms_empty  = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
+      data.info.content.forEach((element:any, index:any) => {
+        this.getImage(element.id, index);
+      });
     }
  
-    data.info.content.forEach((element:any, index:any) => {
-      this.getImage(element.id, index);
-    });
     this.info_component.list.header_item = this.serviceUse.getTableHeaderName(data.info.content);
     this.controlLoading(false);
   }

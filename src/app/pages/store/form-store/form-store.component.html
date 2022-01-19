@@ -154,7 +154,7 @@
                     </div>
                 </div>
 
-                <fieldset class="border border-info col-sm-12 rounded" *ngIf="isCreateMode">
+                <fieldset class="border border-info col-sm-12 rounded">
                     <legend class="border border-info col-sm-12 rounded">
                         <i class="fas fa-images"></i> [{{label_text.optional_image | translate}}]
                         <small class="text-muted ">{{label_text.optional_field| translate }} </small>
@@ -163,14 +163,19 @@
                     <div class="row">
                         <!-- text input -->
                         <div class="form-group col-sm-6">
-                            <label>{{label_text.image_label | translate }} {{ info_component.owner | translate
-                                }}</label>
-                            <!-- DIV´s - ERRORES -->
+                            <label>{{label_text.image_label | translate }} {{ info_component.owner | translate }}</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" formControlName="image"
-                                    title="{{label_text.image_label | translate }}" id="image_store" />
+                                    title="{{label_text.image_label | translate }}" id="image_product" 
+                                     (change)="handleFileInput($event.target)"
+                                    />
                             </div>
-                            <!-- DIV´s - ERRORES -->
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>{{'imagePreview' | translate }}</label>
+                            <div class="input-group">
+                                <img src="{{imagePreview}}" class="image-list">
+                            </div>
                         </div>
                     </div>
                 </fieldset>

@@ -30,6 +30,7 @@ export const propiedades_globales = {
         },
 
         info_component: {
+            no_image : '/assets/image/empty.png',
             owner: '',
             ruta_activada: '',
             title: '',

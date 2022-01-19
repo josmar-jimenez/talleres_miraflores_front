@@ -37,14 +37,13 @@
                                     <tr class="odd"
                                         *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
                                         <td class="dtr-control">{{item.name}}</td>
-                                        <td class="dtr-control">{{item.address}}</td>
+                                        <td class="dtr-control">{{item.address | slice:0:40}}</td>
                                         <td class="dtr-control">{{item.email}}</td>
                                         <td class="dtr-control">{{item.phone | mask: maskPhone }}</td>
                                         <td class="dtr-control">
-                                            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                                                <div class="image">
-                                                    <img [src]="item.image" class="img-circle elevation-2"
-                                                        title="Store Image" />
+                                            <div class="user-panel mt-3 pb-3 mb-3 image-list-div">
+                                                <div >
+                                                    <img class="image-list" [src]="item.image" title="Imagen Referencial" />
                                                 </div>
                                             </div>
                                         </td>

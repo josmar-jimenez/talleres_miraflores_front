@@ -6,6 +6,7 @@ import { propiedades_globales as prop_glo } from 'src/app/globals';
 import { TranslateService } from '@ngx-translate/core';
 import { StoreService } from 'src/app/services/data/store.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { StorageService } from 'src/app/services/upload-file/storage.service';
 
 @Component({
   selector: 'app-store',
@@ -21,6 +22,8 @@ export class StoreComponent implements OnInit {
   public label_btn: any = prop_glo.label_btn;
   public label_text: any = prop_glo.label_component;
   public info_component: any =  prop_glo.info_globals.info_component;
+  private NO_IMAGE = prop_glo.info_globals.info_component.no_image ;
+
   public actionAllowed:any= [];
 
   constructor(
@@ -29,7 +32,9 @@ export class StoreComponent implements OnInit {
     private serviceUse: StoreService,
     private location: Location,
     private notificationService:NotificationsService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public storageService: StorageService
+
     ) {
       translate.addLangs(prop_glo.info_globals.idiomas.config);
       translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
@@ -66,10 +71,25 @@ export class StoreComponent implements OnInit {
       this.info_component.sms_empty  = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
+      data.info.content.forEach((element:any, index:any) => {
+        this.getImage(element.id, index);
+      });
     }
 
     this.info_component.list.header_item = this.serviceUse.getTableHeaderName(data.info.content);
     this.controlLoading(false);
+  }
+
+  getImage(idProduct:number, index:number) {
+    console.log(this.info_component.list.data[index]);
+    this.info_component.list.data[index].image=this.NO_IMAGE;
+
+     this.storageService.getDownloadURL("store/"+idProduct+"/image.jpg").then(value => {
+        console.log(value);
+        this.info_component.list.data[index].image=value;
+      } ).catch(function(reason) {
+        console.log(reason);
+     });
   }
 
   restInfoComponent(): void{  
