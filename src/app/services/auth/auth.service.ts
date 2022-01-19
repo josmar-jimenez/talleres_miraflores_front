@@ -5,8 +5,11 @@ import { Router } from '@angular/router';
 
 const TOKEN_KEY = 'token';
 const USERNAME_KEY = 'userName';
-const USERPERSOLNAME_KEY = 'name';
-const USERSTORE_KEY = 'storeName';
+const USER_PERSONALNAME_KEY = 'name';
+const USER_STORENAME_KEY = 'storeName';
+const USER_STOREID_KEY = 'storeId';
+const USER_ROLEID_KEY = 'roleId';
+
 const AUTORIZATION_KEY = 'authorization';
 const helper = new JwtHelperService();
 
@@ -42,22 +45,39 @@ export class AuthService {
     window.sessionStorage.setItem(USERNAME_KEY, token);
   }
   public setPersonalName(personalName: string): void {
-    window.sessionStorage.removeItem(USERPERSOLNAME_KEY);
-    window.sessionStorage.setItem(USERPERSOLNAME_KEY, personalName);
+    window.sessionStorage.removeItem(USER_PERSONALNAME_KEY);
+    window.sessionStorage.setItem(USER_PERSONALNAME_KEY, personalName);
   }
   public setStoreName(storeName: string): void {
-    window.sessionStorage.removeItem(USERSTORE_KEY);
-    window.sessionStorage.setItem(USERSTORE_KEY, storeName);
+    window.sessionStorage.removeItem(USER_STORENAME_KEY);
+    window.sessionStorage.setItem(USER_STORENAME_KEY, storeName);
   }
+  public setStoreId(storeId: string): void {
+    window.sessionStorage.removeItem(USER_STOREID_KEY);
+    window.sessionStorage.setItem(USER_STOREID_KEY, storeId);
+  }
+  public setRoleId(roleId: string): void {
+    window.sessionStorage.removeItem(USER_ROLEID_KEY);
+    window.sessionStorage.setItem(USER_ROLEID_KEY, roleId);
+  }
+
   public getUserName(): string | null {
     return sessionStorage.getItem(USERNAME_KEY);
   }
   public getPersonalName(): string | null {
-    return sessionStorage.getItem(USERPERSOLNAME_KEY);
+    return sessionStorage.getItem(USER_PERSONALNAME_KEY);
   }
   public getStoreName(): string | null {
-    return sessionStorage.getItem(USERSTORE_KEY);
+    return sessionStorage.getItem(USER_STORENAME_KEY);
   }
+  public getStoreId(): string | null {
+    return sessionStorage.getItem(USER_STOREID_KEY);
+  }
+
+  public getRoleId(): string | null {
+    return sessionStorage.getItem(USER_ROLEID_KEY);
+  }
+
 
   public setAutorization(modulosDelUsuario: string): void {
     window.sessionStorage.removeItem(AUTORIZATION_KEY);

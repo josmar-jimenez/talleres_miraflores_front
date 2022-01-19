@@ -53,6 +53,7 @@ export class FormUserComponent implements OnInit {
   public isCreateMode: boolean = false;
   public isViewMode: boolean = false;
   public isDeleteMode: boolean = false;
+  public isUserAdmin: boolean = false;
 
   public form!: FormGroup;
   public profile_system: any;
@@ -60,17 +61,20 @@ export class FormUserComponent implements OnInit {
   public id!: any;
   public info_component!: any;
   public form_data: any;
-  
+  public userStoreId: number = 0;
+
   ngOnInit(): void { 
     this.getInfoComponent();
+    this.isUserAdmin = this.authService.getRoleId() == "1";
+    this.userStoreId = Number(this.authService.getStoreId());
     this.form = this.formBuilder.group(
       {
         name: [{ value: "", disabled: this.isViewMode }, Validators.required],
         email: [{ value: "", disabled: this.isViewMode }, [Validators.required, Validators.email]],
         cellphone: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
         address: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
-        storeId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]],
-        roleId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]],
+        storeId: [{value: this.userStoreId, disabled: (this.isViewMode || !this.isUserAdmin)}, [Validators.required]],
+        roleId: [{ value: '', disabled: this.isViewMode }, [Validators.required]],
         nick: [{ value: "", disabled: this.isViewMode }, [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
         emergencyPhone: [{ value: "", disabled: this.isViewMode }, [Validators.minLength(4), Validators.nullValidator]],
         emergencyContact: [{ value: "", disabled: this.isViewMode }, [Validators.minLength(4), Validators.maxLength(100)]],
@@ -95,7 +99,8 @@ export class FormUserComponent implements OnInit {
     this.controlLoading (true);
 
     this.form_data = this.form.value;
-    let user_data = new User(null, this.form_data.storeId, this.form_data.statusId, "", this.form_data.roleId,
+    let user_data = new User(null, this.form_data.storeId|this.userStoreId, this.form_data.statusId, "",
+      this.form_data.roleId,
       this.form_data.password, this.form_data.nick, this.form_data.name, this.form_data.cellphone,
       this.form_data.address, this.form_data.email, this.form_data.emergencyPhone,
       this.form_data.emergencyContact);
@@ -226,7 +231,6 @@ export class FormUserComponent implements OnInit {
   }
 
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {
-    this.toastr.toastrConfig.positionClass="toast-top-full-width";
     if (_existeError) { 
       this.controlLoading (false); 
       this.toastr.error(sms, pref, {

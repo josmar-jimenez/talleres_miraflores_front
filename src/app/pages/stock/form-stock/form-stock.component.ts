@@ -44,6 +44,7 @@ export class FormStockComponent implements OnInit {
   public isCreateMode: boolean = false;
   public isViewMode: boolean = false;
   public isDeleteMode: boolean = false;
+  public isUserAdmin: boolean = false;
 
   public label_text: any = prop_glo.label_component;
   public label_error: any = prop_glo.sms_error_component;
@@ -56,16 +57,19 @@ export class FormStockComponent implements OnInit {
   public id: any = null;   
   public info_component!: any; 
   public form_data: any;
+  public userStoreId: number = 0;
 
   public img_stock_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
   ngOnInit(): void {     
+    this.isUserAdmin = this.authService.getRoleId() == "1";
+    this.userStoreId = Number(this.authService.getStoreId());
     this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
         stock: [{ value: "", disabled: this.isViewMode }, Validators.required], 
         productId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]], 
-        storeId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]],
+        storeId: [{value: this.userStoreId, disabled: (this.isViewMode || !this.isUserAdmin)}, [Validators.required]],
         statusId: [{ value: 1, disabled: this.isViewMode }, null],
        }
     );
@@ -84,10 +88,8 @@ export class FormStockComponent implements OnInit {
     this.controlLoading (true);
     
     this.form_data = this.form.value; 
-    let stock_data = new Stock( null, this.form_data.statusId,"", this.form_data.storeId, 
+    let stock_data = new Stock( null, this.form_data.statusId,"", this.form_data.storeId|this.userStoreId, 
                                 this.form_data.productId, this.form_data.stock, "","");
-    
-     
     if (! this.isCreateMode) {  
       this.updateProduct(stock_data);
     }else{ 
@@ -239,8 +241,8 @@ export class FormStockComponent implements OnInit {
         timeOut: 3000, positionClass: 'toast-top-center'
       }).onHidden.subscribe( () => { this.onReset();  this.goUpdatedList();} );
     } 
-    
   }
+
   /* Metodo utilitario */
   onReset(): void {
     this.submitted = false;  

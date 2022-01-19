@@ -173,8 +173,10 @@
                                     </span>
                                 </div>
 
-                                <select name="roleId" class="form-control  " id="roleId" formControlName="roleId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled>
+                                <select name="roleId" class="form-control  " id="roleId" formControlName="roleId"
+                                [ngClass]="{ 'is-invalid': submitted && f.roleId.errors}"
+                                required>
+                                    <option class="text-white bg-dark" value='' disabled >
                                         {{label_text.selected_label | translate }} </option>
                                     <option [value]="item.id" *ngFor="let item of profile_system">
                                         {{item.name}}</option>
@@ -202,8 +204,10 @@
                                     </span>
                                 </div>
 
-                                <select name="storeId" class="form-control  " id="store_user" formControlName="storeId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled>
+                                <select name="storeId" class="form-control  " id="store_user" 
+                                [ngClass]="{ 'is-invalid': submitted && f.storeId.errors}"
+                                formControlName="storeId" required>
+                                    <option class="text-white bg-dark  " value='' disabled>
                                         {{label_text.selected_label | translate }} </option>
                                     <option [value]="item.id" *ngFor="let item of listStore">
                                         {{item.name}}

@@ -44,7 +44,7 @@ export class FormInventoryComponent implements OnInit {
   ) {
     translate.addLangs(prop_glo.info_globals.idiomas.config);
     translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
-    
+
   }
 
   public submitted: boolean = false;
@@ -55,6 +55,7 @@ export class FormInventoryComponent implements OnInit {
   public isCreateMode: boolean = false;
   public isViewMode: boolean = false;
   public isDeleteMode: boolean = false;
+  public isUserAdmin: boolean = false;
 
   public label_text: any = prop_glo.label_component;
   public label_error: any = prop_glo.sms_error_component;
@@ -68,17 +69,16 @@ export class FormInventoryComponent implements OnInit {
   public id: any = null;
   public info_component!: any;
   public form_data: any;
-
+  public userStoreId: number = 0;
   public inventoryTable: Array<InventoryTable> = [];
-
-  public img_inventory_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
   ngOnInit(): void {
     this.getInfoComponent();
-
+    this.isUserAdmin = this.authService.getRoleId() == "1";
+    this.userStoreId = Number(this.authService.getStoreId());
     this.form = this.formBuilder.group(
       {
-        storeId: [{ value: '', disabled: this.isViewMode }, null],
+        storeId: [{ value: this.userStoreId, disabled: (this.isViewMode || !this.isUserAdmin) }, null],
         comments: [{ value: "", disabled: this.isViewMode }, null],
         statusId: [{ value: this.status_activo.id, disabled: this.isViewMode }, null],
 
@@ -113,7 +113,7 @@ export class FormInventoryComponent implements OnInit {
       inventoryDetails.push(new DetailInventory(item.productId, item.cant, 0))
     });
 
-    let inventory_data = new Inventory(null, this.form_data.storeId, this.form_data.comments, inventoryDetails, "", false);
+    let inventory_data = new Inventory(null, this.form_data.storeId | this.userStoreId, this.form_data.comments, inventoryDetails, "", false);
     console.log(inventory_data);
 
     if (!this.isCreateMode) {
@@ -215,8 +215,7 @@ export class FormInventoryComponent implements OnInit {
         } else {
           this.form.patchValue(response.info);
           this.controlLoading(false);
-          console.log(response.info);
-          response.info.detail.forEach((item:any) => {
+          response.info.detail.forEach((item: any) => {
             this.inventoryTable.push(new InventoryTable(item.productId, item.productName, item.cantPhysical));
           });
         }
@@ -228,7 +227,7 @@ export class FormInventoryComponent implements OnInit {
 
   updateProductList(): void {
     this.form_data = this.form.value;
-    this.inventoryTable= [];
+    this.inventoryTable = [];
     this.listProduct = [];
     this.listStock.forEach(item => {
       if (item.storeId == this.form_data.storeId)
@@ -280,8 +279,6 @@ export class FormInventoryComponent implements OnInit {
   }
 
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {
-    this.toastr.toastrConfig.positionClass="toast-top-full-width";
-
     if (_existeError) {
       this.controlLoading(false);
       this.toastr.error(sms, pref, {
