@@ -64,10 +64,10 @@ export const propiedades_globales = {
 
     sms_component: {
         pref_exito: "EXITO: ",
-        sms_bienvenida: "bienvenido al systema",
-        sms_success_add: "registrado correctamente", 
-        sms_success_edit: "editado correctamente" ,
-        sms_success_delete: "eliminado correctamente" ,
+        sms_bienvenida: "bienvenido al sistema",
+        sms_success_add: "registrado(a) correctamente", 
+        sms_success_edit: "editado(a) correctamente" ,
+        sms_success_delete: "eliminado(a) correctamente" ,
     },
 
     sms_error_component: {

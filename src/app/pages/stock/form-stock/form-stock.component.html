@@ -87,7 +87,7 @@
                                     placeholder=" {{label_text.stock  | translate  }}  {{ info_component.owner | translate }}"
                                     title=" {{label_text.stock  | translate  }}  {{ info_component.owner | translate  }}"
                                     [ngClass]="{ 'is-invalid': submitted && f.stock.errors }" formControlName="stock"
-                                    autocomplete="new-user" />
+                                    autocomplete="new-user" min="1"/>
                                 <div *ngIf="submitted && f.stock.errors" class="invalid-feedback">
                                     <div *ngIf="f.stock.errors.required">{{label_text.nick_label | translate }}
                                         {{label_error.msg_error_required | translate }} </div>

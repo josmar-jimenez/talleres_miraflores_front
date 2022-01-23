@@ -120,7 +120,9 @@ export class FormProductComponent implements OnInit {
         } else {
           sms = this.translate.instant('product').concat(" ").concat(prop_glo.sms_component.sms_success_add);
           pref = prop_glo.sms_component.pref_exito;
-          this.storageService.uploadBytes("product/" + ID + "/image.jpg", this.fileToUpload);
+          if(this.imageChanged){
+            this.storageService.uploadBytes("product/" + ID + "/image.jpg", this.fileToUpload);
+          }
         }
 
         this.postExecuteNotification(existeError, sms, pref);

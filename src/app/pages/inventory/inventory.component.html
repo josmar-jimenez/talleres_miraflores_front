@@ -24,7 +24,12 @@
                                         <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
                                             colspan="1"
                                             aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'createdDate' | translate }}
+                                            {{'storeName' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{'user' | translate }}
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
                                             colspan="1"
@@ -34,7 +39,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
                                             colspan="1"
                                             aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'storeName' | translate }}
+                                            {{'createdDate' | translate }}
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
                                             colspan="1"
@@ -56,9 +61,10 @@
                                 <tbody>
                                     <tr class="odd"
                                         *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                        <td class="dtr-control">{{item.storeName}}</td>
+                                        <td class="dtr-control">{{item.userName}}</td>
                                         <td class="dtr-control">{{item.createdDate}}</td>
                                         <td class="dtr-control">{{item.createdTime}}</td>
-                                        <td class="dtr-control">{{item.storeName}}</td>
                                         <td class="dtr-control">{{item.comments | slice:0:65}}</td>
                                         <td class="dtr-control">{{item.hasMismatch?'Sí':'No'}}</td>
                                         

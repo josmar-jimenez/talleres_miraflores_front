@@ -17,9 +17,9 @@
      <!-- /.card-header -->
     <div class="card-body" *ngIf="!progressing"> 
         <form  [formGroup]="form" (ngSubmit)="onSubmit()">
-                <div class="row">
+                <div class="row" *ngIf="isCreateMode">
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <!-- select  -->
                         <div class="form-group ">
                             <label> {{label_text.store_label | translate }} {{ info_component.owner | translate }}
@@ -32,9 +32,12 @@
                                     </span>
                                 </div>
 
-                                <select name="storeId" class="form-control  " id="store_sale"   formControlName="storeId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled> {{label_text.selected_label | translate }} </option>
-                                    <option [ngValue]="item.id" *ngFor="let item of listStore">  {{item.name}}  </option>
+                                <select name="storeId" class="form-control" id="store_sale" 
+                                [ngClass]="{ 'is-invalid': submitted2 && f.storeId.errors}" formControlName="storeId" 
+                                (change)="updateProductList()">
+                                    <option class="text-white bg-dark" value=''  disabled> 
+                                        {{label_text.selected_label | translate }} </option>
+                                    <option [ngValue]="item.id" *ngFor="let item of listStore">{{item.name}}</option>
                                 </select>
 
                                 <div *ngIf="submitted && f.storeId.errors" class="invalid-feedback">
@@ -45,7 +48,36 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
+                        <div class="form-group ">
+                            <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-id-card"></i>
+                                    </span>
+                                </div>
+
+                                <select name="productId" class="form-control  " id="product_id"
+                                [ngClass]="{ 'is-invalid': submitted2 && f.productId.errors }"
+                                    formControlName="productId">
+                                    <option class="text-white bg-dark" value='' disabled>
+                                        {{label_text.selected_label | translate }} </option>
+                                    <option [value]="item.productId" *ngFor="let item of listProduct">
+                                        {{item.productName}}</option>
+                                </select>
+
+                                <div *ngIf="submitted2 && f.productId.errors" class="invalid-feedback">
+                                    <div *ngIf="f.productId.errors.required"> {{'product' | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="col-sm-2">
                         <!-- text input -->
                         <div class="form-group">
                             <label> {{ label_text.quantity_label | translate }} {{ info_component.owner | translate }}
@@ -57,10 +89,10 @@
                                 <input type="number" class="form-control" id="quantity"
                                     placeholder=" {{label_text.quantity_label  | translate  }}  {{ info_component.owner | translate }}"
                                     title=" {{label_text.quantity  | translate  }}  {{ info_component.owner | translate  }}"
-                                    [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" formControlName="quantity"
-                                    autocomplete="new-user" />
-                                <div *ngIf="submitted && f.quantity.errors" class="invalid-feedback">
-                                    <div *ngIf="f.quantity.errors.required">{{label_text.nick_label | translate }}
+                                    [ngClass]="{ 'is-invalid': submitted2 && f.quantity.errors }" formControlName="quantity"
+                                    autocomplete="new-user" min="1"/>
+                                <div *ngIf="submitted2 && f.quantity.errors" class="invalid-feedback">
+                                    <div *ngIf="f.quantity.errors.required">{{'quantity' | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
                                     <div *ngIf="f.quantity.errors.minlength">
                                         {{label_text.quantity | translate }}
@@ -74,36 +106,95 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-3">
-                        <div class="form-group ">
-                            <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
-                            </label>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-id-card"></i>
-                                    </span>
-                                </div>
-
-                                <select name="productId" class="form-control  " id="product_id"
-                                    formControlName="productId">
-                                    <option class="text-white bg-dark  " value="undefined"
-                                        selected disabled>
-                                        {{label_text.selected_label | translate }} </option>
-                                    <option [value]="item.id" *ngFor="let item of listProduct">
-                                        {{item.name}}</option>
-                                </select>
-
-                                <div *ngIf="submitted && f.productId.errors" class="invalid-feedback">
-                                    <div *ngIf="f.productId.errors.required"> {{label_text.profile_label | translate }}
-                                        {{label_error.msg_error_required | translate }} </div>
-                                </div>
-
+                    <div class="col-sm-2">
+                        <!-- text input -->
+                        <div class="form-group">
+                            <label> {{ 'add' | translate }} </label>
+                            <div class="input-group mb-2">
+                                <a class="btn btn-outline-warning float-right" role="button" aria-pressed="true"
+                                    title="{{ label_btn.btn_add | translate}}" (click)="addItem()">
+                                    <i class="fas fa-plus-circle"></i>
+                                </a>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>  
+                <div class="row">
+                    <div class="col">
+                        <hr>
+                    </div>
+                    <div class="col-auto"><label >{{'detail' | translate }}</label></div>
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row" *ngIf="submitted && saleTable.length==0">
+                    <div class="col">
+                    </div>
+                    <div class="col-auto">
+                        <p class="text-danger"> Al menos un producto es obligatorio</p>
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{'product' | translate }}</th>
+                                    <th scope="col">Cant</th>
+                                    <th scope="col">{{'price' | translate }}</th>
+                                    <th scope="col">{{'total' | translate }}</th>
+
+                                    <th scope="col" *ngIf="this.isCreateMode">{{'actions' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of saleTable">
+                                    <th scope="row">{{item.productName}}</th>
+                                    <td>{{item.cant}}</td>
+                                    <td>{{item.price}}</td>
+                                    <td>{{item.cant*item.price}}</td>
+                                    <td *ngIf="this.isCreateMode">
+                                        <button type="button" class="btn btn-outline-primary mr-1"
+                                            title="{{ label_btn.btn_delete  | translate }}"
+                                            (click)="addCant(item.productId)">
+                                            <i class="fas fa-plus-circle"></i> </button>
+                                        <button type="button" class="btn btn-outline-info mr-1"
+                                        title="{{ label_btn.btn_delete  | translate }}"
+                                        (click)="subsCant(item.productId)">
+                                        <i class="fas fa-minus-circle"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger"
+                                            title="{{ label_btn.btn_delete  | translate }}" 
+                                            (click)="removeItem(item.productId)">
+                                        <i class="fas fa-trash-alt"></i> </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" *ngIf="saleTable.length>0">
+                    <div class="col">
+                        <hr>
+                    </div>
+                    <div class="col-auto"><label >{{'total' | translate }}</label></div>
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row" *ngIf="saleTable.length>0">
+                    <div class="col"></div>
+                    <div class="col-auto">
+                        <label >Num {{'products' | translate }}: {{totalProducts}} </label>
+                    </div>
+                    <div class="col-auto">
+                        <label >{{'price' | translate }} {{'total' | translate }}: {{totalPrice}} </label>
+                    </div>
+                    <div class="col"></div>
+                </div>
                 <hr>
                 <div class="card-text">
                     <button type="button" (click)="goBack()" *ngIf="!isViewMode"

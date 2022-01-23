@@ -67,8 +67,14 @@ export class SaleComponent implements OnInit {
       this.info_component.sms_empty  = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
+      this.info_component.list.data.forEach((element:any) => {
+        let total = 0;
+        element.detail.forEach((detail:any) => {
+          total += detail.cant;
+        });
+        element.totalProducts =total;
+      });
     }    
-    console.log(this.info_component.list.data);
     this.info_component.list.header_item = this.serviceUse.getTableHeaderName(data.info.content);
     this.controlLoading(false);
   }

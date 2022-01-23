@@ -1,5 +1,11 @@
-import { IDetail } from "./detail";
+export  class DetailSale{ 
+    productId: number; 
+    cant: number;
 
-export interface DetailSale extends IDetail{ 
-    cant: number;  
+    constructor(productId: number, cant: number) { 
+        this.cant = cant;
+        this.productId = productId;
+    }
 }
+
+

@@ -2,69 +2,99 @@
     <!-- ----------------------------------------------------------------------------------- -->
     <!-- LISTA DE VENTAS -->
     <!-- ----------------------------------------------------------------------------------- -->
-   <div class="col-12"> 
+    <div class="col-12">
         <div class="card">
 
             <div class="card-header">
-                <h2 class="card-title titulo-data-table  " >
-                    <i class="fas fa-cash-register"></i> 
+                <h2 class="card-title titulo-data-table  ">
+                    <i class="fas fa-cash-register"></i>
                     {{info_component.title | translate }}
                 </h2>
-            </div>     
-            
-            <div class="card-body" *ngIf="!progressing">                 
-                <ng-container  *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
-                <ng-template #dataBlock >
-                    <div class="dataTables_wrapper dt-bootstrap4">                     
-                            <div class="col-sm-12">
-                                <table id="table_sales" class="table table-bordered table-striped dataTable dtr-inline"
-                                    role="grid" aria-describedby="table_sales_info">
-                                    <thead>
-                                        <tr role="row">
-                                            <th class="sorting" tabindex="0" aria-controls="table_sales" rowspan="1"
-                                                colspan="1" aria-label="Rendering engine: activate to sort column ascending"
-                                                *ngFor="let key of info_component.list.header_item;">{{key | translate }}
-                                            </th>
-                                            <th class="sorting" tabindex="0" aria-controls="table_sales" rowspan="1"
-                                                colspan="1" 
-                                                aria-label="Rendering engine: activate to sort column ascending">
-                                                {{ label_text.actions | translate}}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="odd"
-                                            *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
-                                            <td class="dtr-control">{{item.total | translate}} {{prop_glo.info_globals.monedas.default.simb_mon}} </td>                                      
-                                            <td class="dtr-control">{{item.tax | translate}}   </td> 
-                                            <td class="dtr-control" *ngFor="let index of item.detail ">
-                                                {{index.cant}} | {{index.price}} {{prop_glo.info_globals.monedas.default.simb_mon}}
-                                            </td>
-                                       
-                                            <td class="dtr-control">  
-                                                <app-button-list [acciones_crud]="info_component.list.acciones_crud" [id]="item.id"  ></app-button-list>
-                                            </td>   
-                                            
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr role="row">
-                                            <th rowspan="1" colspan="9">
-                                                <span class="badge bg-success rounded-pill" style="font-size: medium;">
-                                                    {{ label_text.num_item_list | translate}}: {{ info_component.count_item}}
-                                                </span>
+            </div>
 
-                                                <a *ngIf="actionAllowed.includes('Registrar')" 
+            <div class="card-body" *ngIf="!progressing">
+                <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
+                <ng-template #dataBlock>
+                    <div class="dataTables_wrapper dt-bootstrap4">
+                        <div class="col-sm-12">
+                            <table id="table_sales" class="table table-bordered table-striped dataTable dtr-inline"
+                                role="grid" aria-describedby="table_sales_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{'storeName' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{'user' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                        colspan="1"
+                                        aria-label="Rendering engine: activate to sort column ascending">
+                                        {{'createdDate' | translate }}
+                                    </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{'createdTime' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{'total' | translate }} {{'products' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{'total' | translate }}
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_sales" rowspan="1"
+                                            colspan="1"
+                                            aria-label="Rendering engine: activate to sort column ascending">
+                                            {{ label_text.actions | translate}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="odd"
+                                        *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                        <td class="dtr-control">{{item.storeName}} </td>
+                                        <td class="dtr-control">{{item.userName}} </td>
+                                        <td class="dtr-control">{{item.createdDate}} </td>
+                                        <td class="dtr-control">{{item.createdTime}} </td>
+                                        <td class="dtr-control">{{item.totalProducts}} </td>
+                                        <td class="dtr-control">{{item.total | translate}}
+                                            {{prop_glo.info_globals.monedas.default.simb_mon}} </td>
+
+                                        <td class="dtr-control">
+                                            <app-button-list [acciones_crud]="info_component.list.acciones_crud"
+                                                [id]="item.id"></app-button-list>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr role="row">
+                                        <th rowspan="1" colspan="9">
+                                            <span class="badge bg-success rounded-pill" style="font-size: medium;">
+                                                {{ label_text.num_item_list | translate}}: {{
+                                                info_component.count_item}}
+                                            </span>
+
+                                            <a *ngIf="actionAllowed.includes('Registrar')"
                                                 routerLink="{{ info_component.list.url_add_item }}"
-                                                    class="btn btn-outline-warning float-right" role="button"
-                                                    aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
-                                                    <i class="fas fa-plus-circle"></i>
-                                                </a>
-                                            </th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                                                class="btn btn-outline-warning float-right" role="button"
+                                                aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
 
                         <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
                     </div>
@@ -79,8 +109,8 @@
                         <div class="col-sm-12">
 
                             <a routerLink="{{ info_component.list.url_add_item }}"
-                                class="btn btn-outline-warning float-right" role="button"
-                                aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
+                                class="btn btn-outline-warning float-right" role="button" aria-pressed="true"
+                                title="{{ label_btn.btn_add | translate}}">
                                 <i class="fas fa-plus-circle"></i>
                             </a>
 
@@ -94,5 +124,3 @@
     </div>
     <!-- /.card -->
 </div>
-
-

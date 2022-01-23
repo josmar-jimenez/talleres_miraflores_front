@@ -42,8 +42,9 @@
                                         <td class="dtr-control">{{item.cost }}</td>
                                         <td class="dtr-control">
                                             <div class="user-panel mt-3 pb-3 mb-3 image-list-div">
-                                                <div >
-                                                    <img class="image-list" [src]="item.image" title="Imagen referencial" />
+                                                <div>
+                                                    <img class="image-list" [src]="item.image"
+                                                        title="Imagen referencial" />
                                                 </div>
                                             </div>
                                         </td>
@@ -62,8 +63,8 @@
                                                 {{ label_text.num_item_list | translate}}: {{
                                                 info_component.count_item}}
                                             </span>
-
-                                            <a *ngIf="actionAllowed.includes('Registrar')"routerLink="{{ info_component.list.url_add_item }}"
+                                            <a *ngIf="actionAllowed.includes('Registrar')"
+                                                routerLink="{{ info_component.list.url_add_item }}"
                                                 class="btn btn-outline-warning float-right" role="button"
                                                 aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
                                                 <i class="fas fa-plus-circle"></i>
@@ -83,6 +84,14 @@
                     <div class="row">
                         <div class="col-sm-12">
                             {{ info_component.sms_empty | translate}} ...
+                        </div>
+                        <div class="col-sm-12">
+                            <a *ngIf="actionAllowed.includes('Registrar')"
+                                routerLink="{{ info_component.list.url_add_item }}"
+                                class="btn btn-outline-warning float-right" role="button" aria-pressed="true"
+                                title="{{ label_btn.btn_add | translate}}">
+                                <i class="fas fa-plus-circle"></i>
+                            </a>
                         </div>
                     </div>
                 </ng-template>

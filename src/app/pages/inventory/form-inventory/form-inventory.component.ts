@@ -15,7 +15,6 @@ import { Inventory } from 'src/app/model/data/inventory';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { DetailInventory } from 'src/app/model/data/detail-inventory';
 import { InventoryTable } from 'src/app/model/data/inventory-table';
-import { Product } from 'src/app/model/data/product';
 import { StockService } from 'src/app/services/data/stock.service';
 import { Stock } from 'src/app/model/data/stock';
 import { StockByProduct } from 'src/app/model/data/stock-by-product';
@@ -216,7 +215,7 @@ export class FormInventoryComponent implements OnInit {
           this.form.patchValue(response.info);
           this.controlLoading(false);
           response.info.detail.forEach((item: any) => {
-            this.inventoryTable.push(new InventoryTable(item.productId, item.productName, item.cantPhysical));
+              this.inventoryTable.push(new InventoryTable(item.productId, item.productName, item.cantPhysical));
           });
         }
       },
@@ -231,7 +230,7 @@ export class FormInventoryComponent implements OnInit {
     this.listProduct = [];
     this.listStock.forEach(item => {
       if (item.storeId == this.form_data.storeId)
-        this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock));
+        this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock,0));
     });
   }
 
@@ -240,7 +239,7 @@ export class FormInventoryComponent implements OnInit {
       this.authService.setToken(data.token);
       this.listStock = data.info.content;
       this.listStock.forEach(item => {
-        this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock));
+          this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock,0));
       });
     }, (error: any) => {
       console.log(error);
@@ -249,7 +248,6 @@ export class FormInventoryComponent implements OnInit {
     this.storeService.findAllOptions().subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.listStore = data.info.content;
-
       this.controlLoading(false);
 
     }, (error: any) => {
@@ -301,8 +299,7 @@ export class FormInventoryComponent implements OnInit {
     this.storeEmpty = false;
     this.inventoryTable = [];
     this.form.reset({
-      productId: '',
-      storeId: ''
+      productId: ''
     });
   }
 
