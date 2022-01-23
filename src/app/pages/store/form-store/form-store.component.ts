@@ -42,7 +42,7 @@ export class FormStoreComponent implements OnInit {
   public label_btn: any = prop_glo.label_btn;
   public maskPhone: string = prop_glo.mask.mask_phone;
   public status_activo: any = Status.estados[0];
-  public imagePreview:any = prop_glo.info_globals.info_component.no_image;
+  public imagePreview: any = prop_glo.info_globals.info_component.no_image;
 
   public form!: FormGroup;
   public submitted: boolean = false;
@@ -111,7 +111,9 @@ export class FormStoreComponent implements OnInit {
         } else {
           sms = this.translate.instant('store').concat(" ").concat(prop_glo.sms_component.sms_success_add);
           pref = prop_glo.sms_component.pref_exito;
-          this.storageService.uploadBytes("store/" + ID + "/image.jpg", this.fileToUpload);
+          if (this.imageChanged) {
+            this.storageService.uploadBytes("store/" + ID + "/image.jpg", this.fileToUpload);
+          }
         }
 
         this.postExecuteNotification(existeError, sms, pref);
