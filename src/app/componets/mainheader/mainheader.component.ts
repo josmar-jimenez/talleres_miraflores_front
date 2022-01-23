@@ -16,6 +16,7 @@ export class MainHeaderComponent implements OnInit {
   public modulosPermitidos: MenuAutorization[] = [];
   public userName:any ="";
   public storeName:any ="";
+  public actualDate:Date = new Date();
 
   constructor(
     private router: Router,
@@ -29,7 +30,7 @@ export class MainHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        this.modulosPermitidos = this.authService.loadModuleMenu(null);
+        this.actualDate = new Date();
       }
     });
     this.userName = this.authService.getPersonalName();
