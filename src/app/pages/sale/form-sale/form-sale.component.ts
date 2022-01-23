@@ -220,7 +220,7 @@ export class FormSaleComponent implements OnInit {
       this.authService.setToken(data.token);
       this.listStock = data.info.content;
       this.listStock.forEach((item: any) => {
-        if (item.stock > 0)
+        if (item.statusId == 1)
           this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock, item.productPrice));
       });
     }, (error: any) => {
@@ -367,7 +367,7 @@ export class FormSaleComponent implements OnInit {
     this.saleTable = [];
     this.listProduct = [];
     this.listStock.forEach((item: any) => {
-      if (item.storeId == (this.form_data.storeId | this.userStoreId) && item.stock > 0)
+      if (item.storeId == (this.form_data.storeId | this.userStoreId) && item.statusId ==1)
         this.listProduct.push(new StockByProduct(item.productId, item.productName, item.cantPhysical, item.productPrice));
     });
     this.updateTotals();
