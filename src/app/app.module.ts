@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app.component';  
+import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { APP_BASE_HREF } from '@angular/common'; 
+import { APP_BASE_HREF } from '@angular/common';
 import { ComponetsModule } from './componets/componets.module';
 import { PagesModule } from './pages/pages.module';
 import { ToastrModule } from 'ngx-toastr';
@@ -13,10 +13,15 @@ import { AuthInterceptorProviders } from './helpers/auth.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { environment } from 'src/environments/environment';
-import { initializeApp,provideFirebaseApp, } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp, } from '@angular/fire/app';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { LOCALE_ID } from '@angular/core';
+import localeVE from '@angular/common/locales/es-VE';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeVE);
+
 export const AppBaseHref = [
-  {provide: APP_BASE_HREF, useValue: '/'}
+  { provide: APP_BASE_HREF, useValue: '/' }
 ];
 
 @NgModule({
@@ -24,14 +29,14 @@ export const AppBaseHref = [
     AppComponent,
     PreloaderComponent
   ],
-  imports: [  
-    BrowserModule,  
+  imports: [
+    BrowserModule,
     HttpClientModule,
     ComponetsModule,
     PagesModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ToastrModule.forRoot(),    
+    ToastrModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -39,19 +44,20 @@ export const AppBaseHref = [
         deps: [HttpClient]
       },
       isolate: false
-    }), 
+    }),
     provideFirebaseApp(() => initializeApp(environment.firebase)), provideStorage(() => getStorage()),
   ],
   exports: [
   ],
-  providers: [ 
-  AppBaseHref,   
-  AuthInterceptorProviders
+  providers: [
+    { provide: LOCALE_ID, useValue: "es-VE" },
+    AppBaseHref,
+    AuthInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-  
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }

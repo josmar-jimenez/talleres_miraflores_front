@@ -9,12 +9,22 @@ i {
     color: #03045fc7;
   }
 
-  .container-finder{
+.container-finder{
     text-align: center;
+    height: 100vh;
+    background-image: url("../../../assets/image/home.jpg");
+    background-repeat:no-repeat;
+    background-size: cover;
+    opacity: 0.9;
  }
 
+ .container-found{
+  text-align: center;
+  margin-top: 10px;
+}
+
  .input-finder{
-  width: 70%;
+  width: 50%;
   height: 50px;
   padding-left: 50px;
   margin-top: 300px;
@@ -25,13 +35,25 @@ i {
   margin-top: 30px;
 }
 
+.button-found{
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .slogan{
   color:  white;
   margin-top: 20px;
   width: 550px;
   font-weight: bold;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
 
+.products-founds{
+  color:  black;
+  width: 550px;
+  font-weight: bold;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .container-center{

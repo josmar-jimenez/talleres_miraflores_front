@@ -1,15 +1,97 @@
-<!-- Buscador -->
-<div class="container container-finder">
+<section class="content container-finder" #finder>
+    <!-- Buscador -->
     <div>
         <input type="text" class="input-finder" placeholder='Buscamos tu repuesto...'>
         <i class="fa fa-search"></i>
     </div>
     <div class="container-center">
-        <button type="button" class="btn btn-primary button-finder" >Buscar tu repuesto</button>
+        <button type="button" class="btn btn-primary button-finder" (click)="goToFounds(found)">Buscar tu
+            repuesto</button>
     </div>
     <div class="container-center">
         <h1 class="slogan">La forma más Fácil y Segura de comprar tu repuesto</h1>
     </div>
+</section>
 
-</div>
+<section class="container container-found" #found>
+    <div class="container-center">
+        <h1 class="products-founds">Productos encontrados:</h1>
+    </div>
+    <div class="dataTables_wrapper dt-bootstrap4">
+        <div class="col-sm-12">
+            <table id="table_product" class="table table-bordered table-striped dataTable dtr-inline" role="grid"
+                aria-describedby="table_product_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
+                            aria-label="Rendering engine: activate to sort column ascending">
+                            Imagen
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
+                            aria-label="Rendering engine: activate to sort column ascending">
+                            Nombre
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
+                            aria-label="Rendering engine: activate to sort column ascending">
+                            Tienda
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
+                            aria-label="Rendering engine: activate to sort column ascending">
+                            Dirección
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
+                            aria-label="Rendering engine: activate to sort column ascending">
+                            Telefono
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="odd">
+                        <td class="dtr-control">
+                            <div class="mt-3 pb-3 mb-3 image-list-div">
+                                <div>
+                                    <img class="image-list" [src]="NO_IMAGE" title="Imagen referencial" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="dtr-control">Nombre producto</td>
+                        <td class="dtr-control">Nombre Tienda</td>
+                        <td class="dtr-control">Direccion Tienda</td>
+                        <td class="dtr-control">Telefono tienda</td>
+                    </tr>
+                    <tr class="odd">
+                        <td class="dtr-control">
+                            <div class="mt-3 pb-3 mb-3 image-list-div">
+                                <div>
+                                    <img class="image-list" [src]="NO_IMAGE" title="Imagen referencial" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="dtr-control">Nombre producto</td>
+                        <td class="dtr-control">Nombre Tienda</td>
+                        <td class="dtr-control">Direccion Tienda</td>
+                        <td class="dtr-control">Telefono tienda</td>
+                    </tr>
+                    <tr class="odd">
+                        <td class="dtr-control">
+                            <div class="mt-3 pb-3 mb-3 image-list-div">
+                                <div>
+                                    <img class="image-list" [src]="NO_IMAGE" title="Imagen referencial" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="dtr-control">Nombre producto</td>
+                        <td class="dtr-control">Nombre Tienda</td>
+                        <td class="dtr-control">Direccion Tienda</td>
+                        <td class="dtr-control">Telefono tienda</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
+    </div>
+    <div class="container-center">
+        <button type="button" class="btn btn-primary button-found" (click)="goToFounds(finder)">Volver arriba</button>
+    </div>
+</section>
 <!-- Pie de página -->

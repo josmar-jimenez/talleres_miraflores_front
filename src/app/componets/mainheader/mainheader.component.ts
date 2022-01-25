@@ -30,7 +30,7 @@ export class MainHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        this.actualDate = new Date();
+        this.actualDate =  new Date();
       }
     });
     this.userName = this.authService.getPersonalName();

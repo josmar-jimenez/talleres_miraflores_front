@@ -3,17 +3,17 @@
             <app-mainheader></app-mainheader>
             <app-sidebar></app-sidebar>
             <!-- Content Wrapper. Contains page content -->
-            <app-preloader></app-preloader> 
+            <app-preloader></app-preloader>
             <div class="content-wrapper">
                   <app-navbar></app-navbar>
                   <!-- Main content -->
-                  <section class="content">                      
-                        <div class="container-fluid"> 
-                              <app-loading-component></app-loading-component> 
+                  <section class="content">
+                        <div class="container-fluid">
+                              <app-loading-component></app-loading-component>
                               <ng-container *ngTemplateOutlet="template"></ng-container>
                         </div>
                   </section>
-            </div> 
+            </div>
             <!-- /.control-sidebar -->
             <app-footer></app-footer>
       </div>
@@ -28,14 +28,10 @@
 
 <div *ngIf="isIndexPage()">
       <app-indexheader></app-indexheader>
-      <section class="content index-content">                      
-            <div class="container-fluid"> 
-                  <ng-container *ngTemplateOutlet="template"></ng-container>
-            </div>
-      </section>
+      <ng-container *ngTemplateOutlet="template"></ng-container>
       <app-footer></app-footer>
 </div>
 
-<ng-template #template> 
+<ng-template #template>
       <router-outlet> </router-outlet>
 </ng-template>
