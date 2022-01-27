@@ -1,42 +1,50 @@
 <!-- Main Sidebar Container -->
- <aside class="main-sidebar sidebar-dark-primary elevation-5"> 
+<aside class="main-sidebar sidebar-dark-primary elevation-5">
 
-    <!-- Brand Logo -->
-    <a routerLink="/home" class="brand-link" title="{{ prop_globales.text_component.txt_volver |translate }}">
-      <img [src]="prop_img_brand" alt="logo_c_super.png" class="brand-image img-circle elevation-3" 
+  <!-- Brand Logo -->
+  <a routerLink="/home" class="brand-link" title="{{ prop_globales.text_component.txt_volver |translate }}">
+    <img [src]="prop_img_brand" alt="logo_c_super.png" class="brand-image img-circle elevation-3"
       style="opacity: .8; width: 45px; height: 30px; z-index: 2147483647;">
-      <span class="brand-text font-weight-light "> {{ prop_globales.info_globals.name_system }} </span>
-    </a>
+    <span class="brand-text font-weight-light "> {{ prop_globales.info_globals.name_system }} </span>
+  </a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img [src]="prop_img_user"  class="img-circle elevation-2" title="User Image">
-        </div>
-        <div class="info">
-          <a class="d-block"><p class=" "> {{ userActive }}  </p></a>
-        </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img [src]="prop_img_user" class="img-circle elevation-2" title="User Image">
       </div>
-
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar sidebar-mini-md flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Sidebar Menu -->
-
-          <li *ngFor="let modulo of modulosPermitidos" class="nav-item  ">
-            <a class="nav-link" routerLink="/{{modulo.operative_name}}">              
-              <i class="{{modulo.symbolClass}}"></i>
-              <p>
-                {{modulo.operative_name |translate  }}
-                <i class="right fas fa-angle-right"></i>
-              </p>
-            </a>
-          </li>
-        
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
+      <div class="info">
+        <a class="d-block">
+          <p class=" "> {{ userActive }} </p>
+        </a>
+      </div>
     </div>
-    <!-- /.sidebar -->
-  </aside>
+
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar sidebar-mini-md flex-column" data-widget="treeview" role="menu"
+        data-accordion="false">
+        <!-- Sidebar Menu -->
+        <li class="nav-item ">
+          <a class="nav-link" routerLink="/home">
+            <i class="nav-icon fas fa-home"></i>
+            <p>Página principal <i class="right fas fa-angle-right"></i></p>
+          </a>
+        </li>
+        <li *ngFor="let modulo of modulosPermitidos" class="nav-item  ">
+          <a class="nav-link" routerLink="/{{modulo.operative_name}}">
+            <i class="{{modulo.symbolClass}}"></i>
+            <p>
+              {{modulo.operative_name |translate }}
+              <i class="right fas fa-angle-right"></i>
+            </p>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
