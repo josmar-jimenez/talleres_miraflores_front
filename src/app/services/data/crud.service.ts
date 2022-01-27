@@ -3,7 +3,6 @@ import { tap, share, finalize } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CrudOperations } from 'src/app/model/interfaces/crud-operations.interface';
 import { propiedades_globales as prop_glo } from 'src/app/globals';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
 export abstract class CrudService<T, ID> implements CrudOperations<T, ID> {
 

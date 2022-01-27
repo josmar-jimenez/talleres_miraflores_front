@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from 'src/app/model/data/store';
 import { CrudService } from './crud.service';
 import { propierties_api as prop_api } from 'src/app/globals';
+import { Observable } from 'rxjs';
 
 const endpoint = {
   baseURL: prop_api.empoint_url.base_ws_url,
@@ -17,4 +18,9 @@ export class StoreService extends CrudService<Store, number>{
   constructor(private http: HttpClient) {
     super(http, endpoint.baseURL.concat(endpoint.enpointURL) );
    }  
+
+   
+   findByProduct(productId: number): Observable<Store> {
+    return this._http.get<Store>(this._base + "/product/" + productId);
+  }
 }

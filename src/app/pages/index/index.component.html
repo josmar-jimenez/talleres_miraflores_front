@@ -1,8 +1,11 @@
 <section class="content container-finder" #finder>
     <!-- Buscador -->
     <div>
-        <input type="text" class="input-finder" placeholder='Buscamos tu repuesto...'>
+        <input type="text" class="input-finder" list="datalistOptions" placeholder='Buscamos tu repuesto...'  (keyup)="changeFinderInput($event)" (keyup.enter)="goToFounds(found)">
         <i class="fa fa-search"></i>
+        <datalist id="datalistOptions">
+            <option value="{{item.name}}" *ngFor="let item of productList"> 
+        </datalist>
     </div>
     <div class="container-center">
         <button type="button" class="btn btn-primary button-finder" (click)="goToFounds(found)">Buscar tu
@@ -14,10 +17,10 @@
 </section>
 
 <section class="container container-found" #found>
-    <div class="container-center">
+    <div class="container-center" *ngIf="productFoundList.length>0">
         <h1 class="products-founds">Productos encontrados:</h1>
     </div>
-    <div class="dataTables_wrapper dt-bootstrap4">
+    <div class="dataTables_wrapper dt-bootstrap4" *ngIf="productFoundList.length>0">
         <div class="col-sm-12">
             <table id="table_product" class="table table-bordered table-striped dataTable dtr-inline" role="grid"
                 aria-describedby="table_product_info">
@@ -33,64 +36,40 @@
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
                             aria-label="Rendering engine: activate to sort column ascending">
-                            Tienda
+                            Precio
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
                             aria-label="Rendering engine: activate to sort column ascending">
-                            Dirección
-                        </th>
-                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
-                            aria-label="Rendering engine: activate to sort column ascending">
-                            Telefono
+                            Tiendas
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="odd">
-                        <td class="dtr-control">
+                    <tr class="odd" *ngFor="let product of productFoundList">
+                        <td class="dtr-control product-item-table">
                             <div class="mt-3 pb-3 mb-3 image-list-div">
                                 <div>
                                     <img class="image-list" [src]="NO_IMAGE" title="Imagen referencial" />
                                 </div>
                             </div>
                         </td>
-                        <td class="dtr-control">Nombre producto</td>
-                        <td class="dtr-control">Nombre Tienda</td>
-                        <td class="dtr-control">Direccion Tienda</td>
-                        <td class="dtr-control">Telefono tienda</td>
-                    </tr>
-                    <tr class="odd">
-                        <td class="dtr-control">
-                            <div class="mt-3 pb-3 mb-3 image-list-div">
-                                <div>
-                                    <img class="image-list" [src]="NO_IMAGE" title="Imagen referencial" />
-                                </div>
-                            </div>
+                        <td class="dtr-control product-item-table">{{product.name}}</td>
+                        <td class="dtr-control product-item-table">{{product.price}}</td>
+                        <td class="dtr-control product-item-table">
+                            <ul class="list-group">
+                                <li class="list-group-item"  *ngFor="let store of product.stores"> 
+                                    {{store.name}} <br> {{store.address}} <br>{{store.phone}}
+                                </li>
+                               
+                            </ul>
                         </td>
-                        <td class="dtr-control">Nombre producto</td>
-                        <td class="dtr-control">Nombre Tienda</td>
-                        <td class="dtr-control">Direccion Tienda</td>
-                        <td class="dtr-control">Telefono tienda</td>
-                    </tr>
-                    <tr class="odd">
-                        <td class="dtr-control">
-                            <div class="mt-3 pb-3 mb-3 image-list-div">
-                                <div>
-                                    <img class="image-list" [src]="NO_IMAGE" title="Imagen referencial" />
-                                </div>
-                            </div>
-                        </td>
-                        <td class="dtr-control">Nombre producto</td>
-                        <td class="dtr-control">Nombre Tienda</td>
-                        <td class="dtr-control">Direccion Tienda</td>
-                        <td class="dtr-control">Telefono tienda</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
     </div>
-    <div class="container-center">
+    <div class="container-center" *ngIf="productFoundList.length>0">
         <button type="button" class="btn btn-primary button-found" (click)="goToFounds(finder)">Volver arriba</button>
     </div>
 </section>
