@@ -4,27 +4,55 @@
     <!-- ----------------------------------------------------------------------------------- -->
     <div class="col-12">
         <div class="card">
-            
-            <div class="card-header" >
+
+            <div class="card-header">
                 <h2 class="card-title titulo-data-table  ">
                     <i class="fas fa-store"></i>
                     {{info_component.title | translate }}
                 </h2>
             </div>
 
-            <div class="card-body" *ngIf="!progressing"> 
-                <ng-container  *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
-                <ng-template #dataBlock >
-                    <div class="dataTables_wrapper dt-bootstrap4">                     
+            <div class="card-body" *ngIf="!progressing">
+                <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
+                <ng-template #dataBlock>
+                    <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="col-sm-12">
                             <table id="table_store" class="table table-bordered table-striped dataTable dtr-inline"
                                 role="grid" aria-describedby="table_store_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="table_store" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
-                                            *ngFor="let key of info_component.list.header_item;">{{key | translate
-                                            }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('name')">{{'name' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='name',
+                                                    'fa-sort-down' : sort?.field=='name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='name'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('address')">{{'address' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='address',
+                                                'fa-sort-down' : sort?.field=='address'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='address'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('email')">{{'email' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='email',
+                                                    'fa-sort-down' : sort?.field=='email'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='email'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('phone')">{{'phone' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='phone',
+                                                    'fa-sort-down' : sort?.field=='phone'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='phone'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('status')">{{'status' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='status',
+                                                    'fa-sort-down' : sort?.field=='status'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='status'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('status')">{{'image' | translate }}</a>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="table_store" rowspan="1"
                                             colspan="1"
@@ -40,17 +68,19 @@
                                         <td class="dtr-control">{{item.address | slice:0:40}}</td>
                                         <td class="dtr-control">{{item.email}}</td>
                                         <td class="dtr-control">{{item.phone | mask: maskPhone }}</td>
+                                        <td class="dtr-control">{{item.statusName}}</td>
                                         <td class="dtr-control">
                                             <div class="mt-3 pb-3 mb-3 image-list-div">
-                                                <div >
-                                                    <img class="image-list" [src]="item.image" title="Imagen Referencial" />
+                                                <div>
+                                                    <img class="image-list" [src]="item.image"
+                                                        title="Imagen Referencial" />
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="dtr-control">{{item.statusName}}</td>
                                         <td class="dtr-control">
-                                            <app-button-list [acciones_crud]="info_component.list.acciones_crud" [id]="item.id"  ></app-button-list> 
-                                        </td> 
+                                            <app-button-list [acciones_crud]="info_component.list.acciones_crud"
+                                                [id]="item.id"></app-button-list>
+                                        </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -61,8 +91,8 @@
                                                 info_component.count_item}}
                                             </span>
 
-                                            <a *ngIf="actionAllowed.includes('Registrar')"  
-                                            routerLink="{{ info_component.list.url_add_item }}"
+                                            <a *ngIf="actionAllowed.includes('Registrar')"
+                                                routerLink="{{ info_component.list.url_add_item }}"
                                                 class="btn btn-outline-warning float-right" role="button"
                                                 aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
                                                 <i class="fas fa-plus-circle"></i>
@@ -73,30 +103,30 @@
                                 </tfoot>
                             </table>
                         </div>
-                   
-                    <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
-                </div>
 
-            </ng-template>
-
-            <ng-template #emptyBlock>
-                <div class="row">
-                    <div class="col-sm-12">
-                        {{ info_component.sms_empty | translate}} ...
+                        <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
                     </div>
 
-                    <div class="col-sm-12">
+                </ng-template>
 
-                        <a routerLink="{{ info_component.list.url_add_item }}"
-                            class="btn btn-outline-warning float-right" role="button"
-                            aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
-                            <i class="fas fa-plus-circle"></i>
-                        </a>
+                <ng-template #emptyBlock>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ info_component.sms_empty | translate}} ...
+                        </div>
+
+                        <div class="col-sm-12">
+
+                            <a routerLink="{{ info_component.list.url_add_item }}"
+                                class="btn btn-outline-warning float-right" role="button" aria-pressed="true"
+                                title="{{ label_btn.btn_add | translate}}">
+                                <i class="fas fa-plus-circle"></i>
+                            </a>
+
+                        </div>
 
                     </div>
-                    
-                </div>
-            </ng-template>
+                </ng-template>
 
             </div>
         </div>

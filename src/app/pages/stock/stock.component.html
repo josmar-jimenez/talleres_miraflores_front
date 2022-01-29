@@ -21,25 +21,33 @@
                                 role="grid" aria-describedby="table_stock_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="table_stock" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ label_text.producto_label | translate}}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('product.name')">{{'product' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort': sort==null||sort?.field!='product.name',
+                                                    'fa-sort-down' : sort?.field=='product.name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='product.name'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_stock" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ label_text.store_label | translate}}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('store.name')">{{'store' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort': sort==null||sort?.field!='store.name',
+                                                    'fa-sort-down' : sort?.field=='store.name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='store.name'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_stock" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending">
-                                            Inventario
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('stock')">{{'inventory' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='stock',
+                                                    'fa-sort-down' : sort?.field=='stock'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='stock'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_stock" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ label_text.status_label | translate}}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('status')">{{'status' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='status',
+                                                    'fa-sort-down' : sort?.field=='status'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='status'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_stock" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
+                                        <th class="sorting">
                                             {{ label_text.actions | translate}}
                                         </th>
                                     </tr>
@@ -47,10 +55,10 @@
                                 <tbody>
                                     <tr class="odd"
                                         *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
-                                            <td class="dtr-control">{{item.productName}}</td>
-                                            <td class="dtr-control">{{item.storeName}}</td> 
-                                            <td class="dtr-control">{{item.stock}}</td>
-                                            <td class="dtr-control">{{item.statusName}}</td> 
+                                        <td class="dtr-control">{{item.productName}}</td>
+                                        <td class="dtr-control">{{item.storeName}}</td>
+                                        <td class="dtr-control">{{item.stock}}</td>
+                                        <td class="dtr-control">{{item.statusName}}</td>
                                         <td class="dtr-control">
                                             <app-button-list [acciones_crud]="info_component.list.acciones_crud"
                                                 [id]="item.id"></app-button-list>
@@ -66,8 +74,8 @@
                                                 info_component.count_item}}
                                             </span>
 
-                                            <a *ngIf="actionAllowed.includes('Registrar')"  
-                                            routerLink="{{ info_component.list.url_add_item }}"
+                                            <a *ngIf="actionAllowed.includes('Registrar')"
+                                                routerLink="{{ info_component.list.url_add_item }}"
                                                 class="btn btn-outline-warning float-right" role="button"
                                                 aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
                                                 <i class="fas fa-plus-circle"></i>
@@ -92,13 +100,13 @@
                         <div class="col-sm-12">
 
                             <a routerLink="{{ info_component.list.url_add_item }}"
-                                class="btn btn-outline-warning float-right" role="button"
-                                aria-pressed="true" title="{{ label_btn.btn_add | translate}}">
+                                class="btn btn-outline-warning float-right" role="button" aria-pressed="true"
+                                title="{{ label_btn.btn_add | translate}}">
                                 <i class="fas fa-plus-circle"></i>
                             </a>
 
                         </div>
-                        
+
                     </div>
                 </ng-template>
 

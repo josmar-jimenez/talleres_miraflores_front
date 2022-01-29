@@ -50,8 +50,17 @@ export abstract class CrudService<T, ID> implements CrudOperations<T, ID> {
     }else{
       return this._http.get<T[]>(this._base);
     } 
-
   }
+
+  findAllSorted(sort:any): Observable<T[]> {    
+    return this._http.get<T[]>(
+          sort!=null?this._base+"?sort="+sort.field+","+sort.order:this._base).pipe(
+          tap(res => this.cache = res),
+          share(),
+          finalize(() => { this.cachedObservable = this.objempty })
+        );
+  }
+
   findAllOptions(): Observable<T[]> { 
     return this._http.get<T[]>(this._base);
   }

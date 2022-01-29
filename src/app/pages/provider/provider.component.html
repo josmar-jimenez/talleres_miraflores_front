@@ -21,39 +21,43 @@
                                     role="grid" aria-describedby="table_provider_info">
                                     <thead>
                                         <tr role="row">
-                                            <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ 'name' | translate}}
+                                            <th class="sorting" >
+                                            <a (click)="sortByKey('name')">{{'name' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='name',
+                                                    'fa-sort-down' : sort?.field=='name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='name'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ 'shortName' | translate}}
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('shortName')">{{'shortName' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='shortName',
+                                                'fa-sort-down' : sort?.field=='shortName'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='shortName'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ 'address' | translate}}
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('address')">{{'address' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='address',
+                                                'fa-sort-down' : sort?.field=='address'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='address'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ 'email' | translate}}
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('email')">{{'email' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='email',
+                                                'fa-sort-down' : sort?.field=='email'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='email'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ 'phone' | translate}}
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('phone')">{{'phone' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='phone',
+                                                'fa-sort-down' : sort?.field=='phone'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='phone'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{ 'status' | translate}}
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('status')">{{'status' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='status',
+                                                'fa-sort-down' : sort?.field=='status'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='status'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                            <th class="sorting" tabindex="0" aria-controls="table_provider" rowspan="1"
-                                                colspan="1"
-                                                aria-label="Rendering engine: activate to sort column ascending">
+                                            <th class="sorting" >
                                                 {{ label_text.actions | translate}}
                                             </th>
                                         </tr>

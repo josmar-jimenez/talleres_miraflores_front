@@ -99,7 +99,7 @@ export class FormUserComponent implements OnInit {
     this.controlLoading (true);
 
     this.form_data = this.form.value;
-    let user_data = new User(null, this.form_data.storeId|this.userStoreId, this.form_data.statusId, "",
+    let user_data = new User(null, this.form_data.storeId!=null?this.form_data.storeId:this.userStoreId, this.form_data.statusId, "",
       this.form_data.roleId,
       this.form_data.password, this.form_data.nick, this.form_data.name, this.form_data.cellphone,
       this.form_data.address, this.form_data.email, this.form_data.emergencyPhone,

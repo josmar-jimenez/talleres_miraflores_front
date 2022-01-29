@@ -13,7 +13,6 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
   styleUrls: ['./user.component.css']
 })
 
-
 export class UserComponent implements OnInit { 
   public progressing: boolean = false;
   public use_cache: boolean = true;
@@ -24,6 +23,7 @@ export class UserComponent implements OnInit {
   public info_component : any =  prop_glo.info_globals.info_component;
   
   public actionAllowed:any= [];
+  public sort:any=null;
 
   constructor(
     private router: Router, 
@@ -70,7 +70,6 @@ export class UserComponent implements OnInit {
       this.info_component.list.data = data.info.content;
     } 
 
-    this.info_component.list.header_item = this.serviceUse.getTableHeaderName(data.info.content);
     this.controlLoading(false);
   }
 
@@ -88,5 +87,19 @@ export class UserComponent implements OnInit {
   controlLoading (status : boolean) : void {
     this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
     this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
+  }
+
+  sortByKey(key:string): void {
+    this.sort = {
+      field:key, 
+      order:this.sort!=null&&this.sort.order!="ASC"?"ASC":"DESC"
+    };
+    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
+      this.authService.setToken(data.token);
+      this.getInfoComponent(data);  
+      this.info_component.list.pagination.num_page =0;
+    }, error => {
+      console.log(error);
+    });
   }
 }

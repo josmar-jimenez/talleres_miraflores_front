@@ -21,9 +21,11 @@
                                 role="grid" aria-describedby="table_tag_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="table_tag" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
-                                            *ngFor="let key of info_component.list.header_item;">{{key | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('name')">{{'name' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='name',
+                                                    'fa-sort-down' : sort?.field=='name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='name'&&sort.order=='ASC'}"></i></a>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="table_tag" rowspan="1"
                                             colspan="1"

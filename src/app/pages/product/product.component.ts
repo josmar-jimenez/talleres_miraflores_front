@@ -24,6 +24,7 @@ export class ProductComponent implements OnInit {
   private NO_IMAGE = prop_glo.info_globals.info_component.no_image ;
 
   public actionAllowed:any= [];
+  public sort:any=null;
 
   constructor(
     private router: Router, 
@@ -46,7 +47,6 @@ export class ProductComponent implements OnInit {
  
   getAllProducts(): void {
     this.controlLoading(true);
-
     this.restInfoComponent();    
     this.use_cache= this.notificationService.useCache == undefined;
     this.serviceUse.findAll(this.use_cache).subscribe((data: any) => {
@@ -74,7 +74,6 @@ export class ProductComponent implements OnInit {
       });
     }
  
-    this.info_component.list.header_item = this.serviceUse.getTableHeaderName(data.info.content);
     this.controlLoading(false);
   }
 
@@ -96,6 +95,20 @@ export class ProductComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  sortByKey(key:string): void {
+    this.sort = {
+      field:key, 
+      order:this.sort!=null&&this.sort.order!="ASC"?"ASC":"DESC"
+    };
+    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
+      this.authService.setToken(data.token);
+      this.getInfoComponent(data);  
+      this.info_component.list.pagination.num_page =0;
+    }, error => {
+      console.log(error);
+    });
   }
 
   controlLoading (status : boolean) : void {

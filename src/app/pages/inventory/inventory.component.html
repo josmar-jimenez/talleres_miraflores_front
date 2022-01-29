@@ -21,35 +21,42 @@
                                 role="grid" aria-describedby="table_inventory_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'storeName' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('storeName')">{{'storeName' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort': sort==null||sort?.field!='storeName',
+                                                    'fa-sort-down' : sort?.field=='storeName'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='storeName'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'user' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('user')">{{'user' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort':sort==null||sort?.field!='user',
+                                                    'fa-sort-down' : sort?.field=='user'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='user'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'createdTime' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('created')">{{'createdTime' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort':sort==null||sort?.field!='user',
+                                                    'fa-sort-down' : sort?.field=='created'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='created'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'createdDate' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('created')">{{'createdDate' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort':sort==null||sort?.field!='user',
+                                                    'fa-sort-down' : sort?.field=='created'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='created'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'comments' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('hasMismatch')">{{'hasMismatch' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort':sort==null||sort?.field!='user',
+                                                    'fa-sort-down' : sort?.field=='hasMismatch'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='hasMismatch'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'hasMismatch' | translate }}
+                                        <th class="sorting">
+                                            <a >{{'comments' | translate }}</a>
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1"
                                             colspan="1"
@@ -65,9 +72,9 @@
                                         <td class="dtr-control">{{item.userName}}</td>
                                         <td class="dtr-control">{{item.createdDate}}</td>
                                         <td class="dtr-control">{{item.createdTime}}</td>
-                                        <td class="dtr-control">{{item.comments | slice:0:65}}</td>
                                         <td class="dtr-control">{{item.hasMismatch?'Sí':'No'}}</td>
-                                        
+                                        <td class="dtr-control">{{item.comments | slice:0:65}}</td>
+
                                         <td class="dtr-control">
                                             <app-button-list [acciones_crud]="info_component.list.acciones_crud"
                                                 [id]="item.id"></app-button-list>

@@ -88,7 +88,7 @@ export class FormStockComponent implements OnInit {
     this.controlLoading (true);
     
     this.form_data = this.form.value; 
-    let stock_data = new Stock( null, this.form_data.statusId,"", this.form_data.storeId|this.userStoreId, 
+    let stock_data = new Stock( null, this.form_data.statusId,"", this.form_data.storeId!=null?this.form_data.storeId:this.userStoreId, 
                                 this.form_data.productId, this.form_data.stock, "","");
     if (! this.isCreateMode) {  
       this.updateProduct(stock_data);

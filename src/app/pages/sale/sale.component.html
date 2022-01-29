@@ -21,39 +21,43 @@
                                 role="grid" aria-describedby="table_sales_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'storeName' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('store.name')">{{'storeName' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort': sort==null||sort?.field!='store.name',
+                                                    'fa-sort-down' : sort?.field=='store.name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='store.name'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'user' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('user.name')">{{'user' | translate }}
+                                                <i class="fas"
+                                                    [ngClass]="{'fa-sort': sort==null||sort?.field!='user.name',
+                                                    'fa-sort-down' : sort?.field=='user.name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='user.name'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                        colspan="1"
-                                        aria-label="Rendering engine: activate to sort column ascending">
-                                        {{'createdDate' | translate }}
-                                    </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'createdTime' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('created')">{{'createdDate' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='created',
+                                                'fa-sort-down' : sort?.field=='created'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='created'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'total' | translate }} {{'products' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('created')">{{'createdTime' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='created',
+                                                    'fa-sort-down' : sort?.field=='created'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='created'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_inventory" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
-                                            {{'total' | translate }}
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('total')">{{'total' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='total',
+                                                    'fa-sort-down' : sort?.field=='total'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='total'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_sales" rowspan="1"
-                                            colspan="1"
-                                            aria-label="Rendering engine: activate to sort column ascending">
+                                        <th class="sorting">
+                                            <a (click)="sortByKey('total')">{{'total' | translate }} {{'products' |
+                                                translate }}</a>
+                                        </th>
+                                        <th class="sorting">
                                             {{ label_text.actions | translate}}
                                         </th>
                                     </tr>
@@ -65,9 +69,9 @@
                                         <td class="dtr-control">{{item.userName}} </td>
                                         <td class="dtr-control">{{item.createdDate}} </td>
                                         <td class="dtr-control">{{item.createdTime}} </td>
-                                        <td class="dtr-control">{{item.totalProducts}} </td>
                                         <td class="dtr-control">{{item.total | translate}}
                                             {{prop_glo.info_globals.monedas.default.simb_mon}} </td>
+                                        <td class="dtr-control">{{item.totalProducts}} </td>
 
                                         <td class="dtr-control">
                                             <app-button-list [acciones_crud]="info_component.list.acciones_crud"

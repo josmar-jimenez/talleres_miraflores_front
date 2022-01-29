@@ -112,8 +112,7 @@ export class FormInventoryComponent implements OnInit {
       inventoryDetails.push(new DetailInventory(item.productId, item.cant, 0))
     });
 
-    let inventory_data = new Inventory(null, this.form_data.storeId | this.userStoreId, this.form_data.comments, inventoryDetails, "", false);
-    console.log(inventory_data);
+    let inventory_data = new Inventory(null, (this.form_data.storeId==null?this.form_data.storeId:this.userStoreId), this.form_data.comments, inventoryDetails, "", false);
 
     if (!this.isCreateMode) {
       //this.updateProduct(inventory_data);
@@ -139,59 +138,15 @@ export class FormInventoryComponent implements OnInit {
           sms = this.translate.instant('inventory').concat(" ").concat(prop_glo.sms_component.sms_success_add);
           pref = prop_glo.sms_component.pref_exito;
         }
-
         this.postExecuteNotification(existeError, sms, pref);
       }, error => { console.log(error); }
     );
   }
 
   updateProduct(inventory_data: Inventory): void {
-    //Chequear por definicion un inventario no deberia actualizarse
-    /*
-    this.serviceUse.update(this.id, inventory_data).subscribe(
-      (response: any) => {
-
-        let sms: string, pref: string;
-        this.authService.setToken(response.token);
-        let existeError: boolean = response.error != null && response.error != '';
-
-        if (existeError) {
-          sms = response.error;
-          pref = prop_glo.sms_error_component.pref_error;
-        } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_edit);
-          pref = prop_glo.sms_component.pref_exito;
-        }
-
-        this.postExecuteNotification(existeError, sms, pref);
-
-      },
-      error => {
-        console.log(error);
-      });*/
   }
 
   onDelete() {
-    //Chequear por definicion un inventario no deberia eliminarse
-    /*
-    this.serviceUse.delete(this.id).subscribe(
-      (response: any) => {
-        let sms: string, pref: string;
-        this.authService.setToken(response.token);
-        let existeError: boolean = response.error != null && response.error != '';
-
-        if (existeError) {
-          sms = response.error;
-          pref = prop_glo.sms_error_component.pref_error;
-        } else {
-          sms = this.info_component.owner.concat(' ').concat(prop_glo.sms_component.sms_success_edit);
-          pref = prop_glo.sms_component.pref_exito;
-        }
-
-        this.postExecuteNotification(existeError, sms, pref);
-      }, error => { console.log(error); }
-    );*/
-
   }
 
   getIdParams(): Number {

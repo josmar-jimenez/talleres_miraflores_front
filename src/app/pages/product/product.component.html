@@ -21,12 +21,47 @@
                                 role="grid" aria-describedby="table_product_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1"
-                                            colspan="1" aria-label="Rendering engine: activate to sort column ascending"
-                                            *ngFor="let key of info_component.list.header_item;">{{key | translate }}
+                                    <tr role="row">
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('name')">{{'name' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='name',
+                                                    'fa-sort-down' : sort?.field=='name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='name'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1"
-                                            colspan="1"
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('shortName')">{{'shortName' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='shortName',
+                                                'fa-sort-down' : sort?.field=='shortName'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='shortName'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('barcode')">{{'barcode' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='barcode',
+                                            'fa-sort-down' : sort?.field=='barcode'&&sort.order=='DESC',
+                                            'fa-sort-up' : sort?.field=='barcode'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('price')">{{'price' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='price',
+                                        'fa-sort-down' : sort?.field=='price'&&sort.order=='DESC',
+                                        'fa-sort-up' : sort?.field=='price'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('cost')">{{'cost' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='cost',
+                                'fa-sort-down' : sort?.field=='cost'&&sort.order=='DESC',
+                                'fa-sort-up' : sort?.field=='cost'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting" >
+                                            <a (click)="sortByKey('status')">{{'status' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='status',
+                            'fa-sort-down' : sort?.field=='status'&&sort.order=='DESC',
+                            'fa-sort-up' : sort?.field=='status'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting" >
+                                            <a>{{'image' | translate }} </a>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="table_product"
                                             aria-label="Rendering engine: activate to sort column ascending">
                                             {{ label_text.actions | translate}}
                                         </th>
@@ -40,6 +75,7 @@
                                         <td class="dtr-control">{{item.barcode}}</td>
                                         <td class="dtr-control">{{item.price }}</td>
                                         <td class="dtr-control">{{item.cost }}</td>
+                                        <td class="dtr-control">{{item.statusName }}</td>
                                         <td class="dtr-control">
                                             <div class="mt-3 pb-3 mb-3 image-list-div">
                                                 <div>
@@ -48,7 +84,6 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="dtr-control">{{item.statusName }}</td>
                                         <td class="dtr-control">
                                             <app-button-list [acciones_crud]="info_component.list.acciones_crud"
                                                 [id]="item.id"></app-button-list>

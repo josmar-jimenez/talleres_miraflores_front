@@ -107,7 +107,7 @@ export class FormSaleComponent implements OnInit {
       arraySaleDetail.push(new DetailSale(element.productId, element.cant));
     });
 
-    let sale_data = new Sale(null, this.form_data.storeId | this.userStoreId, arraySaleDetail);
+    let sale_data = new Sale(null, this.form_data.storeId!=null?this.form_data.storeId:this.userStoreId, arraySaleDetail);
 
     if (!this.isCreateMode) {
       this.updateProduct(sale_data);
@@ -139,50 +139,9 @@ export class FormSaleComponent implements OnInit {
   }
 
   updateProduct(sale_data: Sale): void {
-    // TODO: Aun no sabemos como modificar 
-    /*     this.serviceUse.update(this.id, sale_data).subscribe(
-          (response: any) => {
-    
-            let sms: string, pref: string;
-            this.authService.setToken(response.token);
-            let existeError: boolean = response.error != null && response.error != '';
-             
-            if (existeError) {
-              sms = response.error;
-              pref = prop_glo.sms_error_component.pref_error;
-            } else {
-              sms = this.translate.instant('sale').concat(" ").concat(prop_glo.sms_component.sms_success_edit);
-              pref = prop_glo.sms_component.pref_exito;
-            }
-    
-            this.postExecuteNotification(existeError, sms, pref);  
-    
-          },
-          error => {
-            console.log(error);
-          }); */
   }
 
   onDelete() {
-    // TODO : por defición una venta no puede ser borrada
-    /*     this.serviceUse.delete(this.id).subscribe(
-          (response: any) => {
-            let sms: string, pref: string;
-            this.authService.setToken(response.token);
-            let existeError: boolean = response.error != null && response.error != '';
-    
-            if (existeError) {
-              sms = response.error;
-              pref = prop_glo.sms_error_component.pref_error;
-            } else {
-              sms = this.translate.instant('sale').concat(" ").concat(prop_glo.sms_component.sms_success_delete);
-              pref = prop_glo.sms_component.pref_exito;
-            }
-    
-            this.postExecuteNotification(existeError, sms, pref);
-          }, error => { console.log(error); }
-        ); */
-
   }
 
   getIdParams(): Number {
@@ -328,7 +287,7 @@ export class FormSaleComponent implements OnInit {
       if (item.productId == this.form_data.productId)
         this.saleTable.splice(index, 1);
     });
-    this.saleTable.push(new SaleTable(this.form_data.storeId | this.userStoreId, this.form_data.productId,
+    this.saleTable.push(new SaleTable(this.form_data.storeId!=null?this.form_data.storeId:this.userStoreId, this.form_data.productId,
       productName, productPrice, this.form_data.quantity));
     this.updateTotals();
   }
@@ -367,7 +326,7 @@ export class FormSaleComponent implements OnInit {
     this.saleTable = [];
     this.listProduct = [];
     this.listStock.forEach((item: any) => {
-      if (item.storeId == (this.form_data.storeId | this.userStoreId) && item.statusId ==1)
+      if ( ((item.storeId == this.form_data.storeId) || (item.storeId == this.userStoreId)) && item.statusId ==1)
         this.listProduct.push(new StockByProduct(item.productId, item.productName, item.cantPhysical, item.productPrice));
     });
     this.updateTotals();
