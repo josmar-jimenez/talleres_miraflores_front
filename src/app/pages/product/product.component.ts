@@ -26,6 +26,10 @@ export class ProductComponent implements OnInit {
   public actionAllowed:any= [];
   public sort:any=null;
 
+  public originalList: any;
+  public productList: Array<{id:number,name:string}> = [];
+  public productSelected:any=null;
+
   constructor(
     private router: Router, 
     private authService: AuthService,
@@ -72,6 +76,17 @@ export class ProductComponent implements OnInit {
       data.info.content.forEach((element:any, index:any) => {
         this.getImage(element.id, index);
       });
+      this.originalList = data.info.content;
+      this.productList = [];
+      this.originalList.forEach((stock:any) => {
+        let exits = false;
+        this.productList.forEach(product => {
+          if(product.id==stock.id)
+            exits=true;
+        });
+        if(!exits)
+          this.productList.push({id:stock.id, name:stock.name});
+      });
     }
  
     this.controlLoading(false);
@@ -95,6 +110,19 @@ export class ProductComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  filter(): void {
+    let temporalList:any = [];
+    this.originalList.forEach((element:any) => {
+      if(element.name==this.productSelected || this.productSelected==null) {
+        temporalList.push(element);
+      }
+    });
+    this.productSelected = null;
+    this.info_component.list.data = temporalList;
+    this.info_component.list.pagination.num_page = 0
+    this.info_component.count_item = temporalList.length;
   }
 
   sortByKey(key:string): void {

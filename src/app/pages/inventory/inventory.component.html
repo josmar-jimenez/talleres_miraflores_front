@@ -15,6 +15,28 @@
             <div class="card-body" *ngIf="!progressing">
                 <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
                 <ng-template #dataBlock>
+                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                        <tr>
+                            <td class="col-sm-7 text-right"></td>
+                            <td class="col-sm-1 text-right">{{'store' | translate }}</td>
+                            <td class="col-sm-3 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="fas fa-store"></i>
+                                </span>
+                                <input type="text" name="storeId" list="inputFindStore" id="storeId"
+                                    class="filter-control" [(ngModel)]="storeSelected">
+                                <datalist id="inputFindStore" class="form-select">
+                                    <option value="{{item.name}}"
+                                        *ngFor="let item of storeList" class="optionFound">
+                                </datalist>
+                            </td>
+                           
+                            <td class="col-sm-1 text-right">
+                                <button type="button" class="btn btn-primary" (click)="filter()">
+                                    {{'filter' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="col-sm-12">
                             <table id="table_inventory" class="table table-bordered table-striped dataTable dtr-inline"

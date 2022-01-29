@@ -15,6 +15,37 @@
             <div class="card-body" *ngIf="!progressing">
                 <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
                 <ng-template #dataBlock>
+                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                        <tr>
+                            <td class="col-sm-3 text-right"></td>
+                            <td class="col-sm-1 text-right">{{'store' | translate }}</td>
+                            <td class="col-sm-3 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="fas fa-store"></i>
+                                </span>
+                                <input type="text" name="storeId" list="inputFindStore" id="storeId"
+                                    class="filter-control" [(ngModel)]="storeSelected">
+                                <datalist id="inputFindStore" class="form-select">
+                                    <option value="{{item.name}}" *ngFor="let item of storeList" class="optionFound">
+                                </datalist>
+                            </td>
+                            <td class="col-sm-1 text-right">{{'user' | translate }}</td>
+                            <td class="col-sm-3 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="fas fa-luggage-cart"></i>
+                                </span>
+                                <input type="text" name="userId" list="inputFindUser" id="userId"
+                                    class="filter-control" [(ngModel)]="userSelected">
+                                <datalist id="inputFindUser" class="form-select">
+                                    <option value="{{item.name}}" *ngFor="let item of userList" class="optionFound">
+                                </datalist>
+                            </td>
+                            <td class="col-sm-1 text-right">
+                                <button type="button" class="btn btn-primary" (click)="filter()">
+                                    {{'filter' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="col-sm-12">
                             <table id="table_sales" class="table table-bordered table-striped dataTable dtr-inline"
@@ -23,8 +54,7 @@
                                     <tr role="row">
                                         <th class="sorting">
                                             <a (click)="sortByKey('store.name')">{{'storeName' | translate }}
-                                                <i class="fas"
-                                                    [ngClass]="{'fa-sort': sort==null||sort?.field!='store.name',
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='store.name',
                                                     'fa-sort-down' : sort?.field=='store.name'&&sort.order=='DESC',
                                                     'fa-sort-up' : sort?.field=='store.name'&&sort.order=='ASC'}"></i></a>
                                         </th>

@@ -25,6 +25,10 @@ export class UserComponent implements OnInit {
   public actionAllowed:any= [];
   public sort:any=null;
 
+  public storeSelected:any=null;
+  public storeList: Array<{id:number,name:string}> = [];
+  public originalList: any;
+
   constructor(
     private router: Router, 
     private authService: AuthService,
@@ -68,6 +72,17 @@ export class UserComponent implements OnInit {
       this.info_component.sms_empty  = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
+      this.originalList = data.info.content;
+      this.storeList = [];
+      this.originalList.forEach((stock:any) => {
+        let exits = false;
+      this.storeList.forEach(store => {
+            if(store.id==stock.storeId)
+              exits=true;
+          });
+          if(!exits)
+            this.storeList.push({id:stock.storeId, name:stock.storeName});
+      });
     } 
 
     this.controlLoading(false);
@@ -82,6 +97,19 @@ export class UserComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+  
+  filter(): void {
+    let temporalList:any = [];
+    this.originalList.forEach((element:any) => {
+      if(element.storeName==this.storeSelected || this.storeSelected==null){
+        temporalList.push(element);
+      }
+    });
+    this.storeSelected=null;
+    this.info_component.list.data = temporalList;
+    this.info_component.list.pagination.num_page = 0
+    this.info_component.count_item = temporalList.length;
   }
   
   controlLoading (status : boolean) : void {

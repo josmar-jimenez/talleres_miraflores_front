@@ -72,9 +72,9 @@ export class FormInventoryComponent implements OnInit {
   public inventoryTable: Array<InventoryTable> = [];
 
   ngOnInit(): void {
-    this.getInfoComponent();
     this.isUserAdmin = this.authService.getRoleId() == "1";
     this.userStoreId = Number(this.authService.getStoreId());
+    this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
         storeId: [{ value: this.userStoreId, disabled: (this.isViewMode || !this.isUserAdmin) }, null],
@@ -194,7 +194,8 @@ export class FormInventoryComponent implements OnInit {
       this.authService.setToken(data.token);
       this.listStock = data.info.content;
       this.listStock.forEach(item => {
-          this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock,0));
+          if(item.storeId==this.userStoreId)
+            this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock,0));
       });
     }, (error: any) => {
       console.log(error);
@@ -204,7 +205,6 @@ export class FormInventoryComponent implements OnInit {
       this.authService.setToken(data.token);
       this.listStore = data.info.content;
       this.controlLoading(false);
-
     }, (error: any) => {
       console.log(error);
     });

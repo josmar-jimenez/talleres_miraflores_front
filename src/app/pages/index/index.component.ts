@@ -20,6 +20,7 @@ export class IndexComponent implements OnInit {
   public findProducts : boolean = false;
   public inputFinder : any;
   public paginator:any = prop_glo.info_globals.info_component.list.pagination;
+  
   constructor(
     private productService: ProductService,
     private storeService: StoreService,
@@ -36,19 +37,19 @@ export class IndexComponent implements OnInit {
     $element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 
-  goToFounds($element: any): void {
+  goToFounds($elementTarget: any): void {
     this.findProducts =true;
-    this.findProductWithStock(this.inputFinder);
-    $element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    this.findProductWithStock(this.inputFinder,$elementTarget);
+    $elementTarget.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 
   goToFoundsWithEnter($element: any,$elementTarget: any): void {
     this.findProducts =true;
-    this.findProductWithStock($element.target.value);
+    this.findProductWithStock($element.target.value,$elementTarget);
     $elementTarget.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 
-  findProductWithStock(inputToFind: any): void {
+  findProductWithStock(inputToFind: any, $elementTarget:any): void {
     this.productService.findByInput(inputToFind).subscribe((data: any) => {
       this.productList = data.info;
       this.productFoundList = [];
@@ -58,6 +59,7 @@ export class IndexComponent implements OnInit {
         this.getImage(element.id, index);
       });
       this.paginator.num_page =0;
+      $elementTarget.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }, (error: any) => {
       this.productFoundList = [];
       console.log(error);

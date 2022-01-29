@@ -15,8 +15,14 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
 export class StockComponent implements OnInit { 
   public progressing: boolean = false;
   public use_cache: boolean = true;
-  public maskPhone: string = prop_glo.mask.mask_phone;    
-   
+  public maskPhone: string = prop_glo.mask.mask_phone;  
+
+  public originalList: any;
+  public productList: Array<{id:number,name:string}> = [];
+  public storeList: Array<{id:number,name:string}> = [];
+  public productSelected:any=null;
+  public storeSelected:any=null;
+
   public label_btn: any = prop_glo.label_btn;
   public label_text: any = prop_glo.label_component;
   public info_component : any =  prop_glo.info_globals.info_component;
@@ -57,7 +63,6 @@ export class StockComponent implements OnInit {
   getInfoComponent(data: any): void {
     let ruta = this.router.url;
     let owner = ruta.split('/')[1];    
-
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner); 
     this.info_component.count_item = data.info.totalElements;    
     this.info_component.empty  = data.info.empty;
@@ -66,6 +71,25 @@ export class StockComponent implements OnInit {
       this.info_component.sms_empty  = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
+      this.originalList = data.info.content;
+      this.productList = [];
+      this.storeList = [];
+      this.originalList.forEach((stock:any) => {
+        let exits = false;
+        this.productList.forEach(product => {
+          if(product.id==stock.productId)
+            exits=true;
+        });
+        if(!exits)
+          this.productList.push({id:stock.productId, name:stock.productName});
+          exits = false;
+          this.storeList.forEach(store => {
+            if(store.id==stock.storeId)
+              exits=true;
+          });
+          if(!exits)
+            this.storeList.push({id:stock.storeId, name:stock.storeName});
+      });
     }
 
     this.controlLoading(false);
@@ -80,6 +104,21 @@ export class StockComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  filter(): void {
+    let temporalList:any = [];
+    this.originalList.forEach((element:any) => {
+      if((element.productName==this.productSelected || this.productSelected==null) &&
+      (element.storeName==this.storeSelected || this.storeSelected==null)){
+        temporalList.push(element);
+      }
+    });
+    this.productSelected = null;
+    this.storeSelected=null;
+    this.info_component.list.data = temporalList;
+    this.info_component.list.pagination.num_page = 0
+    this.info_component.count_item = temporalList.length;
   }
 
   controlLoading (status : boolean) : void {

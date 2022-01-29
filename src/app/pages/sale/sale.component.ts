@@ -25,6 +25,12 @@ export class SaleComponent implements OnInit {
   public actionAllowed:any= [];
   public sort:any=null;
 
+  public originalList: any;
+  public userList: Array<{id:number,name:string}> = [];
+  public storeList: Array<{id:number,name:string}> = [];
+  public userSelected:any=null;
+  public storeSelected:any=null;
+
   constructor(
     private router: Router, 
     private authService: AuthService,
@@ -75,6 +81,25 @@ export class SaleComponent implements OnInit {
         });
         element.totalProducts =total;
       });
+      this.originalList = data.info.content;
+      this.userList = [];
+      this.storeList = [];
+      this.originalList.forEach((stock:any) => {
+        let exits = false;
+        this.userList.forEach(user => {
+          if(user.id==stock.userId)
+            exits=true;
+        });
+        if(!exits)
+          this.userList.push({id:stock.userId, name:stock.userName});
+          exits = false;
+          this.storeList.forEach(store => {
+            if(store.id==stock.storeId)
+              exits=true;
+          });
+          if(!exits)
+            this.storeList.push({id:stock.storeId, name:stock.storeName});
+      });
     }    
     this.controlLoading(false);
   }
@@ -88,6 +113,21 @@ export class SaleComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  filter(): void {
+    let temporalList:any = [];
+    this.originalList.forEach((element:any) => {
+      if((element.userName==this.userSelected || this.userSelected==null) &&
+      (element.storeName==this.storeSelected || this.storeSelected==null)){
+        temporalList.push(element);
+      }
+    });
+    this.userSelected = null;
+    this.storeSelected=null;
+    this.info_component.list.data = temporalList;
+    this.info_component.list.pagination.num_page = 0
+    this.info_component.count_item = temporalList.length;
   }
 
   controlLoading (status : boolean) : void {
