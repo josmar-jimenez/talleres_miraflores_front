@@ -4,7 +4,6 @@ import { Location } from '@angular/common';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UsersService } from 'src/app/services/data/users.service'; 
 import { propiedades_globales as prop_glo } from 'src/app/globals'; 
-import { TranslateService } from '@ngx-translate/core';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 @Component({
@@ -14,20 +13,23 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
 })
 
 export class UserComponent implements OnInit { 
+
   public progressing: boolean = false;
   public use_cache: boolean = true;
+  public isUserAdmin: boolean = false;
+  public actionAllowed:any= [];
+
   public maskPhone: string = prop_glo.mask.mask_phone;      
 
   public label_btn: any = prop_glo.label_btn;
   public label_text: any = prop_glo.label_component;
   public info_component : any =  prop_glo.info_globals.info_component;
   
-  public actionAllowed:any= [];
-  public sort:any=null;
-
+  //Filtros
   public storeSelected:any=null;
   public storeList: Array<{id:number,name:string}> = [];
   public originalList: any;
+  public sort:any=null;
 
   constructor(
     private router: Router, 
@@ -35,10 +37,8 @@ export class UserComponent implements OnInit {
     private serviceUse: UsersService,
     private location: Location,
     private notificationService:NotificationsService,
-    public translate: TranslateService
     ) {
-      translate.addLangs(prop_glo.info_globals.idiomas.config);
-      translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
+      this.isUserAdmin = this.authService.getRoleId() == "1";
     }
  
   ngOnInit(): void {  
@@ -99,6 +99,12 @@ export class UserComponent implements OnInit {
     this.location.back();
   }
   
+  controlLoading (status : boolean) : void {
+    this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
+    this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
+  }
+
+  /*Ordenaiento y filtros*/
   filter(): void {
     let temporalList:any = [];
     this.originalList.forEach((element:any) => {
@@ -110,11 +116,6 @@ export class UserComponent implements OnInit {
     this.info_component.list.data = temporalList;
     this.info_component.list.pagination.num_page = 0
     this.info_component.count_item = temporalList.length;
-  }
-  
-  controlLoading (status : boolean) : void {
-    this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
-    this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
   }
 
   sortByKey(key:string): void {

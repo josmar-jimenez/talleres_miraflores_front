@@ -15,11 +15,12 @@
             <div class="card-body" *ngIf="!progressing">
                 <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
                 <ng-template #dataBlock>
-                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                    <table class="col-sm-12" style=" margin-bottom: 20px" *ngIf="isUserAdmin||isUserLider">
                         <tr>
-                            <td class="col-sm-3 text-right"></td>
-                            <td class="col-sm-1 text-right">{{'store' | translate }}</td>
-                            <td class="col-sm-3 text-right">
+                            <td class="text-right"
+                            [ngClass]="{'col-sm-3': isUserAdmin,'col-sm-7' : isUserLider}"></td>
+                            <td class="col-sm-1 text-right" *ngIf="isUserAdmin">{{'store' | translate }}</td>
+                            <td class="col-sm-3 text-right"  *ngIf="isUserAdmin">
                                 <span class="input-group-text" style=" display:inline-block;">
                                     <i class="fas fa-store"></i>
                                 </span>

@@ -95,12 +95,6 @@ export class FormInventoryComponent implements OnInit {
     this.submitted = false;
     this.submitted2 = true;
     this.form_data = this.form.value;
-    if (this.form_data.storeId == '') {
-      this.storeEmpty = true;
-      return;
-    } else {
-      this.storeEmpty = false;
-    }
     if (this.form.invalid || this.inventoryTable.length == 0) {
       return;
     }
@@ -112,7 +106,8 @@ export class FormInventoryComponent implements OnInit {
       inventoryDetails.push(new DetailInventory(item.productId, item.cant, 0))
     });
 
-    let inventory_data = new Inventory(null, (this.form_data.storeId==null?this.form_data.storeId:this.userStoreId), this.form_data.comments, inventoryDetails, "", false);
+    let inventory_data = new Inventory(null, (this.form_data.storeId!=null?this.form_data.storeId:this.userStoreId), 
+    this.form_data.comments, inventoryDetails, "", false);
 
     if (!this.isCreateMode) {
       //this.updateProduct(inventory_data);
