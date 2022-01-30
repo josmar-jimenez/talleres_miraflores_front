@@ -4,7 +4,6 @@ import { HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http'
 
 import { AuthService } from '../services/auth/auth.service'; 
 import { Observable } from 'rxjs'; 
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 const TOKEN_HEADER_KEY = 'Authorization';  
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,8 +13,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private toastr: ToastrService,
-    private authService: AuthService) { }
+    private toastr: ToastrService) { }
 
   ngOnInit(): void { }
 
