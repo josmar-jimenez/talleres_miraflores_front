@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { Summary } from 'src/app/model/data/summary';
+import { SummaryService } from 'src/app/services/data/summary.service';
 
 
 @Component({
@@ -11,11 +12,23 @@ import { ToastrService } from 'ngx-toastr';
 
 export class HomeComponent implements OnInit {
 
+  public use_cache: boolean = false;  
+  public summariesList:Array<Summary>= [];
+
   constructor(
     private router: Router,
-    private toastr: ToastrService) { }
+    private summaryService: SummaryService) { 
 
-  ngOnInit(): void { }
+    }
+
+  ngOnInit(): void { 
+    this.summaryService.findAll(this.use_cache).subscribe((data: any) => {
+      console.log(data);
+      this.summariesList = data.info;
+    }, error => {
+      console.log(error);
+    });
+  }
 
   goTo(url: string) {
     this.router.navigateByUrl(url);

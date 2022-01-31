@@ -93,6 +93,7 @@ export class FormSaleComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
     this.submitted2 = false;
+    this.form_data = this.form.value;
 
     if (this.form.invalid) {
       return;
@@ -101,7 +102,6 @@ export class FormSaleComponent implements OnInit {
     this.controlLoading(true);
 
     this.form_data = this.form.value;
-
     let arraySaleDetail: Array<DetailSale> = [];
     this.saleTable.forEach(element => {
       arraySaleDetail.push(new DetailSale(element.productId, element.cant));
@@ -179,7 +179,7 @@ export class FormSaleComponent implements OnInit {
       this.authService.setToken(data.token);
       this.listStock = data.info.content;
       this.listStock.forEach((item: any) => {
-        if (item.statusId == 1)
+        if (item.statusId == 1 && item.storeId==this.userStoreId)
           this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock, item.productPrice));
       });
     }, (error: any) => {
@@ -326,7 +326,7 @@ export class FormSaleComponent implements OnInit {
     this.saleTable = [];
     this.listProduct = [];
     this.listStock.forEach((item: any) => {
-      if ( ((item.storeId == this.form_data.storeId) || (item.storeId == this.userStoreId)) && item.statusId ==1)
+      if ( (item.storeId == this.form_data.storeId) && item.statusId ==1)
         this.listProduct.push(new StockByProduct(item.productId, item.productName, item.cantPhysical, item.productPrice));
     });
     this.updateTotals();

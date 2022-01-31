@@ -197,8 +197,11 @@ export const propierties_api = {
         /*url endpoint users*/
 
         /*url endpoint operatives*/
-        endpoint_operatives: '/operatives'
+        endpoint_operatives: '/operatives',
         /*url endpoint operatives*/
 
+         /*url endpoint operatives*/
+         endpoint_summaries: '/summary'
+         /*url endpoint operatives*/
     }
 }
