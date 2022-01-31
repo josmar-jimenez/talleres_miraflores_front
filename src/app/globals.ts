@@ -18,7 +18,7 @@ export const propiedades_globales = {
         },
 
         /*url imagenes globales*/
-        name_system: 'sisgestore',
+        name_system: 'Super opciones',
         pages_url_base_img: '../../assets/',
         default_img: 'default/user_default.png',
         url_logo_owner: 'logo_propietario/logo_c_super.png',
@@ -143,7 +143,7 @@ export const propiedades_globales = {
         year_release: '2021',
         url_site_owner: 'www.google.com',
         derechos: "todos los derechos reservados.",
-        name_owner_app: 'Talleres Miraflores C.A'
+        name_owner_app: 'Corporación Super C.A'
         /*url footer globales*/
     }
 

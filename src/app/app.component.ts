@@ -9,7 +9,7 @@ import { Router  } from '@angular/router';
 })
 
 export class AppComponent {
-  titte = "SIGESTORE";
+  titte = "Super opciones";
   public isLoggin: any = false;
   
   constructor(
