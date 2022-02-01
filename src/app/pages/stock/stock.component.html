@@ -17,10 +17,9 @@
                 <ng-template #dataBlock>
                     <table class="col-sm-12" style=" margin-bottom: 20px">
                         <tr>
-                            <td class="text-right"
-                            [ngClass]="{'col-sm-3': isUserAdmin,'col-sm-7' : !isUserAdmin}"></td>
-                            <td class="col-sm-1 text-right"  *ngIf="isUserAdmin">{{'store' | translate }}</td>
-                            <td class="col-sm-3 text-right" *ngIf="isUserAdmin">
+                            <td class="text-right col-sm-3"></td>
+                            <td class="col-sm-1 text-right"  >{{'store' | translate }}</td>
+                            <td class="col-sm-3 text-right" >
                                 <span class="input-group-text" style=" display:inline-block;">
                                     <i class="fas fa-store"></i>
                                 </span>
