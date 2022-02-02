@@ -17,6 +17,7 @@ export class ProductComponent implements OnInit {
 
   public progressing: boolean = false; 
   public use_cache: boolean = true;
+  public prop_glo = prop_glo;
 
   public label_btn: any = prop_glo.label_btn;
   public label_text: any = prop_glo.label_component;

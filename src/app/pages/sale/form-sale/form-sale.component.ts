@@ -46,6 +46,7 @@ export class FormSaleComponent implements OnInit {
 
   public submitted: boolean = false;
   public submitted2: boolean = false;
+  public prop_glo = prop_glo;
 
   public progressing: boolean = false;
   public isCreateMode: boolean = false;

@@ -11,10 +11,10 @@ export const propiedades_globales = {
         
         monedas:{
             config: [{cod_mon:'VES',nom_mon:'Bolivar', simb_mon:'Bs.'},
-                     {cod_mon:'EUR', nom_mon:'Euro', simb_mon:'€.'}, 
-                     {cod_mon:'USD', nom_mon:'Dolar', simb_mon:'$.'}],
+                     {cod_mon:'EUR', nom_mon:'Euro', simb_mon:'€'}, 
+                     {cod_mon:'USD', nom_mon:'Dolar', simb_mon:'$'}],
                      
-            default: {cod_mon:'VES',nom_mon:'Bolivar', simb_mon:'Bs.'}
+            default: {cod_mon:'VES',nom_mon:'Dolares', simb_mon:'$'}
         },
 
         /*url imagenes globales*/
