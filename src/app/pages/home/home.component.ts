@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Summary } from 'src/app/model/data/summary';
 import { SummaryService } from 'src/app/services/data/summary.service';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -17,8 +16,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private summaryService: SummaryService) { 
-
+    private summaryService: SummaryService
+ ) { 
     }
 
   ngOnInit(): void { 

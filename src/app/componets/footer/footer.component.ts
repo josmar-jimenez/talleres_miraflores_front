@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { propiedades_globales as prop_glo } from 'src/app/globals';
-import { AuthService } from 'src/app/services/auth/auth.service'; 
-import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-footer',
@@ -10,18 +8,17 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit { 
+
+  public isMobile: boolean = false;  
+
   constructor( 
-    private authService:AuthService ,
-    private notificationService:NotificationsService,
-    public translate: TranslateService
-    ) {
-      translate.addLangs(prop_glo.info_globals.idiomas.config);
-      translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
-    }
+    private deviceService: DeviceDetectorService
+    ) {    }
 
   public info_footer: any =  prop_glo.footer; 
 
   ngOnInit(): void { 
+    this.isMobile = this.deviceService.isMobile();
   }
 
 }

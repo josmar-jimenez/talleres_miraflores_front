@@ -1,7 +1,9 @@
 <section class="content container-finder" #finder>
     <!-- Buscador -->
     <div>
-        <input type="text" class="input-finder" list="inputFindProduct"  placeholder='Buscamos tu repuesto...'  (keyup)="changeFinderInput($event)" 
+        <input type="text" list="inputFindProduct"  placeholder='Buscamos tu repuesto...'  
+        [ngClass]="{'input-finder': !isMobile, 'input-finder-mobile' : isMobile}"
+        (keyup)="changeFinderInput($event)" 
         (keyup.enter)="goToFoundsWithEnter($event,found)" [(ngModel)]="inputFinder">
         <i class="fa fa-search" (click)="goToFounds(found)"></i>
         <datalist id="inputFindProduct" class="form-select">
@@ -19,7 +21,7 @@
 
 <section class="container container-found" #found>
     <div class="container-center" *ngIf="productFoundList.length>0 && findProducts">
-        <h1 class="products-founds">Productos encontrados:</h1>
+        <h1  [ngClass]="{'h1-mobile' : isMobile}">Productos encontrados:</h1>
     </div>
     <div class="dataTables_wrapper dt-bootstrap4" *ngIf="productFoundList.length>0 && findProducts">
         <div class="col-sm-12">
@@ -29,35 +31,39 @@
                     <tr role="row">
                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
                             aria-label="Rendering engine: activate to sort column ascending">
-                            Imagen
+                            {{'image' | translate }}
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
                             aria-label="Rendering engine: activate to sort column ascending">
-                            Nombre
+                            {{'name' | translate }}
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
                             aria-label="Rendering engine: activate to sort column ascending">
-                            Precio
+                            {{'price' | translate }}
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="table_product" rowspan="1" colspan="1"
                             aria-label="Rendering engine: activate to sort column ascending">
-                            Tiendas
+                            {{'stores' | translate }}
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="odd" *ngFor="let product of productFoundList  | paginate:{itemsPerPage: 3, currentPage: paginator.num_page, totalItems: productFoundList.length}">
-                        <td class="dtr-control product-item-table" style="width: 20%;">
+                        <td data-title="Imagen" class="dtr-control product-item-table column-center" 
+                        [ngClass]="{'column-width-desktop-20': !isMobile, 'column-width-mobile' : isMobile}">
                             <div class="mt-3 pb-3 mb-3 image-list-div">
                                 <div>
                                     <img class="image-list" [src]="product.image" title="Imagen referencial" />
                                 </div>
                             </div>
                         </td>
-                        <td class="dtr-control product-item-table" style="width: 30%;">{{product.name}}</td>
-                        <td class="dtr-control product-item-table" style="width: 10%;">{{product.price}} $</td>
-                        <td class="dtr-control product-item-table" style="width: 40%;">
-                            <ul class="list-group">
+                        <td data-title="Nombre" class="dtr-control product-item-table column-center" 
+                        [ngClass]="{'column-width-desktop-30': !isMobile, 'column-width-mobile' : isMobile}">{{product.name}}</td>
+                        <td data-title="Precio" class="dtr-control product-item-table column-center" 
+                        [ngClass]="{'column-width-desktop-10': !isMobile, 'column-width-mobile' : isMobile}">{{product.price}} $</td>
+                        <td  data-title="Tiendas" class="dtr-control product-item-table column-center" >
+                            <ul class="list-group"
+                            [ngClass]="{'column-center-mobile' : isMobile}">
                                 <li class="list-group-item"  *ngFor="let store of product.stores"> 
                                     {{store.name}} <br> {{store.address}} <br>{{store.phone}}
                                 </li>

@@ -5,6 +5,7 @@ import { ProductFound } from 'src/app/model/data/product-found';
 import { ProductService } from 'src/app/services/data/product.service';
 import { StoreService } from 'src/app/services/data/store.service';
 import { StorageService } from 'src/app/services/upload-file/storage.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-index-component',
@@ -13,6 +14,9 @@ import { StorageService } from 'src/app/services/upload-file/storage.service';
 })
 export class IndexComponent implements OnInit {
 
+  public isMobile: boolean = false;  
+
+  /*Product List */
   public productsList: Array<string> = [];
   public info_component: any = prop_glo.info_globals.info_component;
   public productList: Array<Product> = [];
@@ -24,10 +28,14 @@ export class IndexComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private storeService: StoreService,
-    public storageService: StorageService
-  ) { }
+    public storageService: StorageService,
+    private deviceService: DeviceDetectorService
+  ) {
+
+   }
 
   ngOnInit(): void {
+    this.isMobile = this.deviceService.isMobile();
   }
 
   goToFinder($element: any): void {

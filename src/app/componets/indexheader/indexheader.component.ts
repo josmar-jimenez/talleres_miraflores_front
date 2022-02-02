@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Router, Event, NavigationEnd } from '@angular/router';
+import { Router} from '@angular/router';
 import { propiedades_globales as prop_glo } from 'src/app/globals'; 
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-indexheader',
@@ -12,15 +13,18 @@ import { propiedades_globales as prop_glo } from 'src/app/globals';
 export class IndexHeaderComponent implements OnInit {
   
   public prop_img_brand:any;
+  public isMobile: boolean = false;  
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private deviceService: DeviceDetectorService
   ) {
   }
 
   ngOnInit(): void {
     this.prop_img_brand =  prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.url_logo_owner);
+    this.isMobile = this.deviceService.isMobile();
   }
 
   nglogOut() {

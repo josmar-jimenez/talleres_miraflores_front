@@ -1,6 +1,7 @@
-<footer class="main-footer" >
+<footer class="main-footer"  [ngClass]="{'footer-mobile' : isMobile}">
     <strong>Copyright &copy; {{ info_footer.year_release }} -
-        <a [href]="info_footer.url_site_owner"> {{ info_footer.name_owner_app }}.  </a></strong>
+        <a [href]="info_footer.url_site_owner"> {{ info_footer.name_owner_app }}.</a></strong>
+        <br *ngIf="isMobile"> 
     <span class="derechos-app"> {{  info_footer.derechos | translate }}</span> 
     <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> {{ info_footer.version_app }}
