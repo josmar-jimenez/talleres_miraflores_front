@@ -22,17 +22,21 @@
       </a>
     </li> 
     <li class="nav-item">
-      <a class="nav-link" data-widget="fullscreen" role="button">
+      <a class="nav-link" data-widget="fullscreen" role="button"
+      data-toggle="tooltip" data-placement="bottom" title="Pantalla Completa">
         <i class="fas fa-expand-arrows-alt"></i>
       </a>
     </li> 
     <li class="nav-item">
-      <a class="nav-link" data-widget="control-sidebar" role="button" routerLink="/index">
+      <a class="nav-link" data-widget="control-sidebar" role="button" routerLink="/index"
+      data-toggle="tooltip" data-placement="bottom" title="Ir a buscador">
         <i class="fas fa-door-open"></i>
       </a>
     </li> 
     <li class="nav-item ">
-      <a (click)="nglogOut()"  data-widget="control-sidebar" data-slide="true" role="button" class="nav-link"><i class="fas fa-sign-out-alt"></i></a>
+      <a (click)="nglogOut()"  data-widget="control-sidebar" data-slide="true" role="button" class="nav-link"
+      data-toggle="tooltip" data-placement="bottom" title="Salir">
+        <i class="fas fa-sign-out-alt"></i></a>
     </li>
   </ul>
 </nav> 

@@ -13,6 +13,10 @@ i {
     font-size: 1.8rem;
   }
 
+  .h3-mobile{
+    font-size: 0.8rem;
+  }
+
 .container-finder{
     text-align: center;
     height: 100vh;

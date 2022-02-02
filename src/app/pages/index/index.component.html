@@ -1,14 +1,13 @@
-<section class="content " #finder
-[ngClass]="{'container-finder': !isMobile, 'container-finder-mobile' : isMobile}">
+<section class="content " #finder [ngClass]="{'container-finder': !isMobile, 'container-finder-mobile' : isMobile}">
     <!-- Buscador -->
     <div>
-        <input type="text" list="inputFindProduct"  placeholder='Buscamos tu repuesto...'  
-        [ngClass]="{'input-finder': !isMobile, 'input-finder-mobile' : isMobile}"
-        (keyup)="changeFinderInput($event)" 
-        (keyup.enter)="goToFoundsWithEnter($event,found)" [(ngModel)]="inputFinder">
+        <input type="text" list="inputFindProduct" placeholder='Buscamos tu repuesto...'
+            [ngClass]="{'input-finder': !isMobile, 'input-finder-mobile' : isMobile}"
+            (keyup)="changeFinderInput($event)" (keyup.enter)="goToFoundsWithEnter($event,found)"
+            [(ngModel)]="inputFinder">
         <i class="fa fa-search" (click)="goToFounds(found)"></i>
         <datalist id="inputFindProduct" class="form-select">
-            <option value="{{item.name}}" *ngFor="let item of productList" class="optionFound"> 
+            <option value="{{item.name}}" *ngFor="let item of productList" class="optionFound">
         </datalist>
     </div>
     <div class="container-center">
@@ -22,7 +21,10 @@
 
 <section class="container container-found" #found>
     <div class="container-center" *ngIf="productFoundList.length>0 && findProducts">
-        <h1  [ngClass]="{'h1-mobile' : isMobile}">Productos encontrados:</h1>
+        <h3 [ngClass]="{'h1-mobile' : isMobile}">Repuestos encontrados:</h3>
+    </div>
+    <div class="container-center" *ngIf="productFoundList.length==0 && findProducts">
+        <h3 [ngClass]="{'h3-mobile' : isMobile}">Lo sentimos, repuesto no disponible </h3>
     </div>
     <div class="dataTables_wrapper dt-bootstrap4" *ngIf="productFoundList.length>0 && findProducts">
         <div class="col-sm-12">
@@ -49,26 +51,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="odd" *ngFor="let product of productFoundList  | paginate:{itemsPerPage: 3, currentPage: paginator.num_page, totalItems: productFoundList.length}">
-                        <td data-title="Imagen" class="dtr-control product-item-table column-center" 
-                        [ngClass]="{'column-width-desktop-20': !isMobile, 'column-width-mobile' : isMobile}">
+                    <tr class="odd"
+                        *ngFor="let product of productFoundList  | paginate:{itemsPerPage: 3, currentPage: paginator.num_page, totalItems: productFoundList.length}">
+                        <td data-title="Imagen" class="dtr-control product-item-table column-center"
+                            [ngClass]="{'column-width-desktop-20': !isMobile, 'column-width-mobile' : isMobile}">
                             <div class="mt-3 pb-3 mb-3 image-list-div">
                                 <div>
                                     <img class="image-list" [src]="product.image" title="Imagen referencial" />
                                 </div>
                             </div>
                         </td>
-                        <td data-title="Nombre" class="dtr-control product-item-table column-center" 
-                        [ngClass]="{'column-width-desktop-30': !isMobile, 'column-width-mobile' : isMobile}">{{product.name}}</td>
-                        <td data-title="Precio" class="dtr-control product-item-table column-center" 
-                        [ngClass]="{'column-width-desktop-10': !isMobile, 'column-width-mobile' : isMobile}">{{product.price}} $</td>
-                        <td  data-title="Tiendas" class="dtr-control product-item-table column-center" >
-                            <ul class="list-group"
-                            [ngClass]="{'column-center-mobile' : isMobile}">
-                                <li class="list-group-item"  *ngFor="let store of product.stores"> 
+                        <td data-title="Nombre" class="dtr-control product-item-table column-center"
+                            [ngClass]="{'column-width-desktop-30': !isMobile, 'column-width-mobile' : isMobile}">
+                            {{product.name}}</td>
+                        <td data-title="Precio" class="dtr-control product-item-table column-center"
+                            [ngClass]="{'column-width-desktop-10': !isMobile, 'column-width-mobile' : isMobile}">
+                            {{product.price}} $</td>
+                        <td data-title="Tiendas" class="dtr-control product-item-table column-center">
+                            <ul class="list-group" [ngClass]="{'column-center-mobile' : isMobile}">
+                                <li class="list-group-item" *ngFor="let store of product.stores">
                                     {{store.name}} <br> {{store.address}} <br>{{store.phone}}
                                 </li>
-                               
+
                             </ul>
                         </td>
                     </tr>
