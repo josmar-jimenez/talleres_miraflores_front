@@ -24,7 +24,7 @@
         <h3 [ngClass]="{'h1-mobile' : isMobile}">Repuestos encontrados:</h3>
     </div>
     <div class="container-center" *ngIf="productFoundList.length==0 && findProducts">
-        <h3 [ngClass]="{'h3-mobile' : isMobile}">Lo sentimos, repuesto no disponible </h3>
+        <h2 [ngClass]="{'h3-mobile' : isMobile}">Lo sentimos, repuesto no disponible </h2>
     </div>
     <div class="dataTables_wrapper dt-bootstrap4" *ngIf="productFoundList.length>0 && findProducts">
         <div class="col-sm-12">
