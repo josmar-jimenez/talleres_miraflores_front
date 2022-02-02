@@ -1,4 +1,5 @@
-<section class="content container-finder" #finder>
+<section class="content " #finder
+[ngClass]="{'container-finder': !isMobile, 'container-finder-mobile' : isMobile}">
     <!-- Buscador -->
     <div>
         <input type="text" list="inputFindProduct"  placeholder='Buscamos tu repuesto...'  
