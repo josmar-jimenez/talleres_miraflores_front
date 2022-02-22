@@ -3,6 +3,7 @@ import { tap, share, finalize } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CrudOperations } from 'src/app/model/interfaces/crud-operations.interface';
 import { propiedades_globales as prop_glo } from 'src/app/globals';
+import * as internal from 'stream';
 
 export abstract class CrudService<T, ID> implements CrudOperations<T, ID> {
 
@@ -50,6 +51,16 @@ export abstract class CrudService<T, ID> implements CrudOperations<T, ID> {
     }else{
       return this._http.get<T[]>(this._base);
     } 
+  }
+
+  findAllSortedPageableAndFiltered(sort:any,page:number, size:any, filter:any): Observable<T[]> {    
+    return this._http.post<T[]>(
+      sort!=null?this._base+"/filtered?page="+page+"&size="+size+"&sort="+sort.field+","+sort.order:
+      this._base+"/filtered?page="+page+"&size="+size, filter).pipe(
+          tap(res => this.cache = res),
+          share(),
+          finalize(() => { this.cachedObservable = this.objempty })
+        );
   }
 
   findAllSorted(sort:any): Observable<T[]> {    

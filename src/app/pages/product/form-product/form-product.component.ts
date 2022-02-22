@@ -68,8 +68,8 @@ export class FormProductComponent implements OnInit {
     this.form = this.formBuilder.group(
       {
         name: [{ value: "", disabled: this.isViewMode }, Validators.required],
-        shortName: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
-        barcode: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
+        tax: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
+        code: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
         price: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
         cost: [{ value: "", disabled: this.isViewMode }, [Validators.required]],
         image: [{ value: "", disabled: this.isViewMode }, null],
@@ -95,8 +95,8 @@ export class FormProductComponent implements OnInit {
     this.form_data = this.form.value;
 
     let product_data = new Product(null, this.form_data.statusId, "", this.form_data.name,
-      this.form_data.shortName, this.form_data.barcode, this.form_data.price, this.form_data.cost,
-      this.form_data.image);
+      "" , this.form_data.barcode, this.form_data.price, this.form_data.cost,
+      this.form_data.tax,this.form_data.code,"","",this.form_data.image);
 
     if (!this.isCreateMode) {
       this.updateProduct(product_data);

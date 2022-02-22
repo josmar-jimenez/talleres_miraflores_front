@@ -17,17 +17,22 @@
                 <ng-template #dataBlock>
                     <table class="col-sm-12" style=" margin-bottom: 20px">
                         <tr>
-                            <td class="col-sm-7 text-right"></td>
-                            <td class="col-sm-1 text-right">{{'product' | translate }}</td>
-                            <td class="col-sm-3 text-right">
+                            <td class="col-sm-2 text-right"></td>
+                            <td class="col-sm-1 text-right">{{'code' | translate }}</td>
+                            <td class="col-sm-2 text-right">
                                 <span class="input-group-text" style=" display:inline-block;">
-                                    <i class="fas fa-luggage-cart"></i>
+                                    <i class="fas fa-qrcode"></i>
                                 </span>
-                                <input type="text" name="productId" list="inputFindProduct" id="productId"
+                                <input type="text" name="code"  id="code"
+                                    class="filter-control" [(ngModel)]="codeSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">{{'name' | translate }}</td>
+                            <td class="col-sm-4 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="productId"  id="productId"
                                     class="filter-control" [(ngModel)]="productSelected">
-                                <datalist id="inputFindProduct" class="form-select">
-                                    <option value="{{item.name}}" *ngFor="let item of productList" class="optionFound">
-                                </datalist>
                             </td>
                             <td class="col-sm-1 text-right">
                                 <button type="button" class="btn btn-primary" (click)="filter()">
@@ -43,22 +48,16 @@
                                     <tr role="row">
                                     <tr role="row">
                                         <th class="sorting" >
+                                            <a (click)="sortByKey('code')">{{'code' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='code',
+                                                'fa-sort-down' : sort?.field=='code'&&sort.order=='DESC',
+                                                'fa-sort-up' : sort?.field=='code'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting" >
                                             <a (click)="sortByKey('name')">{{'name' | translate }}
                                                 <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='name',
                                                     'fa-sort-down' : sort?.field=='name'&&sort.order=='DESC',
                                                     'fa-sort-up' : sort?.field=='name'&&sort.order=='ASC'}"></i></a>
-                                        </th>
-                                        <th class="sorting" >
-                                            <a (click)="sortByKey('shortName')">{{'shortName' | translate }}
-                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='shortName',
-                                                'fa-sort-down' : sort?.field=='shortName'&&sort.order=='DESC',
-                                                'fa-sort-up' : sort?.field=='shortName'&&sort.order=='ASC'}"></i></a>
-                                        </th>
-                                        <th class="sorting" >
-                                            <a (click)="sortByKey('barcode')">{{'barcode' | translate }}
-                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='barcode',
-                                            'fa-sort-down' : sort?.field=='barcode'&&sort.order=='DESC',
-                                            'fa-sort-up' : sort?.field=='barcode'&&sort.order=='ASC'}"></i></a>
                                         </th>
                                         <th class="sorting" >
                                             <a (click)="sortByKey('price')">{{'price' | translate }}
@@ -89,10 +88,10 @@
                                 </thead>
                                 <tbody>
                                     <tr class="odd"
-                                        *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                        *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: info_component.pageSize, 
+                                            currentPage: info_component.list.pagination.num_page, totalItems: info_component.count_item }">
+                                        <td class="dtr-control">{{item.code}}</td>
                                         <td class="dtr-control">{{item.name}}</td>
-                                        <td class="dtr-control">{{item.shortName}}</td>
-                                        <td class="dtr-control">{{item.barcode}}</td>
                                         <td class="dtr-control">{{item.price}} {{prop_glo.info_globals.monedas.default.simb_mon}}</td>
                                         <td class="dtr-control">{{item.cost}} {{prop_glo.info_globals.monedas.default.simb_mon}}</td>
                                         <td class="dtr-control">{{item.statusName }}</td>
@@ -130,11 +129,36 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
+                        <app-pagination-list [paginador]="info_component.list.pagination" (click)="changePage()"></app-pagination-list>
                     </div>
                 </ng-template>
 
                 <ng-template #emptyBlock>
+                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                        <tr>
+                            <td class="col-sm-2 text-right"></td>
+                            <td class="col-sm-1 text-right">{{'code' | translate }}</td>
+                            <td class="col-sm-2 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="fas fa-qrcode"></i>
+                                </span>
+                                <input type="text" name="code"  id="code"
+                                    class="filter-control" [(ngModel)]="codeSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">{{'name' | translate }}</td>
+                            <td class="col-sm-4 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="productId"  id="productId"
+                                    class="filter-control" [(ngModel)]="productSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">
+                                <button type="button" class="btn btn-primary" (click)="filter()">
+                                    {{'filter' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="row">
                         <div class="col-sm-12">
                             {{ info_component.sms_empty | translate}} ...

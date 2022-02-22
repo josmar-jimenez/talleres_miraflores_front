@@ -27,9 +27,9 @@ export class ProductComponent implements OnInit {
   public actionAllowed:any= [];
   public sort:any=null;
 
-  public originalList: any;
   public productList: Array<{id:number,name:string}> = [];
   public productSelected:any=null;
+  public codeSelected:any=null;
 
   constructor(
     private router: Router, 
@@ -45,16 +45,22 @@ export class ProductComponent implements OnInit {
     }
  
   ngOnInit(): void {  
-    this.getAllProducts(); 
+    this.getAllProducts(0); 
     var userOperative = this.authService.loadModuleMenu(this.router.url);
     this.actionAllowed = userOperative != null && userOperative.length > 0 ? userOperative[0].action_name : null;
   }
  
-  getAllProducts(): void {
+  changePage () : void {
+    this.getAllProducts(this.info_component.list.pagination.num_page-1);
+  }
+
+  getAllProducts(page:number): void {
     this.controlLoading(true);
     this.restInfoComponent();    
-    this.use_cache= this.notificationService.useCache == undefined;
-    this.serviceUse.findAll(this.use_cache).subscribe((data: any) => {
+    this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
+      page,this.info_component.size_page,{name: this.productSelected, 
+        code:this.codeSelected}).subscribe((data: any) => {
+
       this.authService.setToken(data.token);
       this.getInfoComponent(data);  
     }, error => {
@@ -67,7 +73,9 @@ export class ProductComponent implements OnInit {
     let owner = ruta.split('/')[1];    
 
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner); 
-    this.info_component.count_item = data.info.totalElements;    
+    this.info_component.count_item = data.info.totalElements; 
+    this.info_component.pageSize = data.info.pageable.pageSize;    
+   
     this.info_component.empty  = data.info.empty;
 
     if (data.info.empty) { 
@@ -77,17 +85,7 @@ export class ProductComponent implements OnInit {
       data.info.content.forEach((element:any, index:any) => {
         this.getImage(element.id, index);
       });
-      this.originalList = data.info.content;
       this.productList = [];
-      this.originalList.forEach((stock:any) => {
-        let exits = false;
-        this.productList.forEach(product => {
-          if(product.id==stock.id)
-            exits=true;
-        });
-        if(!exits)
-          this.productList.push({id:stock.id, name:stock.name});
-      });
     }
  
     this.controlLoading(false);
@@ -114,16 +112,9 @@ export class ProductComponent implements OnInit {
   }
 
   filter(): void {
-    let temporalList:any = [];
-    this.originalList.forEach((element:any) => {
-      if(element.name==this.productSelected || this.productSelected==null) {
-        temporalList.push(element);
-      }
-    });
-    this.productSelected = null;
-    this.info_component.list.data = temporalList;
-    this.info_component.list.pagination.num_page = 0
-    this.info_component.count_item = temporalList.length;
+    this.controlLoading(true);
+    this.restInfoComponent();    
+    this.getAllProducts(0);
   }
 
   sortByKey(key:string): void {
@@ -131,13 +122,7 @@ export class ProductComponent implements OnInit {
       field:key, 
       order:this.sort!=null&&this.sort.order!="ASC"?"ASC":"DESC"
     };
-    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.getInfoComponent(data);  
-      this.info_component.list.pagination.num_page =0;
-    }, error => {
-      console.log(error);
-    });
+    this.getAllProducts(0);
   }
 
   controlLoading (status : boolean) : void {

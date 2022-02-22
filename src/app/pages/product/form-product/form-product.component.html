@@ -20,19 +20,19 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label> {{label_text.name_label | translate }} {{ info_component.owner | translate }}
+                            <label> {{'code' | translate }} {{ info_component.owner | translate }}
                             </label>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">N</div>
                                 </div>
                                 <input type="text" class="form-control"
-                                    placeholder="{{label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
-                                    title="{{ label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
-                                    id="name_product" formControlName="name"
-                                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                                    <div *ngIf="f.name.errors.required"> {{label_text.name_label | translate }}
+                                    placeholder="{{'code'  | translate  }}  {{ info_component.owner | translate  }}"
+                                    title="{{ 'code'  | translate  }}  {{ info_component.owner | translate  }}"
+                                    id="code_product" formControlName="code"
+                                    [ngClass]="{ 'is-invalid': submitted && f.code.errors }" />
+                                <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+                                    <div *ngIf="f.code.errors.required"> {{'code' | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
                                 </div>
                             </div>
@@ -73,21 +73,20 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label> {{label_text.shortName_label | translate }} {{ info_component.owner | translate }}
+                            <label> {{label_text.name_label | translate }} {{ info_component.owner | translate }}
                             </label>
-                            <div class="input-group">
+                            <div class="input-group mb-2">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-sort-alpha-down-alt"></i></span>
+                                    <div class="input-group-text">N</div>
                                 </div>
                                 <input type="text" class="form-control"
-                                    placeholder="{{label_text.shortName_label | translate }}"
-                                    title="{{label_text.shortName_label  | translate  }}  {{ info_component.owner | translate  }}"
-                                    id="shortName_product" formControlName="shortName"
-                                    [ngClass]="{ 'is-invalid': submitted && f.shortName.errors }" />
-
-                                <div *ngIf="submitted && f.shortName.errors" class="invalid-feedback">
-                                    <div *ngIf="f.shortName.errors.required">{{label_text.shortName_label |
-                                        translate }} {{label_error.msg_error_required | translate }} </div>
+                                    placeholder="{{label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    title="{{ label_text.name_label  | translate  }}  {{ info_component.owner | translate  }}"
+                                    id="name_product" formControlName="name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.name.errors.required"> {{label_text.name_label | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
                                 </div>
                             </div>
                         </div>
@@ -96,21 +95,23 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group ">
-                            <label> {{label_text.barcode_label | translate }} {{ info_component.owner | translate }}
+                            <label> {{label_text.price_label | translate }} {{ info_component.owner | translate }}
                             </label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <span class="input-group-text">
+                                        {{prop_glo.info_globals.monedas.default.simb_mon}}</span>
                                 </div>
-                                <input type="price" class="form-control" id="price_product" formControlName="barcode"
-                                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
-                                    placeholder="{{label_text.barcode_label | translate }}"
-                                    title="{{label_text.barcode_label  | translate  }}  {{ info_component.owner | translate  }}" />
 
-                                <div *ngIf="submitted && f.barcode.errors" class="invalid-feedback">
-                                    <div *ngIf="f.barcode.errors.required"> {{label_text.barcode_label | translate }}
+                                <input type="number" class="form-control" id="price_product" formControlName="price"
+                                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
+                                    placeholder="{{label_text.price_label | translate }}"
+                                    title="{{label_text.price_label  | translate  }}  {{ info_component.owner | translate  }}" />
+
+                                <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                                    <div *ngIf="f.price.errors.required"> {{label_text.price_label | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
-                                    <div *ngIf="f.barcode.errors.price"> {{label_text.barcode_label | translate }}
+                                    <div *ngIf="f.price.errors.price"> {{label_text.price_label | translate }}
                                         {{label_error.msg_error_price_invalid | translate }} </div>
                                 </div>
                             </div>
@@ -145,7 +146,7 @@
                     <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group ">
-                            <label> {{label_text.price_label | translate }} {{ info_component.owner | translate }}
+                            <label> {{'tax' | translate }} {{ info_component.owner | translate }}
                             </label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -153,16 +154,16 @@
                                         {{prop_glo.info_globals.monedas.default.simb_mon}}</span>
                                 </div>
 
-                                <input type="number" class="form-control" id="price_product" formControlName="price"
-                                    [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
-                                    placeholder="{{label_text.price_label | translate }}"
-                                    title="{{label_text.price_label  | translate  }}  {{ info_component.owner | translate  }}" />
+                                <input type="number" class="form-control" id="tax_product" formControlName="tax"
+                                    [ngClass]="{ 'is-invalid': submitted && f.tax.errors }"
+                                    placeholder="{{'tax' | translate }}"
+                                    title="{{'tax'  | translate  }}  {{ info_component.owner | translate  }}" />
 
-                                <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
-                                    <div *ngIf="f.price.errors.required"> {{label_text.price_label | translate }}
+                                <div *ngIf="submitted && f.tax.errors" class="invalid-feedback">
+                                    <div *ngIf="f.tax.errors.required"> {{'tax' | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
-                                    <div *ngIf="f.price.errors.price"> {{label_text.price_label | translate }}
-                                        {{label_error.msg_error_price_invalid | translate }} </div>
+                                    <div *ngIf="f.tax.errors.tax"> {{'tax' | translate }}
+                                        {{label_error.msg_error_tax_invalid | translate }} </div>
                                 </div>
                             </div>
                         </div>

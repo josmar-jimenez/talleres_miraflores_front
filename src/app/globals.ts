@@ -36,6 +36,7 @@ export const propiedades_globales = {
             title: '',
             id: '',
             accion_activa: '',
+            size_page : 3,
             list: {
                 pagination: {
                     /*properties paginator globales*/
