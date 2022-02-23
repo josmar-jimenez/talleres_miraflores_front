@@ -75,7 +75,6 @@ export class ProductComponent implements OnInit {
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner); 
     this.info_component.count_item = data.info.totalElements; 
     this.info_component.pageSize = data.info.pageable.pageSize;    
-   
     this.info_component.empty  = data.info.empty;
 
     if (data.info.empty) { 

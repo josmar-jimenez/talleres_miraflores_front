@@ -20,7 +20,6 @@ export class StockComponent implements OnInit {
   public actionAllowed: any = [];
 
   //Filtros
-  public originalList: any;
   public productList: Array<{ id: number, name: string }> = [];
   public storeList: Array<{ id: number, name: string }> = [];
   public productSelected: any = null;
@@ -42,19 +41,23 @@ export class StockComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllStocks();
+    this.getAllStocks(0);
     var userOperative = this.authService.loadModuleMenu(this.router.url);
     this.actionAllowed = userOperative != null && userOperative.length > 0 ? userOperative[0].action_name : null;
   }
 
-  getAllStocks(): void {
-    this.controlLoading(true);
+  changePage () : void {
+    this.getAllStocks(this.info_component.list.pagination.num_page-1);
+  }
 
-    this.restInfoComponent();
-    this.use_cache = this.notificationService.useCache == undefined;
-    this.serviceUse.findAll(this.use_cache).subscribe((data: any) => {
+  getAllStocks(page:number): void {
+    this.controlLoading(true);
+    this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
+      page,this.info_component.size_page,{storeName: this.storeSelected, 
+        productName:this.productSelected}).subscribe((data: any) => {
+
       this.authService.setToken(data.token);
-      this.getInfoComponent(data);
+      this.getInfoComponent(data);  
     }, error => {
       console.log(error);
     });
@@ -64,32 +67,17 @@ export class StockComponent implements OnInit {
     let ruta = this.router.url;
     let owner = ruta.split('/')[1];
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner);
-    this.info_component.count_item = data.info.totalElements;
+    this.info_component.count_item = data.info.totalElements; 
+    this.info_component.pageSize = data.info.pageable.pageSize;
     this.info_component.empty = data.info.empty;
 
     if (data.info.empty) {
       this.info_component.sms_empty = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
-      this.originalList = data.info.content;
       this.productList = [];
       this.storeList = [];
-      this.originalList.forEach((stock: any) => {
-        let exits = false;
-        this.productList.forEach(product => {
-          if (product.id == stock.productId)
-            exits = true;
-        });
-        if (!exits)
-          this.productList.push({ id: stock.productId, name: stock.productName });
-        exits = false;
-        this.storeList.forEach(store => {
-          if (store.id == stock.storeId)
-            exits = true;
-        });
-        if (!exits)
-          this.storeList.push({ id: stock.storeId, name: stock.storeName });
-      });
+      
     }
 
     this.controlLoading(false);
@@ -113,18 +101,9 @@ export class StockComponent implements OnInit {
 
   /*Filtros y orden */
   filter(): void {
-    let temporalList: any = [];
-    this.originalList.forEach((element: any) => {
-      if ((element.productName == this.productSelected || this.productSelected == null) &&
-        (element.storeName == this.storeSelected || this.storeSelected == null)) {
-        temporalList.push(element);
-      }
-    });
-    this.productSelected = null;
-    this.storeSelected = null;
-    this.info_component.list.data = temporalList;
-    this.info_component.list.pagination.num_page = 0
-    this.info_component.count_item = temporalList.length;
+    this.controlLoading(true);
+    this.restInfoComponent();    
+    this.getAllStocks(0);
   }
 
   sortByKey(key: string): void {

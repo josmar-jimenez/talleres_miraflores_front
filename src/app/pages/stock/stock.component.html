@@ -17,28 +17,22 @@
                 <ng-template #dataBlock>
                     <table class="col-sm-12" style=" margin-bottom: 20px">
                         <tr>
-                            <td class="text-right col-sm-3"></td>
+                            <td class="text-right col-sm-1"></td>
                             <td class="col-sm-1 text-right"  >{{'store' | translate }}</td>
-                            <td class="col-sm-3 text-right" >
-                                <span class="input-group-text" style=" display:inline-block;">
-                                    <i class="fas fa-store"></i>
-                                </span>
-                                <input type="text" name="storeId" list="inputFindStore" id="storeId"
-                                    class="filter-control" [(ngModel)]="storeSelected">
-                                <datalist id="inputFindStore" class="form-select">
-                                    <option value="{{item.name}}" *ngFor="let item of storeList" class="optionFound">
-                                </datalist>
-                            </td>
-                            <td class="col-sm-1 text-right">{{'product' | translate }}</td>
                             <td class="col-sm-3 text-right">
                                 <span class="input-group-text" style=" display:inline-block;">
-                                    <i class="fas fa-luggage-cart"></i>
+                                    <i class="fas fa-qrcode"></i>
                                 </span>
-                                <input type="text" name="productId" list="inputFindProduct" id="productId"
+                                <input type="text" name="code"  id="code"
+                                    class="filter-control" [(ngModel)]="storeSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">{{'product' | translate }}</td>
+                            <td class="col-sm-4 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="productId"  id="productId"
                                     class="filter-control" [(ngModel)]="productSelected">
-                                <datalist id="inputFindProduct" class="form-select">
-                                    <option value="{{item.name}}" *ngFor="let item of productList" class="optionFound">
-                                </datalist>
                             </td>
                             <td class="col-sm-1 text-right">
                                 <button type="button" class="btn btn-primary" (click)="filter()">
@@ -85,7 +79,8 @@
                                 </thead>
                                 <tbody>
                                     <tr class="odd"
-                                        *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                    *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: info_component.pageSize, 
+                                        currentPage: info_component.list.pagination.num_page, totalItems: info_component.count_item }">
                                         <td class="dtr-control">{{item.storeName}}</td>
                                         <td class="dtr-control">{{item.productName}}</td>
                                         <td class="dtr-control">{{item.stock}}</td>
@@ -118,11 +113,36 @@
                             </table>
                         </div>
 
-                        <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
+                        <app-pagination-list [paginador]="info_component.list.pagination" (click)="changePage()"></app-pagination-list>
                     </div>
                 </ng-template>
 
                 <ng-template #emptyBlock>
+                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                        <tr>
+                            <td class="text-right col-sm-1"></td>
+                            <td class="col-sm-1 text-right">{{'store' | translate }}</td>
+                            <td class="col-sm-3 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="fas fa-qrcode"></i>
+                                </span>
+                                <input type="text" name="code"  id="code"
+                                    class="filter-control" [(ngModel)]="storeSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">{{'product' | translate }}</td>
+                            <td class="col-sm-4 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="productId"  id="productId"
+                                    class="filter-control" [(ngModel)]="productSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">
+                                <button type="button" class="btn btn-primary" (click)="filter()">
+                                    {{'filter' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="row">
                         <div class="col-sm-12">
                             {{ info_component.sms_empty | translate}} ...
