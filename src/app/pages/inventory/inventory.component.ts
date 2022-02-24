@@ -25,8 +25,6 @@ export class InventoryComponent implements OnInit {
 
   //Filtros
   public storeSelected: any = null;
-  public storeList: Array<{ id: number, name: string }> = [];
-  public originalList: any;
   public sort: any = null;
 
   constructor(
@@ -40,17 +38,23 @@ export class InventoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllInventory();
+    this.getAllInventory(0);
     var userOperative = this.authService.loadModuleMenu(this.router.url);
     this.actionAllowed = userOperative != null && userOperative.length > 0 ? userOperative[0].action_name : null;
   }
 
-  getAllInventory(): void {
+  changePage () : void {
+    this.getAllInventory(this.info_component.list.pagination.num_page-1);
+  }
+
+  getAllInventory(page:number): void {
     this.controlLoading(true);
 
     this.restInfoComponent();
     this.use_cache = this.notificationService.useCache == undefined;
-    this.serviceUse.findAll(this.use_cache).subscribe((data: any) => {
+    this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
+      page,this.info_component.size_page,{storeName: this.storeSelected}
+      ).subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.getInfoComponent(data);
     }, error => {
@@ -63,24 +67,14 @@ export class InventoryComponent implements OnInit {
     let owner = ruta.split('/')[1];
 
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner);
-    this.info_component.count_item = data.info.totalElements;
+    this.info_component.count_item = data.info.totalElements; 
+    this.info_component.pageSize = data.info.pageable.pageSize;  
     this.info_component.empty = data.info.empty;
 
     if (data.info.empty) {
       this.info_component.sms_empty = this.label_text.list_empty;
     } else {
       this.info_component.list.data = data.info.content;
-      this.originalList = data.info.content;
-      this.storeList = [];
-      this.originalList.forEach((stock: any) => {
-        let exits = false;
-        this.storeList.forEach(store => {
-          if (store.id == stock.storeId)
-            exits = true;
-        });
-        if (!exits)
-          this.storeList.push({ id: stock.storeId, name: stock.storeName });
-      });
     }
 
     this.controlLoading(false);
@@ -108,25 +102,12 @@ export class InventoryComponent implements OnInit {
       field: key,
       order: this.sort != null && this.sort.order != "ASC" ? "ASC" : "DESC"
     };
-    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.getInfoComponent(data);
-      this.info_component.list.pagination.num_page = 0;
-    }, error => {
-      console.log(error);
-    });
+    this.getAllInventory(0);
   }
 
   filter(): void {
-    let temporalList: any = [];
-    this.originalList.forEach((element: any) => {
-      if (element.storeName == this.storeSelected || this.storeSelected == null) {
-        temporalList.push(element);
-      }
-    });
-    this.storeSelected = null;
-    this.info_component.list.data = temporalList;
-    this.info_component.list.pagination.num_page = 0
-    this.info_component.count_item = temporalList.length;
+    this.controlLoading(true);
+    this.restInfoComponent();    
+    this.getAllInventory(0);
   }
 }

@@ -111,12 +111,6 @@ export class StockComponent implements OnInit {
       field: key,
       order: this.sort != null && this.sort.order != "ASC" ? "ASC" : "DESC"
     };
-    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.getInfoComponent(data);
-      this.info_component.list.pagination.num_page = 0;
-    }, error => {
-      console.log(error);
-    });
+    this.getAllStocks(0);
   }
 }

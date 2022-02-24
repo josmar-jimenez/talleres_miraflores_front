@@ -27,9 +27,6 @@ export class SaleComponent implements OnInit {
   public info_component: any = prop_glo.info_globals.info_component;
 
   //Filtros
-  public originalList: any;
-  public userList: Array<{ id: number, name: string }> = [];
-  public storeList: Array<{ id: number, name: string }> = [];
   public userSelected: any = null;
   public storeSelected: any = null;
   public sort: any = null;
@@ -46,17 +43,23 @@ export class SaleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllSales();
+    this.getAllSales(0);
     var userOperative = this.authService.loadModuleMenu(this.router.url);
     this.actionAllowed = userOperative != null && userOperative.length > 0 ? userOperative[0].action_name : null;
   }
 
-  getAllSales(): void {
+  changePage () : void {
+    this.getAllSales(this.info_component.list.pagination.num_page-1);
+  }
+
+  getAllSales(page:number): void {
     this.controlLoading(true);
 
     this.restInfoComponent();
     this.use_cache = this.notificationService.useCache == undefined;
-    this.serviceUse.findAll(this.use_cache).subscribe((data: any) => {
+    this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
+      page,this.info_component.size_page,{storeName: this.storeSelected, 
+        userName:this.userSelected}).subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.getInfoComponent(data);
     }, error => {
@@ -69,8 +72,9 @@ export class SaleComponent implements OnInit {
     let owner = ruta.split('/')[1];
 
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner);
-    this.info_component.count_item = data.info.totalElements;
-    this.info_component.empty = data.info.empty;
+    this.info_component.count_item = data.info.totalElements; 
+    this.info_component.pageSize = data.info.pageable.pageSize;    
+        this.info_component.empty = data.info.empty;
 
     if (data.info.empty) {
       this.info_component.sms_empty = this.label_text.list_empty;
@@ -82,25 +86,6 @@ export class SaleComponent implements OnInit {
           total += detail.cant;
         });
         element.totalProducts = total;
-      });
-      this.originalList = data.info.content;
-      this.userList = [];
-      this.storeList = [];
-      this.originalList.forEach((stock: any) => {
-        let exits = false;
-        this.userList.forEach(user => {
-          if (user.id == stock.userId)
-            exits = true;
-        });
-        if (!exits)
-          this.userList.push({ id: stock.userId, name: stock.userName });
-        exits = false;
-        this.storeList.forEach(store => {
-          if (store.id == stock.storeId)
-            exits = true;
-        });
-        if (!exits)
-          this.storeList.push({ id: stock.storeId, name: stock.storeName });
       });
     }
     this.controlLoading(false);
@@ -129,29 +114,14 @@ export class SaleComponent implements OnInit {
       field: key,
       order: this.sort != null && this.sort.order != "ASC" ? "ASC" : "DESC"
     };
-    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.getInfoComponent(data);
-      this.info_component.list.pagination.num_page = 0;
-    }, error => {
-      console.log(error);
-    });
+    this.getAllSales(0);
   }
 
 
   filter(): void {
-    let temporalList: any = [];
-    this.originalList.forEach((element: any) => {
-      if ((element.userName == this.userSelected || this.userSelected == null) &&
-        (element.storeName == this.storeSelected || this.storeSelected == null)) {
-        temporalList.push(element);
-      }
-    });
-    this.userSelected = null;
-    this.storeSelected = null;
-    this.info_component.list.data = temporalList;
-    this.info_component.list.pagination.num_page = 0
-    this.info_component.count_item = temporalList.length;
+    this.controlLoading(true);
+    this.restInfoComponent();    
+    this.getAllSales(0);
   }
 
 }
