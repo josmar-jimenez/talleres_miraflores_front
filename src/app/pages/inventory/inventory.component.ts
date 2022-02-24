@@ -102,7 +102,7 @@ export class InventoryComponent implements OnInit {
       field: key,
       order: this.sort != null && this.sort.order != "ASC" ? "ASC" : "DESC"
     };
-    this.getAllInventory(0);
+    this.getAllInventory(this.info_component.list.pagination.num_page);
   }
 
   filter(): void {

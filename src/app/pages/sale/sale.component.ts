@@ -74,7 +74,7 @@ export class SaleComponent implements OnInit {
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner);
     this.info_component.count_item = data.info.totalElements; 
     this.info_component.pageSize = data.info.pageable.pageSize;    
-        this.info_component.empty = data.info.empty;
+    this.info_component.empty = data.info.empty;
 
     if (data.info.empty) {
       this.info_component.sms_empty = this.label_text.list_empty;
@@ -114,7 +114,7 @@ export class SaleComponent implements OnInit {
       field: key,
       order: this.sort != null && this.sort.order != "ASC" ? "ASC" : "DESC"
     };
-    this.getAllSales(0);
+    this.getAllSales(this.info_component.list.pagination.num_page);
   }
 
 

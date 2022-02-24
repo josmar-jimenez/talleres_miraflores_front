@@ -55,7 +55,6 @@ export class StockComponent implements OnInit {
     this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
       page,this.info_component.size_page,{storeName: this.storeSelected, 
         productName:this.productSelected}).subscribe((data: any) => {
-
       this.authService.setToken(data.token);
       this.getInfoComponent(data);  
     }, error => {
@@ -70,7 +69,7 @@ export class StockComponent implements OnInit {
     this.info_component.count_item = data.info.totalElements; 
     this.info_component.pageSize = data.info.pageable.pageSize;
     this.info_component.empty = data.info.empty;
-
+    
     if (data.info.empty) {
       this.info_component.sms_empty = this.label_text.list_empty;
     } else {
@@ -111,6 +110,6 @@ export class StockComponent implements OnInit {
       field: key,
       order: this.sort != null && this.sort.order != "ASC" ? "ASC" : "DESC"
     };
-    this.getAllStocks(0);
+    this.getAllStocks(this.info_component.list.pagination.num_page);
   }
 }

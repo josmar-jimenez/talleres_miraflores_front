@@ -121,7 +121,7 @@ export class ProductComponent implements OnInit {
       field:key, 
       order:this.sort!=null&&this.sort.order!="ASC"?"ASC":"DESC"
     };
-    this.getAllProducts(0);
+    this.getAllProducts(this.info_component.list.pagination.num_page);
   }
 
   controlLoading (status : boolean) : void {
