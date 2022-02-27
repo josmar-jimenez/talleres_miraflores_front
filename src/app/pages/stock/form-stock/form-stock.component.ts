@@ -58,6 +58,8 @@ export class FormStockComponent implements OnInit {
   public info_component!: any; 
   public form_data: any;
   public userStoreId: number = 0;
+  public productFinder: any = null;
+  public producId: any = null;
 
   public img_stock_default = prop_glo.info_globals.pages_url_base_img.concat(prop_glo.info_globals.default_img);
 
@@ -67,10 +69,11 @@ export class FormStockComponent implements OnInit {
     this.getInfoComponent();
     this.form = this.formBuilder.group(
       {
-        stock: [{ value: "", disabled: this.isViewMode }, Validators.required], 
-        productId: [{ value: "undefined", disabled: this.isViewMode }, [Validators.required]], 
-        storeId: [{value: this.userStoreId, disabled: (this.isViewMode || !this.isUserAdmin)}, [Validators.required]],
-        statusId: [{ value: 1, disabled: this.isViewMode }, null],
+        stock: [{ value: "", disabled: this.isViewMode||this.isDeleteMode }, Validators.required], 
+        productId: [{ value: null, disabled: !this.isCreateMode }, [Validators.required]],
+        storeId: [{value: this.userStoreId, disabled: (!this.isCreateMode || !this.isUserAdmin)}, [Validators.required]],
+        statusId: [{ value: 1, disabled: this.isViewMode||this.isDeleteMode }, null],
+        productFinder: [{ value: null, disabled: !this.isCreateMode }, Validators.required]
        }
     );
   }
@@ -80,6 +83,9 @@ export class FormStockComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.form_data = this.form.value; 
+
+    console.log(this.form_data.storeId)
     this.submitted = true;
     if (this.form.invalid) {
       return;
@@ -89,7 +95,7 @@ export class FormStockComponent implements OnInit {
     
     this.form_data = this.form.value; 
     let stock_data = new Stock( null, this.form_data.statusId,"", this.form_data.storeId!=null?this.form_data.storeId:this.userStoreId, 
-                                this.form_data.productId, this.form_data.stock, "","");
+                                this.form_data.productId==null?this.producId:this.form_data.productId, this.form_data.stock, "","");
     if (! this.isCreateMode) {  
       this.updateProduct(stock_data);
     }else{ 
@@ -181,6 +187,9 @@ export class FormStockComponent implements OnInit {
         if (existeError) {
           console.log(response.error);
         } else {
+          this.producId=response.info.productId
+          this.productFinder=response.info.productName;
+          this.getAllProducts();
           this.form.patchValue(response.info);
           this.controlLoading (false); 
         }
@@ -190,13 +199,20 @@ export class FormStockComponent implements OnInit {
       });
   }
 
-  getSelectedAddStock(): void {
-    this.productService.findAllOptions().subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.listProduct = data.info.content;
-    }, (error: any) => {
+  getAllProducts(): void {
+    this.productService.findAllSortedPageableAndFiltered(null,
+      0,50,{name: this.productFinder}).subscribe((data: any) => {
+          this.authService.setToken(data.token);
+          this.listProduct = data.info.content;
+          this.controlLoading (false); 
+    }, error => {
       console.log(error);
+      this.controlLoading (false); 
     });
+  }
+
+  getSelectedAddStock(): void {
+    this.getAllProducts()
 
     this.storeService.findAllOptions().subscribe((data: any) => {
       this.authService.setToken(data.token);
@@ -241,6 +257,11 @@ export class FormStockComponent implements OnInit {
         timeOut: 3000, positionClass: 'toast-top-center'
       }).onHidden.subscribe( () => { this.onReset();  this.goUpdatedList();} );
     } 
+  }
+
+  filter(): void {
+    this.controlLoading(true);
+    this.getAllProducts();
   }
 
   /* Metodo utilitario */

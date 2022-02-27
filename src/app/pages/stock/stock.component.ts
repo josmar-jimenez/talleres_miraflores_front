@@ -63,6 +63,7 @@ export class StockComponent implements OnInit {
   }
 
   getInfoComponent(data: any): void {
+    this.restInfoComponent();
     let ruta = this.router.url;
     let owner = ruta.split('/')[1];
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner);

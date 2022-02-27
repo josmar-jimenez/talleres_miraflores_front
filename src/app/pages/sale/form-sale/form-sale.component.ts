@@ -17,7 +17,6 @@ import { DetailSale } from 'src/app/model/data/detail-sale';
 import { SaleTable } from 'src/app/model/data/sale-table';
 import { StockService } from 'src/app/services/data/stock.service';
 import { StockByProduct } from 'src/app/model/data/stock-by-product';
-import { InventoryTable } from 'src/app/model/data/inventory-table';
 
 @Component({
   selector: 'app-form-sale',
@@ -56,12 +55,14 @@ export class FormSaleComponent implements OnInit {
   public label_text: any = prop_glo.label_component;
   public label_error: any = prop_glo.sms_error_component;
   public label_btn: any = prop_glo.label_btn;
-  public status_activo: any = Status.estados[0];
+  public statusActive: any = Status.estados[0];
 
   public form!: FormGroup;
   public listStore: any;
   public listProduct: any = [];
   public listStock: any = [];
+  public productFinder: any = null;
+  public storeSelected: any = null;
 
   public id: any = null;
   public info_component!: any;
@@ -75,16 +76,17 @@ export class FormSaleComponent implements OnInit {
   ngOnInit(): void {
     this.userStoreId = Number(this.authService.getStoreId());
     this.isUserAdmin = this.authService.getRoleId() == "1";
+    this.getInfoComponent();
 
     this.form = this.formBuilder.group(
       {
-        quantity: [{ value: "", disabled: this.isViewMode }, Validators.required],
-        productId: [{ value: '', disabled: this.isViewMode }, [Validators.required]],
+        quantity: [{ value: null, disabled: this.isViewMode }, Validators.required],
+        productId: [{ value: null, disabled: this.isViewMode }, [Validators.required]],
         storeId: [{ value: this.userStoreId, disabled: (this.isViewMode || !this.isUserAdmin) }, [Validators.required]],
-        statusId: [{ value: this.status_activo.id, disabled: this.isViewMode }, null],
+        statusId: [{ value: this.statusActive.id, disabled: this.isViewMode }, null],
+        productFinder: [{ value: null, disabled: !this.isCreateMode }]
       }
     );
-    this.getInfoComponent();
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -175,26 +177,40 @@ export class FormSaleComponent implements OnInit {
       });
   }
 
-  getSelectedAddStock(): void {
-    this.stockService.findAllOptions().subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.listStock = data.info.content;
-      this.listStock.forEach((item: any) => {
-        if (item.statusId == 1 && item.storeId==this.userStoreId)
-          this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock, item.productPrice));
-      });
-    }, (error: any) => {
+  getAllStocks(storeId:any): void {
+    this.listProduct=[];
+    this.stockService.findAllSortedPageableAndFiltered(null,
+      0,50,{storeName: this.storeSelected, 
+        productName:this.productFinder}).subscribe((data: any) => {
+        this.authService.setToken(data.token);
+        this.listStock = data.info.content;
+        this.listStock.forEach((item: any) => {
+          if (item.statusId == 1 && item.storeId==(storeId==null?this.userStoreId:storeId))
+            this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock, item.productPrice));
+        });
+        this.controlLoading (false); 
+    }, error => {
       console.log(error);
+      this.controlLoading (false); 
     });
+  }
+
+  getSelectedAddStock(): void {
 
     this.storeService.findAllOptions().subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.listStore = data.info.content;
+      this.listStore.forEach((item: any) => {
+        if (item.storeId==this.userStoreId){
+          this.storeSelected=item.name
+          return;
+        }
+      });
       this.controlLoading(false);
     }, (error: any) => {
       console.log(error);
     });
-
+    this.getAllStocks(null);
   }
 
   getInfoComponent() {
@@ -233,16 +249,19 @@ export class FormSaleComponent implements OnInit {
         timeOut: 3000, positionClass: 'toast-top-center'
       }).onHidden.subscribe(() => { this.onReset(); this.goUpdatedList(); });
     }
-
   }
+
+  filter(): void {
+    this.form_data = this.form.value;
+    this.controlLoading(true);
+    this.getAllStocks(this.form_data.storeId);
+  }
+
   /* Metodo utilitario */
   onReset(): void {
     this.submitted = false;
     this.submitted2 = false;
     this.saleTable = [];
-    this.form.reset({
-      productId: ''
-    });
   }
 
   /* Metodos de navegacion */
@@ -326,10 +345,15 @@ export class FormSaleComponent implements OnInit {
     this.form_data = this.form.value;
     this.saleTable = [];
     this.listProduct = [];
-    this.listStock.forEach((item: any) => {
-      if ( (item.storeId == this.form_data.storeId) && item.statusId ==1)
-        this.listProduct.push(new StockByProduct(item.productId, item.productName, item.cantPhysical, item.productPrice));
+    this.form.controls['quantity'].setValue(null);
+    this.submitted2=false;
+    this.listStore.forEach((item: any) => {
+      if(item.id==this.form_data.storeId){
+        this.storeSelected=item.name;
+        return;
+      }
     });
+    this.getAllStocks(this.form_data.storeId);
     this.updateTotals();
   }
 

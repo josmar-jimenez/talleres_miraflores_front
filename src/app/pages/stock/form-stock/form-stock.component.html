@@ -29,15 +29,15 @@
                                         <i class="fas fa-store"></i>
                                     </span>
                                 </div>
-                                <select name="storeId" class="form-control  " id="store_stock"
-                                    formControlName="storeId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled>
+                                <select name="storeId" class="form-control  " id="storeId"  formControlName="storeId" 
+                                    [ngClass]="{ 'is-invalid': submitted && (f.storeId.value==null||f.storeId.errors)}">
+                                    <option class="text-white bg-dark" [ngValue]=null selected disabled>
                                         {{label_text.selected_label | translate }} </option>
                                     <option [ngValue]="item.id" *ngFor="let item of listStore"> {{item.name}} </option>
                                 </select>
 
-                                <div *ngIf="submitted && f.storeId.errors" class="invalid-feedback">
-                                    <div *ngIf="f.storeId.errors.required"> {{label_text.store_label | translate }}
+                                <div *ngIf="submitted && (f.storeId.value==null||f.storeId.errors)" class="invalid-feedback">
+                                    <div *ngIf="(f.storeId.value==null||f.storeId.errors)"> {{label_text.store_label | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
                                 </div>
                             </div>
@@ -45,28 +45,23 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group ">
-                            <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
+                            <label> {{'findProductMessage' | translate }}
                             </label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        <i class="far fa-id-card"></i>
+                                        <i class="fas fa-list"></i>
                                     </span>
                                 </div>
+                                <input type="text" class="form-control" id="productFinder"
+                                    placeholder=" {{'name'  | translate  }}  {{ 'product' | translate }}"
+                                    title=" {{'name'   | translate  }}  {{ 'product' | translate  }}"
+                                     formControlName="productFinder" [(ngModel)]="productFinder"
+                                    autocomplete="new-user" min="3"/>
 
-                                <select name="productId" class="form-control  " id="product_id"
-                                    formControlName="productId">
-                                    <option class="text-white bg-dark  " value="undefined" selected disabled>
-                                        {{label_text.selected_label | translate }} </option>
-                                    <option [value]="item.id" *ngFor="let item of listProduct">
-                                        {{item.name}}</option>
-                                </select>
-
-                                <div *ngIf="submitted && f.productId.errors" class="invalid-feedback">
-                                    <div *ngIf="f.productId.errors.required"> {{label_text.profile_label | translate }}
-                                        {{label_error.msg_error_required | translate }} </div>
-                                </div>
-
+                                    <button type="button" class="btn btn-primary" style="margin-left: 10px;" 
+                                    *ngIf="isCreateMode"
+                                    (click)="filter()">{{'filter' | translate }}</button>   
                             </div>
                         </div>
                     </div>
@@ -89,7 +84,7 @@
                                     [ngClass]="{ 'is-invalid': submitted && f.stock.errors }" formControlName="stock"
                                     autocomplete="new-user" min="1"/>
                                 <div *ngIf="submitted && f.stock.errors" class="invalid-feedback">
-                                    <div *ngIf="f.stock.errors.required">{{label_text.nick_label | translate }}
+                                    <div *ngIf="f.stock.errors.required">{{'stock' | translate }}
                                         {{label_error.msg_error_required | translate }} </div>
                                     <div *ngIf="f.stock.errors.minlength">
                                         {{label_text.stock | translate }}
@@ -103,6 +98,37 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group ">
+                            <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                </div>
+
+                                <select name="productId" class="form-control" id="productId"
+                                    formControlName="productId"  
+                                    [ngClass]="{ 'is-invalid': submitted && (f.productId.value==null||f.productId.errors)}">
+                                    <option class="text-white bg-dark" [ngValue]=null selected disabled>
+                                        {{label_text.selected_label | translate }} </option>
+                                    <option [ngValue]="item.id" *ngFor="let item of listProduct">
+                                        {{item.name}}</option>
+                                </select>
+
+                                <div *ngIf="submitted && (f.productId.value==null||f.productId.errors)" class="invalid-feedback">
+                                    <div *ngIf="(f.productId.value==null||f.productId.errors)"> {{'product' | translate }}
+                                        {{label_error.msg_error_required | translate }} </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
 
                     <div class="col-sm-6">
                         <div class="form-group">

@@ -54,8 +54,6 @@ export class SaleComponent implements OnInit {
 
   getAllSales(page:number): void {
     this.controlLoading(true);
-
-    this.restInfoComponent();
     this.use_cache = this.notificationService.useCache == undefined;
     this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
       page,this.info_component.size_page,{storeName: this.storeSelected, 
@@ -68,9 +66,9 @@ export class SaleComponent implements OnInit {
   }
 
   getInfoComponent(data: any): void {
+    this.restInfoComponent();
     let ruta = this.router.url;
     let owner = ruta.split('/')[1];
-
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner);
     this.info_component.count_item = data.info.totalElements; 
     this.info_component.pageSize = data.info.pageable.pageSize;    

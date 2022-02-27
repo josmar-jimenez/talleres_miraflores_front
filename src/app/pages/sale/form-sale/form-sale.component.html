@@ -19,7 +19,7 @@
         <form  [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="row" *ngIf="isCreateMode">
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <!-- select  -->
                         <div class="form-group ">
                             <label> {{label_text.store_label | translate }} {{ info_component.owner | translate }}
@@ -35,7 +35,7 @@
                                 <select name="storeId" class="form-control" id="store_sale" 
                                 [ngClass]="{ 'is-invalid': submitted2 && f.storeId.errors}" formControlName="storeId" 
                                 (change)="updateProductList()">
-                                    <option class="text-white bg-dark" value=''  disabled> 
+                                    <option class="text-white bg-dark" [ngValue]=null  selected disabled> 
                                         {{label_text.selected_label | translate }} </option>
                                     <option [ngValue]="item.id" *ngFor="let item of listStore">{{item.name}}</option>
                                 </select>
@@ -48,7 +48,32 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
+                        <div class="form-group ">
+                            <label> {{'findProductMessage' | translate }}
+                            </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-list"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" id="productFinder"
+                                    placeholder=" {{'name'  | translate  }}  {{ 'product' | translate }}"
+                                    title=" {{'name'   | translate  }}  {{ 'product' | translate  }}"
+                                     formControlName="productFinder" [(ngModel)]="productFinder"
+                                    autocomplete="new-user" min="3"/>
+
+                                    <button type="button" class="btn btn-primary" style="margin-left: 10px;" 
+                                    *ngIf="isCreateMode"
+                                    (click)="filter()">{{'filter' | translate }}</button>   
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                <div class="row" *ngIf="isCreateMode">
+
+                    <div class="col-sm-6">
                         <div class="form-group ">
                             <label> {{label_text.producto_label | translate }} {{ info_component.owner | translate }}
                             </label>
@@ -62,7 +87,7 @@
                                 <select name="productId" class="form-control  " id="product_id"
                                 [ngClass]="{ 'is-invalid': submitted2 && f.productId.errors }"
                                     formControlName="productId">
-                                    <option class="text-white bg-dark" value='' disabled>
+                                    <option class="text-white bg-dark" [ngValue]=null selected disabled>
                                         {{label_text.selected_label | translate }} </option>
                                     <option [value]="item.productId" *ngFor="let item of listProduct">
                                         {{item.productName}}</option>
@@ -77,7 +102,7 @@
                         </div>
                     </div> 
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <!-- text input -->
                         <div class="form-group">
                             <label> {{ label_text.quantity_label | translate }} {{ info_component.owner | translate }}
@@ -106,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <!-- text input -->
                         <div class="form-group">
                             <label> {{ 'add' | translate }} </label>
@@ -118,7 +143,7 @@
                             </div>
                         </div>
                     </div>
-                </div>  
+                </div>
                 <div class="row">
                     <div class="col">
                         <hr>
