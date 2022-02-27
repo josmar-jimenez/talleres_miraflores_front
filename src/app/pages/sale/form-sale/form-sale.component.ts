@@ -346,6 +346,7 @@ export class FormSaleComponent implements OnInit {
     this.saleTable = [];
     this.listProduct = [];
     this.form.controls['quantity'].setValue(null);
+    this.form.controls['productId'].setValue(null);
     this.submitted2=false;
     this.listStore.forEach((item: any) => {
       if(item.id==this.form_data.storeId){

@@ -60,6 +60,8 @@ export class FormInventoryComponent implements OnInit {
   public label_error: any = prop_glo.sms_error_component;
   public label_btn: any = prop_glo.label_btn;
   public status_activo: any = Status.estados[0];
+  public productFinder: any = null;
+  public storeSelected: any = null;
 
   public form!: FormGroup;
   public listStore: any;
@@ -83,6 +85,7 @@ export class FormInventoryComponent implements OnInit {
 
         cantPhysical: [{ value: "", disabled: this.isViewMode }, Validators.required],
         productId: [{ value: '', disabled: this.isViewMode }, [Validators.required]],
+        productFinder: [{ value: null, disabled: !this.isCreateMode }]
       }
     );
   }
@@ -178,32 +181,49 @@ export class FormInventoryComponent implements OnInit {
     this.form_data = this.form.value;
     this.inventoryTable = [];
     this.listProduct = [];
+    this.form.controls['cantPhysical'].setValue(null);
+    this.form.controls['productId'].setValue(null);
+    this.submitted=false;
     this.listStock.forEach(item => {
       if (item.storeId == this.form_data.storeId)
         this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock,0));
     });
   }
 
-  getSelectedAddStock(): void {
-    this.stockService.findAllOptions().subscribe((data: any) => {
+  getAllStocks(storeId:any): void {
+    this.listProduct=[];
+    this.stockService.findAllSortedPageableAndFiltered(null,
+      0,50,{storeName: this.storeSelected, 
+        productName:this.productFinder}).subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.listStock = data.info.content;
       this.listStock.forEach(item => {
-          if(item.storeId==this.userStoreId)
+          if(item.storeId==(storeId==null?this.userStoreId:storeId))
             this.listProduct.push(new StockByProduct(item.productId, item.productName, item.stock,0));
+      });
+        this.controlLoading (false); 
+    }, error => {
+      console.log(error);
+      this.controlLoading (false); 
+    });
+  }
+
+  getSelectedAddStock(): void {
+    this.storeService.findAllOptions().subscribe((data: any) => {
+      this.authService.setToken(data.token);
+      this.listStore = data.info.content;
+      this.controlLoading(false);
+      this.listStore.forEach((item: any) => {
+        if (item.storeId==this.userStoreId){
+          this.storeSelected=item.name
+          return;
+        }
       });
     }, (error: any) => {
       console.log(error);
     });
 
-    this.storeService.findAllOptions().subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.listStore = data.info.content;
-      this.controlLoading(false);
-    }, (error: any) => {
-      console.log(error);
-    });
-
+    this.getAllStocks(null);
   }
 
   getInfoComponent() {
@@ -248,9 +268,6 @@ export class FormInventoryComponent implements OnInit {
     this.submitted2 = false;
     this.storeEmpty = false;
     this.inventoryTable = [];
-    this.form.reset({
-      productId: ''
-    });
   }
 
   /* Metodos de navegacion */
@@ -265,6 +282,13 @@ export class FormInventoryComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+
+  filter(): void {
+    this.form_data = this.form.value;
+    this.controlLoading(true);
+    this.getAllStocks(this.form_data.storeId);
+  }
+
 
   controlLoading(status: boolean): void {
     this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
