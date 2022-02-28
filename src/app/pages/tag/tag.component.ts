@@ -36,17 +36,22 @@ export class TagComponent implements OnInit{
     } 
  
   ngOnInit(): void { 
-    this.getAllTags(); 
+    this.getAllTags(0); 
     var userOperative = this.authService.loadModuleMenu(this.router.url);
     this.actionAllowed = userOperative != null && userOperative.length > 0 ? userOperative[0].action_name : null;
   }
   
-  getAllTags(): void {
+  changePage () : void {
+    this.getAllTags(this.info_component.list.pagination.num_page-1);
+  }
+
+  getAllTags(page:number): void {
     this.controlLoading(true);
-    
     this.restInfoComponent(); 
     this.use_cache = this.notificationService.useCache == undefined;
-    this.serviceUse.findAll(this.use_cache).subscribe((data: any) => {
+    this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
+      page,this.info_component.size_page,{name: null, 
+        fatherName:null}).subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.getInfoComponent(data);  
     }, error => {
@@ -59,7 +64,8 @@ export class TagComponent implements OnInit{
     let owner = ruta.split('/')[1];     
     
     this.info_component = this.serviceUse.getInfoComponent(ruta, owner); 
-    this.info_component.count_item = data.info.totalElements;    
+    this.info_component.count_item = data.info.totalElements; 
+    this.info_component.pageSize = data.info.pageable.pageSize;    
     this.info_component.empty  = data.info.empty;
 
     if (data.info.empty) { 
@@ -92,12 +98,6 @@ export class TagComponent implements OnInit{
       field:key, 
       order:this.sort!=null&&this.sort.order!="ASC"?"ASC":"DESC"
     };
-    this.serviceUse.findAllSorted(this.sort).subscribe((data: any) => {
-      this.authService.setToken(data.token);
-      this.getInfoComponent(data);  
-      this.info_component.list.pagination.num_page =0;
-    }, error => {
-      console.log(error);
-    });
+    this.getAllTags(this.info_component.list.pagination.num_page);
   }
 }

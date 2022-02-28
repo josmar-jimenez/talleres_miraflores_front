@@ -22,11 +22,20 @@
                                 <thead>
                                     <tr role="row">
                                         <th class="sorting">
+                                            <a (click)="sortByKey('type.name')">{{'type' | translate }}
+                                                <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='type.name',
+                                                    'fa-sort-down' : sort?.field=='type.name'&&sort.order=='DESC',
+                                                    'fa-sort-up' : sort?.field=='type.name'&&sort.order=='ASC'}"></i></a>
+                                        </th>
+                                        <th class="sorting">
                                             <a (click)="sortByKey('name')">{{'name' | translate }}
                                                 <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='name',
                                                     'fa-sort-down' : sort?.field=='name'&&sort.order=='DESC',
                                                     'fa-sort-up' : sort?.field=='name'&&sort.order=='ASC'}"></i></a>
                                         </th>
+                                        <th class="sorting">{{'tagFatherType' | translate }}</th>
+                                        <th class="sorting">{{'tagFatherName' | translate }}</th>
+
                                         <th class="sorting" tabindex="0" aria-controls="table_tag" rowspan="1"
                                             colspan="1"
                                             aria-label="Rendering engine: activate to sort column ascending">
@@ -36,8 +45,12 @@
                                 </thead>
                                 <tbody>
                                     <tr class="odd"
-                                        *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: 3, currentPage: info_component.list.pagination.num_page, totalItems: info_component.list.data.count_item }">
+                                    *ngFor="let item of info_component.list.data  | paginate:{itemsPerPage: info_component.pageSize, 
+                                        currentPage: info_component.list.pagination.num_page, totalItems: info_component.count_item }">
+                                        <td class="dtr-control">{{item.typeName}}</td>
                                         <td class="dtr-control">{{item.name}}</td>
+                                        <td class="dtr-control">{{item.fatherTypeName}}</td>
+                                        <td class="dtr-control">{{item.fatherName}}</td>
                                         <td class="dtr-control" *ngIf="item != null">
                                             <app-button-list [acciones_crud]="info_component.list.acciones_crud"
                                                 [id]="item.id"></app-button-list>
@@ -65,7 +78,7 @@
                             </table>
                         </div>
 
-                        <app-pagination-list [paginador]="info_component.list.pagination"></app-pagination-list>
+                        <app-pagination-list [paginador]="info_component.list.pagination"  (click)="changePage()"></app-pagination-list>
                     </div>
                 </ng-template>
 
