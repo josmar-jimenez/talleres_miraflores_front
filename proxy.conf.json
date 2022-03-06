@@ -1,15 +1,15 @@
 {
     "/user/*": {
-      "target": "http://54.37.3.91:8080/",
-      "secure": false,
+      "target": "https://talleres-miraflores.herokuapp.com/",
+      "secure": true,
       "changeOrigin": true,
       "pathRewrite": {
         "^/user/*": ""
       }
     },
     "/operatives/*": {
-      "target": "http://54.37.3.91:8080/",
-      "secure": false,
+      "target": "https://talleres-miraflores.herokuapp.com/",
+      "secure": true,
       "changeOrigin": true,
       "pathRewrite": {
         "^/operatives/*": ""

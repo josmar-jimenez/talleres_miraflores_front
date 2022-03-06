@@ -157,9 +157,9 @@ export const propierties_api = {
         /*url base endpoint*/
         // 'https://talleres-miraflores.herokuapp.com',
         // 'http://localhost:8080',
-        // 'http://54.37.3.91',
+        // 'http://54.37.3.91:8080',
 
-        base_ws_url: 'http://54.37.3.91:8080',
+        base_ws_url: 'https://talleres-miraflores.herokuapp.com',
         /*url base endpoint*/
 
         /*url endpoint users*/
