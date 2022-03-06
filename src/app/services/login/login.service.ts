@@ -7,7 +7,6 @@ import { JwtResponse } from '../../model/response/jwt-response';
 import { User } from '../../model/data/user';
 import { OperativesResponse } from 'src/app/model/response/operatives-response'; 
 import { propierties_api as prop_api } from 'src/app/globals';
-import { propiedades_globales as prop_glo } from 'src/app/globals';
 
 
 const httpOptions = {

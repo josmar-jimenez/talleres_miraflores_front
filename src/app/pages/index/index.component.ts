@@ -71,6 +71,7 @@ export class IndexComponent implements OnInit {
       $elementTarget.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }, (error: any) => {
       this.productFoundList = [];
+      window.sessionStorage.clear();
       console.log(error);
     });
   }
@@ -99,6 +100,7 @@ export class IndexComponent implements OnInit {
       this.productFoundList[index].stores = data.info;
     }, (error: any) => {
       console.log(error);
+      window.sessionStorage.clear();
     });
   }
 
