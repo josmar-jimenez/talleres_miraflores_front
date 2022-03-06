@@ -24,7 +24,8 @@ export class IndexComponent implements OnInit {
   public findProducts : boolean = false;
   public inputFinder : any;
   public paginator:any = prop_glo.info_globals.info_component.list.pagination;
-  
+  public maskPhone: string = prop_glo.mask.mask_phone;      
+
   constructor(
     private productService: ProductService,
     private storeService: StoreService,

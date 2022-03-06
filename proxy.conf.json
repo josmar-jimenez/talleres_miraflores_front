@@ -1,7 +1,7 @@
 {
     "/user/*": {
       "target": "http://54.37.3.91:8080/",
-      "secure": true,
+      "secure": false,
       "changeOrigin": true,
       "pathRewrite": {
         "^/user/*": ""
@@ -9,7 +9,7 @@
     },
     "/operatives/*": {
       "target": "http://54.37.3.91:8080/",
-      "secure": true,
+      "secure": false,
       "changeOrigin": true,
       "pathRewrite": {
         "^/operatives/*": ""

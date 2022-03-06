@@ -70,7 +70,7 @@
                         <td data-title="Tiendas" class="dtr-control product-item-table column-center">
                             <ul class="list-group" [ngClass]="{'column-center-mobile' : isMobile}">
                                 <li class="list-group-item" *ngFor="let store of product.stores">
-                                    {{store.name}} <br> {{store.address}} <br>{{store.phone}}
+                                    {{store.name}} <br> {{store.address}} <br>{{store.phone | mask: maskPhone }}
                                 </li>
 
                             </ul>
