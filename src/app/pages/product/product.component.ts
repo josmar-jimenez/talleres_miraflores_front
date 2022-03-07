@@ -18,6 +18,8 @@ export class ProductComponent implements OnInit {
   public progressing: boolean = false; 
   public use_cache: boolean = true;
   public prop_glo = prop_glo;
+  public isUserAdmin: boolean = false;
+  public isUserLider: boolean = false;
 
   public label_btn: any = prop_glo.label_btn;
   public label_text: any = prop_glo.label_component;
@@ -40,6 +42,9 @@ export class ProductComponent implements OnInit {
     public translate: TranslateService,
     public storageService: StorageService
     ) {
+      this.isUserAdmin = this.authService.getRoleId() == "1";
+      this.isUserLider = this.authService.getRoleId() == "2";
+
       translate.addLangs(prop_glo.info_globals.idiomas.config);
       translate.setDefaultLang(prop_glo.info_globals.idiomas.default);
     }

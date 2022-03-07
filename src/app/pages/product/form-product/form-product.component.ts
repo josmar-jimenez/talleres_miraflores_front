@@ -45,7 +45,9 @@ export class FormProductComponent implements OnInit {
   public status_activo: any = Status.estados[0];
   public imagePreview: any = prop_glo.info_globals.info_component.no_image;
   public prop_glo = prop_glo;
-
+  public isUserAdmin: boolean = false;
+  public isUserLider: boolean = false;
+  
   public submitted: boolean = false;
   public progressing: boolean = false;
 
@@ -64,6 +66,9 @@ export class FormProductComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.isUserAdmin = this.authService.getRoleId() == "1";
+    this.isUserLider = this.authService.getRoleId() == "2";
+
     this.getInfoComponent();
     this.form = this.formBuilder.group(
       {

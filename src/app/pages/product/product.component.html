@@ -65,7 +65,7 @@
                                         'fa-sort-down' : sort?.field=='price'&&sort.order=='DESC',
                                         'fa-sort-up' : sort?.field=='price'&&sort.order=='ASC'}"></i></a>
                                         </th>
-                                        <th class="sorting" >
+                                        <th class="sorting" *ngIf="isUserAdmin||isUserLider">
                                             <a (click)="sortByKey('cost')">{{'cost' | translate }}
                                                 <i class="fas" [ngClass]="{'fa-sort': sort==null||sort?.field!='cost',
                                 'fa-sort-down' : sort?.field=='cost'&&sort.order=='DESC',
@@ -93,7 +93,7 @@
                                         <td class="dtr-control">{{item.code}}</td>
                                         <td class="dtr-control">{{item.name}}</td>
                                         <td class="dtr-control">{{item.price}} {{prop_glo.info_globals.monedas.default.simb_mon}}</td>
-                                        <td class="dtr-control">{{item.cost}} {{prop_glo.info_globals.monedas.default.simb_mon}}</td>
+                                        <td class="dtr-control" *ngIf="isUserAdmin||isUserLider">{{item.cost}} {{prop_glo.info_globals.monedas.default.simb_mon}}</td>
                                         <td class="dtr-control">{{item.statusName }}</td>
                                         <td class="dtr-control">
                                             <div class="mt-3 pb-3 mb-3 image-list-div">
