@@ -237,10 +237,8 @@ export class FormStockComponent implements OnInit {
     if (!this.isCreateMode) {  //actions[4] = create ~ 
       this.controlLoading (true); 
       this.id = this.getIdParams();
-      console.log("ITEM [" + owner + "] | ID SELECCIONADO:" + this.id);
       this.findItemById(this.id);
     }
-
   }
       
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {

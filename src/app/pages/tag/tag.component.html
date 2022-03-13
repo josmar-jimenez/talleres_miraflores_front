@@ -15,6 +15,31 @@
             <div class="card-body" *ngIf="!progressing">
                 <ng-container *ngIf="!info_component.empty; then dataBlock else emptyBlock"></ng-container>
                 <ng-template #dataBlock>
+                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                        <tr>
+                            <td class="col-sm-1 text-right"></td>
+                            <td class="col-sm-2 text-right">{{'type' | translate }}</td>
+                            <td class="col-sm-3 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="typeId"  id="typeId"
+                                    class="filter-control" [(ngModel)]="typeSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">{{'name' | translate }}</td>
+                            <td class="col-sm-4 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="tagId"  id="tagId"
+                                    class="filter-control" [(ngModel)]="tagSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">
+                                <button type="button" class="btn btn-primary" (click)="filter()">
+                                    {{'filter' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="dataTables_wrapper dt-bootstrap4">
                         <div class="col-sm-12">
                             <table id="table_tag" class="table table-bordered table-striped dataTable dtr-inline"
@@ -83,13 +108,36 @@
                 </ng-template>
 
                 <ng-template #emptyBlock>
+                    <table class="col-sm-12" style=" margin-bottom: 20px">
+                        <tr>
+                            <td class="col-sm-1 text-right"></td>
+                            <td class="col-sm-2 text-right">{{'type' | translate }}</td>
+                            <td class="col-sm-3 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="typeId"  id="typeId"
+                                    class="filter-control" [(ngModel)]="typeSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">{{'name' | translate }}</td>
+                            <td class="col-sm-4 text-right">
+                                <span class="input-group-text" style=" display:inline-block;">
+                                    <i class="far fa-address-book"></i>
+                                </span>
+                                <input type="text" name="tagId"  id="tagId"
+                                    class="filter-control" [(ngModel)]="tagSelected">
+                            </td>
+                            <td class="col-sm-1 text-right">
+                                <button type="button" class="btn btn-primary" (click)="filter()">
+                                    {{'filter' | translate }}</button>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="row">
                         <div class="col-sm-12">
                             {{ info_component.sms_empty | translate}} ...
                         </div>
-
                         <div class="col-sm-12">
-
                             <a routerLink="{{ info_component.list.url_add_item }}"
                                 class="btn btn-outline-warning float-right" role="button"
                                 aria-pressed="true" title="{{ label_btn.btn_add | translate}}">

@@ -52,11 +52,18 @@ export class FormTagComponent implements OnInit {
   public form_data: any;
   public info_component!: any;
 
+  public listTypes :any =[];
+  public listTagFathers :any =[];
+  public tagFinder: any = null;
+
   ngOnInit(): void { 
-    this.getInfoComponent()   
+    this.getInfoComponent(); 
     this.form = this.formBuilder.group(
       {
-        name: [{ value: "", disabled: this.isViewMode || this.isDeleteMode }, Validators.required]
+        name: [{ value: "", disabled: this.isViewMode || this.isDeleteMode }, Validators.required],
+        typeId: [{ value: null, disabled: this.isViewMode || this.isDeleteMode }, Validators.required],
+        fatherId: [{ value: undefined, disabled: this.isViewMode || this.isDeleteMode }],
+        tagFinder: [{ value: null, disabled: this.isViewMode || this.isDeleteMode }]
       }, { validators: [ValidationSpaceWhite.cannotContainSpace('name')] }
     );
 
@@ -68,15 +75,13 @@ export class FormTagComponent implements OnInit {
   
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       return;
     }
     
     this.controlLoading(true);
-
     this.form_data = this.form.value;
-    let tag_data = new Tag(null, this.form_data.name);
+    let tag_data = new Tag(null, this.form_data.name, this.form_data.typeId,this.form_data.fatherId);
 
     if (!this.isCreateMode) {
       this.updateTag(tag_data);
@@ -157,6 +162,14 @@ export class FormTagComponent implements OnInit {
     return id_param;
   }
 
+  getAllTypesTag(): void {
+    this.serviceUse.findAllTypes().subscribe((data: any) => {
+          this.authService.setToken(data.token);
+          this.listTypes = data.info;
+    }, error => {
+      console.log(error);
+    });
+  }
 
   findItemById(id: any): void {
     this.serviceUse.findOne(id).pipe(first()).subscribe(
@@ -167,6 +180,8 @@ export class FormTagComponent implements OnInit {
         if (existeError) {
           console.log(response.error);
         } else {
+          this.tagFinder=response.info.fatherName;
+          this.getFilteredTags();
           this.form.patchValue(response.info);
           this.controlLoading(false);
         }
@@ -189,11 +204,11 @@ export class FormTagComponent implements OnInit {
     if (!this.isCreateMode) {  //actions[4] = create ~ 
       this.controlLoading(true);
       this.id = this.getIdParams();
-      console.log("ITEM [" + owner + "] | ID SELECCIONADO:" + this.id);
       this.findItemById(this.id);
     }
 
-
+    this.getAllTypesTag();
+    this.getFilteredTags();
   }
 
   postExecuteNotification(_existeError: boolean, sms: string, pref: string) {
@@ -234,6 +249,24 @@ export class FormTagComponent implements OnInit {
   controlLoading (status : boolean) : void {
     this.notificationService.setVisualizeLoading(status); //notificamos si necesitamos o no mostrar el loading
     this.progressing = status; //esta variable es usada para indicar que se procesa alguna peticion.
+  }
+
+  /*Tag father filter */
+  getFilteredTags(): void {
+    this.serviceUse.findAllSortedPageableAndFiltered(null,
+      0,50,{name: this.tagFinder}).subscribe((data: any) => {
+          this.authService.setToken(data.token);
+          this.listTagFathers = data.info.content;
+          this.controlLoading (false); 
+    }, error => {
+      console.log(error);
+      this.controlLoading (false); 
+    });
+  }
+
+  filter(): void {
+    this.controlLoading(true);
+    this.getFilteredTags();
   }
 
 }

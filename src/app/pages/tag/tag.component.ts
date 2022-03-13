@@ -23,6 +23,9 @@ export class TagComponent implements OnInit{
   public actionAllowed:any= [];
   public sort:any=null;
 
+  public tagSelected:any= null;
+  public typeSelected:any= null;
+
   constructor(
     private router: Router, 
     private authService: AuthService,
@@ -50,8 +53,8 @@ export class TagComponent implements OnInit{
     this.restInfoComponent(); 
     this.use_cache = this.notificationService.useCache == undefined;
     this.serviceUse.findAllSortedPageableAndFiltered(this.sort,
-      page,this.info_component.size_page,{name: null, 
-        fatherName:null}).subscribe((data: any) => {
+      page,this.info_component.size_page,{name: this.tagSelected, 
+        typeName:this.typeSelected}).subscribe((data: any) => {
       this.authService.setToken(data.token);
       this.getInfoComponent(data);  
     }, error => {
@@ -99,5 +102,11 @@ export class TagComponent implements OnInit{
       order:this.sort!=null&&this.sort.order!="ASC"?"ASC":"DESC"
     };
     this.getAllTags(this.info_component.list.pagination.num_page);
+  }
+  
+  filter(): void {
+    this.controlLoading(true);
+    this.restInfoComponent();    
+    this.getAllTags(0);
   }
 }
