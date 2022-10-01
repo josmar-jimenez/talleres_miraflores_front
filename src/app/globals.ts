@@ -159,7 +159,7 @@ export const propierties_api = {
         // 'http://localhost:8080',
         // 'http://54.37.3.91:8080',
 
-        base_ws_url: 'https://backend.corporacionsuper.com',
+        base_ws_url: 'https://talleres-miraflores.herokuapp.com',
         /*url base endpoint*/
 
         /*url endpoint users*/

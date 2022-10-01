@@ -1,6 +1,6 @@
 {
     "/user/*": {
-      "target": "https://backend.corporacionsuper.com",
+      "target": "https://talleres-miraflores.herokuapp.com",
       "secure": false,
       "changeOrigin": true,
       "pathRewrite": {
@@ -8,7 +8,7 @@
       }
     },
     "/operatives/*": {
-      "target": "https://backend.corporacionsuper.com",
+      "target": "https://talleres-miraflores.herokuapp.com",
       "secure": false,
       "changeOrigin": true,
       "pathRewrite": {
